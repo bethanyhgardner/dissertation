@@ -1,0 +1,11 @@
+Age: ___________
+
+What is your gender? ___________
+
+Please rate your overall ability in the English language:
+○	Native (learned from birth)
+○	Fully competent in speaking, listening, reading, and writing, but not native
+○	Limited but adequate competence in speaking, reading, and writing
+○	Restricted ability (e.g., only reading or speaking/listening)
+○	Some familiarity (e.g., a year of instruction in school)
+○	Prefer not to answer

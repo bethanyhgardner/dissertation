@@ -1,0 +1,13 @@
+condition,group,psa,story1,story2
+both,both_1,psa_pronoun.html,story1_they_fem.html,story2_they_masc.html
+both,both_2,psa_pronoun.html,story1_they_fem.html,story2_they_masc.html
+both,both_3,psa_pronoun.html,story1_they_fem.html,story2_they_masc.html
+neither,neither_1,psa_neutral.html,story1_she.html,story2_he.html
+neither,neither_2,psa_neutral.html,story1_she.html,story2_he.html
+neither,neither_3,psa_neutral.html,story1_she.html,story2_he.html
+psa,psa_1,psa_pronoun.html,story1_she.html,story2_he.html
+psa,psa_2,psa_pronoun.html,story1_she.html,story2_he.html
+psa,psa_3,psa_pronoun.html,story1_she.html,story2_he.html
+story,story_1,psa_neutral.html,story1_they_fem.html,story2_they_masc.html
+story,story_2,psa_neutral.html,story1_they_fem.html,story2_they_masc.html
+story,story_3,psa_neutral.html,story1_they_fem.html,story2_they_masc.html

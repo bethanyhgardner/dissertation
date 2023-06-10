@@ -1,0 +1,42 @@
+.PennController {
+    width: 50em !important; /* controls the width of the content area */
+    margin-left: 50vw; /* aligns the content area's left edge with the vertical center of the page */
+    transform: translateX(-50%); /* aligns the *vertical center* of the content area instead  */
+    font-family: Arial;
+    font-size: 1.25em;
+}
+
+.Button {
+    font-size: 1em;
+    margin: .5em auto;
+}
+
+.MediaRecorder-record {
+    font-size: 1em;
+    margin: 1em;
+    position: relative;
+    top: -20px;
+}
+
+.Scale-container {
+    /*margin: 25px auto;*/
+    line-height: 150%;
+}
+
+.DropDown{
+    font-size: 1em;
+    min-width: 7em;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.TextInput {
+    font-family: Arial;
+    font-size: 1em;
+}
+
+.TextInput-container{
+    margin-top: 15px;
+    margin-bottom: .5em;
+}
+
