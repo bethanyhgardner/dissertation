@@ -1,0 +1,1240 @@
+---
+title: "Experiment 4"
+subtitle: "**Online Processing**"
+toc-title: "Experiment 4: Online Processing"
+---
+
+```{r}
+#| label: exp4-setup
+#| include: false
+
+library(tidyverse) # data wrangling
+library(magrittr)
+library(sjmisc)
+options(dplyr.group.inform = FALSE, dplyr.summarise.inform = FALSE)
+
+library(lme4) #  stats
+library(lmerTest)
+library(buildmer)
+
+library(snow) # parallel
+
+library(insight) # model results
+library(broom.mixed)
+
+library(sjPlot)  # tables
+library(flextable)
+
+library(patchwork)  # plots
+library(RColorBrewer)
+library(ggtext)
+
+rainbow <- read.csv("resources/formatting/rainbow.csv")  # colors
+rainbow_primary <- rainbow %>%
+  filter(Spectral != "") %>%
+  select(-Score) %>%
+  column_to_rownames("Spectral")
+
+source("resources/data-functions/exp4_load_data.R")  # setting up data
+source("resources/formatting/printing.R")  # model results in text
+source("resources/formatting/aesthetics.R")   # plot and table themes
+source("resources/data-functions/demographics.R")  # demographics tables
+```
+
+[![](resources/icons/preregistered.svg){title="Preregistration" width="30"}](https://osf.io/r3fy9) [![](resources/icons/open-materials.svg){title="Materials" width="30"}](https://github.com/bethanyhgardner/dissertation/blob/main/materials/exp4) [![](resources/icons/open-data.svg){title="Data" width="30"}](https://github.com/bethanyhgardner/dissertation/blob/main/data) [![](resources/icons/file-code-fill.svg){title="Analysis Code" width="30"}](https://github.com/bethanyhgardner/dissertation/blob/main/exp4.qmd)
+
+<br>
+
+## Motivation
+
+One of the most common objections to singular *they* is that both generic and specific forms are too ambiguous [@hekanaho2020]. However, it is unclear whether this opinion arises from actual difficulties in coreference resolution, or if it is more a product of language and gender attitudes. According to the processing fluency account [@alter2009], processing difficulty and language attitudes are connected both directly and indirectly. First, processing fluency can be a cue to language attitudes: if a listener attributes their difficulty understanding a speaker to that speaker being unable or unwilling to communicate in a way that the listener finds clear, experiencing less processing fluency will cause them to evaluate the speaker more negatively. Second, harder processing tends to elicit more negative affect, which may bias listeners' language attitudes [@dragojevic2020]. One line of experiments has connected the processing fluency account specifically to perceptions of nonnative-accented speech. Participants listened to audio recordings of fictional stories, and while their task was ostensibly to remember enough of the story to complete a fill-in-the-blanks memory task, the dependent measures were how much processing fluency they experienced (e.g., rating as clear, easy to understand), how positively they felt about the speaker (1‍--‍100 scale), and status (e.g., intelligence, competence) and solidarity (e.g., friendliness, niceness) judgments about the speaker. The experiments manipulated various ways of making the audio easier or harder to understand, independent of the speaker's accent. Adding background white noise to the audio decreased listener's fluency ratings when the speaker used a Punjabi accent, more so than when the same speaker used a Standard American English accent. The lower processing fluency then resulted in more negative affect and lower status attributions to the speaker. When a Mandarin-accented speaker was accompanied with subtitles or participants had read a transcript of the story first, participants reported higher processing fluency, which resulted in more positive feelings about and higher status attributions to the speaker. In both sets of experiments, the effects of making the listening conditions easier or harder on status attributions were mediated by processing fluency and sequentially by fluency and affect [@dragojevic2020; @dragojevic2016; @dragojevic2017].
+
+The processing fluency account would predict that dislike of singular *they* is caused, at least in part, by lower-level processing difficulty. Multiple factors could cause listeners to experience lower processing fluency for singular *they* compared to other pronouns: a larger set of possible antecedents may make it more ambiguous, it may elicit a number or gender mismatch agreement violation, it may be newly learned, and it is overall less frequent even for speakers familiar with it. The processing fluency account also predicts that making singular *they* easier to understand would reduce people's negative reactions to it, and therefore the people who use it.
+
+However, the actual amount of processing difficulty for singular *they*---particularly for definite specific gender-specified forms---is unclear. Only a few studies to date have investigated online comprehension of *they* coreferring with proper names. These are described in more detail in §0.4, but to review briefly, people are slower to identify the referent for *they* compared to *he* and *she*, as measured through a maze task while reading [@shenkar2023] and a mouse tracking task while listening [@arnold2023]. In two ERP experiments, a P600 effect was observed for *they* coreferring with proper names (gender-specified), but not with specific gender-unspecified referents (e.g., *the participant*) [@chen2023; @prasad2020]. Since the P600 indexes detecting a syntactic error or having difficulty comprehending a sentence's syntactic structure [@hagoort1993; @kaan2000; @osterhout1994; @osterhout1992], Prasad & Morris interpret their results to indicate that *they* coreferring with proper names still causes a gender agreement error, even though participants in their experiment all had significant experience with using they/them pronouns and consider it grammatical in offline acceptability judgments.
+
+However, results like @prasad2020 do not necessarily require that *they* for specific gender-specified antecedents is still ungrammatical for these participants. Even in LGBTQ+ communities, *they* coreferring with a name is still relatively infrequent overall and would not be expected in many contexts. Stimuli in sentence processing experiments are typically unrelated, with each sentence using a different name and referring to a new character. When singular *they* corefers with a new referent in each trial, it is unclear whether *they* is consistently perceived as syntactically anomalous, or if it is originally unexpected, but could be processed smoothly once anticipated to corefer with a particular referent. Experiment 4 tests processing in the context of repeated reference, where listeners can come to expect singular *they* to corefer with certain characters. This is potentially somewhat easier, and it more closely resembles the real-world contexts in which we hear pronouns referring to people.
+
+Additionally, the majority of processing studies, particularly for generic indefinite *they*, have used self-paced reading and eyetracking while reading measures. Experiment 4 is one of the first to use the visual world paradigm, which measures eye movements while participants listen to sentences describing a visual scene. Gaze at pictured characters provides a measure of online processing as the sentence unfolds, since listeners automatically look at what they think is being talked about [@allopenna1998; @sedivy1999; @spivey2002; @tanenhaus1995; @tanenhaus2000]. The visual world paradigm has advantages compared to other tasks, as it provides detailed time-course information about *which* alternative interpretations are being considered, in addition to *when* processing difficulties occur.
+
+Experiment 4 investigates the degree of processing difficulty of singular *they* compared to *he* and *she*, if the processing of singular *they* follows the same patterns as *he* and *she*, and if processing measures correspond with offline judgments. The design is based on a prior line of work investigating ambiguous pronoun resolution. In Arnold et al. [-@arnold2000; -@arnold2007], participants looked at illustrated scenes of cartoon characters and listened to stories about them:
+
+1.  Donald is bringing some mail to \[Mickey/Minnie\], while a violent storm is beginning.
+2.  He's/She's carrying an
+3.  umbrella and it looks like they're both going to need it.
+
+Part \[1\] introduced 2 named characters (*Donald, Mickey/Minnie*), using a verb (*bringing*) that allows for a subsequent pronoun to refer to either of the characters individually [@garnham2001; @gordon1993; @sanford1981]. While *he* or *she* in \[2\] is more likely to refer to the character mentioned first in the prior sentence (Donald) [@arnold2000; @arnold2007; @gernsbacher1989; @kaiser2011], it can also refer to the character mentioned second (Mickey/Minnie). In other words, the character mentioned first is more accessible [@ariel2006]. This structure makes it possible for the referent of *he* or *she*---called the target character in visual world experiments---to remain ambiguous until the next phrase [3] can be compared to the illustration. In this example, either Donald or Mickey/Minnie is carrying an umbrella ([Figure @fig-exp4-arnold2000]A). This allows for enough time to observe processing of the pronoun (*is carrying an*), but without creating a discourse context too different from actual language use.
+
+The stories in @arnold2000 manipulated 2 factors: the ambiguity of the pronoun (target and competitor characters using the same vs different pronouns) and the accessibility of the referent (target mentioned first vs second). The results showed that listeners rapidly use both gender and accessibility cues to identify which character the pronoun referred to. If gender was unambiguous (top right in [Figure @fig-exp4-arnold2000]A), the pronoun referred to the character mentioned first (bottom left), or both (top left), participants looked at the target character starting at approximately 200ms after the pronoun. This is about as quickly as effects in the visual world paradigm can be observed [@hallett1986; @tanenhaus1995]. When neither gender nor accessibility cues disambiguated the referent (bottom right), participants were slower to look at the target character ([Figure @fig-exp4-arnold2000]B). For the purposes of the present experiment, these results provide a validated stimuli design and a baseline for how we expect *he* and *she* to be processed.
+
+<br>
+
+![@arnold2000. [A] Recreation of design, showing the pronoun ambiguity and order of mention conditions. The original materials were illustrated using the Disney characters. \[B\] Results, with 0 indicating pronoun onset and horizontal lines indicating the verb (*bringing*).](materials/exp4/arnold2000.png){#fig-exp4-arnold2000}
+
+A later set of studies used a similar design to examine how listeners process pronouns acoustically ambiguous between *he* and *she* [@brown-schmidt2017; @falandays2020]. This experiment used similar stories as Arnold et al. [-@arnold2000; -@arnold2007], but different images. Instead of 2 characters being drawn to match the scene, characters were pictured in colored shapes. The target character was disambiguated by describing their location, e.g., *he's standing on a blue square* instead of *he's carrying an umbrella*. This allows for a larger range of stimuli to be created, and the prior results demonstrate that listeners can process *he* and *she* smoothly in these types of stories. Critically, while the descriptions may seem odd and somewhat discontinuous, the discourse structure matches how speakers introduce new referents and when they tend to use pronouns instead of names.
+
+The current experiment uses similar manipulations as Arnold et al. [-@arnold2000; -@arnold2007] and the same task as @brown-schmidt2017. One potential issue with this design is that *they* can be ambiguous between a singular and plural interpretation, even if participants learn that *they* is always singular in the context of the experiment. An alternative is to use stimuli that rule out a plural interpretation of *they*. Reflexive pronouns (*himself, herself, themself*) can syntactically constrain a singular interpretation [e.g., @runner2006; @sturt2003], but introduce a potential confound, since speakers vary in whether they prefer *themself* or *themselves* for singular referents [@ahn2022]. Another option is to use stimuli that semantically rule out a plural interpretation. Returning to some of the examples in the first chapter (§0.2.3), *they're worrying* can be singular or plural, since people can worry together, but *their free leg* can only be singular, since a body part only belongs to one person. However, it is difficult to create stimuli that rule out a plural interpretation, while still including a long enough period where the pronoun is ambiguous between two possible referents. Results like these would be difficult to interpret because it would be unclear whether processing costs are due to singular *they* itself, because the structure of the story does not match when speakers use pronouns instead of names or other referring expressions. Moreover, because fully ruling out a plural interpretation is difficult, the majority of instances of singular *they* in actual language use *do* contain some degree of ambiguity between singular and plural interpretations. Results from stimuli that reflect a very narrow set of contexts in which people hear singular *they*, where no plural interpretation is at all possible, would be less relevant.
+
+## Methods
+
+The design and analysis plan were [preregistered](https://osf.io/r3fy9 "Experiment 4 Preregistration") on the Open Science Framework. Sources and attributions for the images are included with the [materials](https://github.com/bethanyhgardner/dissertation/tree/main/materials/exp4 "Experiment 4 Materials"); the edited images and audio stimuli are available upon request. The de-identified [data](https://github.com/bethanyhgardner/dissertation/blob/main/data "Experiment 4 Data") and [analysis code](https://github.com/bethanyhgardner/dissertation/blob/main/exp4.qmd "Source Code") are available at this dissertation's [Github repository](https://github.com/bethanyhgardner/dissertation "Github repository").
+
+### Participants
+
+```{r}
+#| label: exp4-participants-data
+
+# demographic counts
+exp4_d_demographics <- read.csv(
+  "data/exp4_demographics.csv",
+  stringsAsFactors = TRUE
+)
+# subset of responses
+exp4_d_survey <- read.csv("data/exp4_survey.csv", stringsAsFactors = TRUE)
+
+# n
+exp4_n <- exp4_d_demographics %>%
+  filter(Category == "Age" & Group == "Total") %>%
+  pull(Total)
+```
+
+`r exp4_n` participants completed the study for partial course credit or for pay; their demographic information is shown in @tbl-exp4-demographics. Participants were required to be fluent English speakers (but not necessarily native or monolingual) and to have normal or corrected-to-normal vision and hearing, and most were Vanderbilt undergraduate students. An additional 2 participants completed the experiment, but were excluded due to too few trials having usable eyetracking data. The experiment lasted approximately 45 minutes.
+
+### Materials
+
+#### Characters
+
+Participants learned about 6 characters, each associated with a name and an image: 2 who used he/him, 2 who used she/her, and 2 who used they/them ([Figure @fig-exp4-stimuli]A). The 6 character names and 6 character images were the same as in Experiment 3 [@drucker2019] ([materials](https://github.com/bethanyhgardner/dissertation/blob/main/materials/exp4/images.md)). Recall that all names were gender neutral since counterbalancing gender associations of the names within lists was not feasible. Participants were randomly assigned to 1 of 6 lists, in order to counterbalance the images and names associated with characters who use they/them. Across lists, 3 images appeared twice with he/him and once with they/them, and 3 images appeared twice with she/her and once with they/them; each name appeared twice with each pronoun. Critically, across lists they/them appeared once with each image and once with each name, in order to avoid confounding interpretations about what aspects of a person's name or appearance may make it easier for someone to learn that they use they/them pronouns.
+
+<br>
+
+![Experiment 4: Stimuli. \[A\] Example set of characters. \[B\] Example trial screen and story, with grey boxes indicating information not shown to participants.](materials/exp4/figures/stimuli.png){#fig-exp4-stimuli}
+
+#### Stories
+
+```{r}
+#| label: exp4-audio-times
+
+exp4_audio_times <- read.csv("materials/exp4/audio-times.csv") %>%
+  filter(Type == "Pronoun") %>%
+  summarise(
+    min  = min(Time_Shape),
+    max  = max(Time_Shape),
+    mean = mean(Time_Shape),
+    sd   = sd(Time_Shape)
+  ) %>%
+  round(0)
+exp4_audio_times
+```
+
+The stories and visual scenes were based on @arnold2000 and @brown-schmidt2017. During each trial, the 6 characters were arranged in a 3x2 grid, each shown inside a colored shape (red, yellow, green, blue; triangle, square) ([Figure @fig-exp4-stimuli]B). Participants listened to stories in the frame:
+
+1.  Jaime is painting a portrait of Sam, as some paint is spilling on the floor.
+2.  He is/she is/they are
+3.  standing in a blue triangle
+4.  and the painting looks amazing
+
+Each story began with a sentence that named two characters, with an additional phrase to allow time for participants to identify them [1]. The two named characters---the target and competitor---always used different pronouns (e.g., Jaime: they/them, Sam: he/him). This created 3 **Pronoun Pair** conditions: they/them targets with he/him or she/her competitors [They\|HeShe], he/him or she/her targets with they/them competitors [HeShe\|They], and he/him or she/her targets with he/him or she/her competitors [HeShe\|SheHe]. Next, a pronoun (*he*, *she*, or *they*) referred to one of the named characters [2]. This created 2 **Order of Mention** conditions, where the pronoun refers to the character mentioned first in the preceding sentence or to the character mentioned second. [Figure @fig-exp4-stimuli]B shows an example of the first-mention condition, where the pronoun (*they*) refers to the first named character (*Jaime*). The second-mention story matching this scene would have *he is standing in a blue triangle*, referring to Sam. At this point in the story, participants could identify which of the named characters is the target if they knew the characters' pronouns and were using that information in their language comprehension (e.g., Jaime uses they/them and Sam uses he/him, meaning that they refers to Jaime). The stories then described the location of the target character \[3\]. Because the target and competitor characters were always pictured with the same color, the target was not fully disambiguated until the shape word, an average of `r exp4_audio_times$mean`ms after the pronoun onset. After the shape word \[3\], listeners could identify the target character without taking the pronoun into consideration. The story concluded with a final phrase, which did not include another pronoun referring to the character(s) \[4\]. After listening to each story, participants were asked to decide whether it matched the scene (e.g., if Jaime was standing in a blue square).
+
+There were a total of 60 story frames (\[1\] and \[4\]) ([materials](https://github.com/bethanyhgardner/dissertation/blob/main/materials/exp4/stories.md)). Within lists, each story appeared once in the first-mention condition and once in the second-mention condition. Across lists, each story appeared twice with each pronoun for counterbalancing, but with the same pair of names to make the stimuli recording feasible. There were a total of 24 pronoun + color + shape combinations (\[2\] and \[3\]). These clips were recorded as full sentences (not spliced together), and each trial randomly selected 1 of 3 versions, in order to avoid participants learning additional cues about a particular recording. The audio was recorded by the first author, a white native English speaker from the northeast U.S. with a feminine voice.
+
+### Procedure
+
+#### Character Learning
+
+To learn about the characters, participants first saw each character's image, accompanied by their name (e.g., *This is Jaime*) and a fact about them (e.g., *They like to play the piano*, *They work as an engineer*). Each character was shown twice, so that participants saw two examples of the characters' pronouns. However, pronouns were never directly stated (e.g., *This is Jaime, who uses they/them pronouns*), and the use of singular *they* was not explained to participants. Participants were then tested on the names and images of the characters. They were shown all 6 images and asked to click on the named character. If the answer was correct, the image and name of the character was displayed, along with another example of their pronouns (e.g., *Correct, they're Jaime*). If the answer was incorrect, the image of and information about the incorrectly chosen character was shown (e.g., *Incorrect, he's Sam*), followed by the image of and information about the correct character (e.g., *They're Jaime*). To continue, participants were required to get all 6 names correct in the same block. When listening to the stories, participants should then have been able to identify the images of the 2 named characters, and had seen at least 3 examples of each characters' pronouns.
+
+#### Eyetracking
+
+During each trial, the images were displayed for 1 second, then the audio began playing. After the story finished, the images remained on the screen, and the text *Did the story match the picture?* was displayed at the bottom. Participants clicked YES or NO at the corner of the screen to advance to the next trial. Eye movements were recorded with an Eyelink 1000 desktop-mounted eyetracker recording monocularly at 1000 Hz, with drift correction after every fifth trial. The trial order was randomly generated for each participant, the locations of the 6 images were randomly generated for each trial, and the colors and shapes were counterbalanced.
+
+Participants completed 6 practice trials in order to explain the task and that they should judge whether the story matched the scene based on the colored shape sentence, since the action described at the beginning (e.g., painting a portrait) was not pictured. These practice trials used a name instead of a pronoun (e.g., *Jaime is standing in a blue triangle*). 4 trials matched the scene, and 2 trials mismatched by referring to a color not pictured. After each practice trial, participants saw feedback on if their match judgment was correct.
+
+Participants then completed 96 critical and 18 filler trials, mixed in a randomized order. These varied according to 2 within-subjects factors: Pronoun Pair [They\|HeShe; HeShe\|They; HeShe\|SheHe] and Order of Mention [target mentioned first; second]. The target and competitor characters were evenly distributed, yielding a total of 32 critical trials for each pronoun. Filler trials were included to ensure that participants treated *no* as an option in the match judgment question, even if they considered singular they acceptable and knew which characters used they/them. 10 of the filler trials were unambiguously the wrong description, referring to a color that was not pictured on the screen (e.g., for [Figure @fig-exp4-stimuli]B, *they are standing in a red square*). The other 8 filler trials used one of the pronouns of the non-named characters, making the story incorrect for the target character, as well as the competitor character (e.g., for [Figure @fig-exp4-stimuli]B, *she is standing in a blue triangle*). The he/him and she/her characters were each called *they* twice, and the they/them characters were each called *he* once and *she* once. No filler trials used *he* instead of *she* or *she* instead of *he*. Note that throughout the experiment, they was always singular, never plural. After completing the 120 trials, participants were tested on the names of the characters, following the same procedure as before, but without feedback.
+
+#### Survey
+
+Finally, participants completed the same singular they naturalness ratings, familiarity with using they/them pronouns, gender binary and gender essentialism beliefs, and demographics questions as in Experiment 3 ([materials](https://github.com/bethanyhgardner/dissertation/blob/main/materials/exp4/survey.md)). All demographic questions included the option to not respond. @fig-exp4-procedure shows an overview of the full procedure.
+
+<br>
+
+![Experiment 4: Procedure.](materials/exp4/figures/procedure.png){#fig-exp4-procedure}
+
+## Predictions
+
+The first question concerns whether listeners can accurately comprehend *they* as singular, then combine this with knowledge about the character's pronouns to identify who is being described in the story. If so, participants will preferentially look at the target character after the pronoun and before the disambiguating shape word. While it is theoretically possible that singular *they* would show no processing costs compared to *he* or *she*, prior results indicate this is currently unlikely [@arnold2023; @chen2023; @prasad2020; @sanford2007; @shenkar2023]. Instead, listeners may identify the referent for singular *they* before the disambiguation, but more slowly than they do for *he* and *she*. This result would resemble those observed in young children [@arnold2007] and adult foreign language learners [@cunnings2017; @gruter2012; @speyer2019], who can use gender and order of mention cues from pronouns to identify the referent, but do so more slowly than fluent adults. Alternatively, there are two ways of observing results where listeners do not preferentially look at the target before the disambiguating shape word, which the current experiment cannot distinguish between. One possibility is that listeners attempt to use singular *they* to identify the target character, but do not succeed because of ambiguity. Another possibility is that listeners recognize the potential ambiguity in *they* and strategically choose to wait until hearing more information before deciding on an interpretation.
+
+A secondary question concerns the competitor character, who is named at the beginning of the story but whose pronouns are never used. Stories using *he* and *she* can have a competitor who uses she/her or he/him (never the same as the target character), or a competitor who uses they/them. A difference between these two conditions could be predicted in either direction: If trials where the competitor character uses they/them are slower than trials where the competitor character uses he/him or she/her, this could indicate that some aspect of the they/them characters---the pronoun activated alongside the character or the character themself---is causing greater competition (making it a stronger possibility) than the he/him and she/her characters. If, on the other hand, trials where the competitor character uses they/them are faster, this could indicate that listeners are treating the more ambiguous character as less likely to be referred to, either in general or with a pronoun.
+
+With regards to order of mention, we expect to replicate prior results for *he* and *she*, where participants are more likely to look at target characters who were named first than target characters who were named second, because although the pronoun can refer to either, it is more likely to refer to the person mentioned first [@arnold2000; @arnold2007; @brown-schmidt2017]. If we also observe an order of mention effect for singular *they*---either the same as or present but reduced compared to he and she---it would suggest that singular *they* is being integrated into listeners' standard discourse processing mechanisms.
+
+## Results
+
+### Participant Backgrounds
+
+```{r}
+#| label: exp4-participants-counts
+
+# Age
+exp4_n_age <- exp4_d_survey %>%
+  filter(Category == "Age") %>%
+  summarise(
+    min  = min(Response_Num),
+    max  = max(Response_Num),
+    med  = median(Response_Num),
+    mean = mean(Response_Num) %>% round(2),
+    sd   = sd(Response_Num) %>% round(2)
+  )
+exp4_n_age
+
+# Gender
+exp4_n_gender <- exp4_d_demographics %>%
+  filter(Category == "Gender" & Group != "Total") %>%
+  select(-Category) %>%
+  rotate_df(cn = TRUE)
+exp4_n_gender
+
+# English
+exp4_n_english <- exp4_d_demographics %>%
+  filter(Category == "English Experience" & Group != "Total") %>%
+  select(-Category) %>%
+  mutate(Group = case_when(
+    str_detect(Group, "competent") ~ "Fluent",
+    str_detect(Group, "Native")    ~ "Native"
+  )) %>%
+  rotate_df(cn = TRUE)
+exp4_n_english
+```
+
+```{r}
+#| label: exp4-survey-ratings
+
+# Subset data
+exp4_d_ratings <- exp4_d_survey %>%
+  filter(Category == "Sentence Naturalness Ratings" &
+    !is.na(Response_Num)) %>%
+  select(ParticipantID, Item, Response_Num) %>%
+  mutate(Type = ifelse(str_detect(Item, "Name"), "Name", "Generic"))
+
+# Means
+exp4_r_rating_means <- exp4_d_ratings %>%
+  group_by(Type) %>%
+  summarise(
+    mean = mean(Response_Num, na.rm = TRUE),
+    SD   = sd(Response_Num, na.rm = TRUE)
+  ) %>%
+  column_to_rownames("Type") %>%
+  round(2)
+exp4_r_rating_means
+```
+
+```{r}
+#| label: exp4-survey-ratings-model
+
+# Mean-center according to scale
+exp4_d_ratings %<>% mutate(Response_Centered = Response_Num - 4)
+
+# Compare names to indefinites
+exp4_d_ratings$Type %<>% as.factor()
+contrasts(exp4_d_ratings$Type) <- cbind("=Name_Generic" = c(+.5, -.5))
+contrasts(exp4_d_ratings$Type)
+
+exp4_m_ratings <- lmer(
+  formula = Response_Centered ~ Type + (1 | Item) + (Type | ParticipantID),
+  data = exp4_d_ratings
+)
+summary(exp4_m_ratings)
+
+exp4_r_ratings <- exp4_m_ratings %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp4-survey-use-they
+
+exp4_d_use_they <- exp4_d_survey %>%
+  filter(str_detect(Category, "They/Them") & Response_Bool == TRUE) %>%
+  group_by(Item) %>%
+  summarise(n = n()) %>%
+  bind_rows(tibble(  # Add options not represented in exp 4
+    Item = c("Myself", "Not Heard About"),
+    n    = c(0, 0)
+  )) %>%
+  mutate(Item = str_remove_all(Item, " ")) %>%
+  rotate_df(cn = TRUE)
+exp4_d_use_they
+```
+
+```{r}
+#| label: exp4-survey-gender-beliefs
+
+# Subset & scale data
+exp4_d_gender_beliefs <- exp4_d_survey %>%
+  filter(Category == "Gender Beliefs" & !is.na(Response_Num)) %>%
+  mutate(Response_Scaled = Response_Num - 1) %>%
+  group_by(ParticipantID) %>%
+  summarise(Total = sum(Response_Scaled))
+
+# Summary stats
+exp4_d_gender_beliefs <- exp4_d_gender_beliefs %>%
+  summarise(
+    min  = min(Total),
+    max  = max(Total),
+    mean = mean(Total) %>% round(2),
+    SD   = sd(Total)   %>% round(2)
+  )
+exp4_d_gender_beliefs
+```
+
+To contextualize the findings, I first discuss the results of the survey. Most participants were in the typical undergraduate age range (*M* = `r exp4_n_age$mean`, *SD* = `r exp4_n_age$sd`) and described themselves as native English speakers (N = `r exp4_n_english$Native`). `r exp4_n_gender$Female` were women, `r exp4_n_gender$Male` were men, and none identified as transgender and/or a gender different than their sex assigned at birth (@tbl-exp4-demographics). Overall, all participants were at least somewhat familiar with singular *they* before the experiment: `r exp4_d_use_they$HeardAbout` had heard about people using they/them pronouns but not met someone who does, `r exp4_d_use_they$HaveMet` had met but were not close to anyone who uses they/them, and `r exp4_d_use_they$CloseTo` were close to someone who uses they/them, but `r exp4_d_use_they$Myself` participants used they/them themselves ([Figure @fig-exp4-survey]B). When rating the naturalness of singular *they* coreferring with different types of referents ([Figure @fig-exp4-survey]A), acceptance of indefinite forms was generally high (*M* = `r exp4_r_rating_means['Generic', 'mean']`, *SD* = `r exp4_r_rating_means['Generic', 'SD']`). Surprisingly, ratings for proper names (*M* = `r exp4_r_rating_means['Name', 'mean']`, *SD* = `r exp4_r_rating_means['Name', 'SD']`) were not significantly lower than ratings for indefinites @tbl-exp4-ratings). For the gender beliefs measure [@nagoshi2008], responses were again scaled to 0--6 and summed, so that a score of 0 indicated the lowest endorsement of the gender binary and gender essentialism, and a score of 54 indicated the highest [Figure @fig-exp4-survey]C. Participant totals spanned the entire range but were strongly skewed towards the lower end, with the mean response favorable towards trans and gender-nonconforming people (range = `r exp4_d_gender_beliefs$min`--`r exp4_d_gender_beliefs$max`, *M* = `r exp4_d_gender_beliefs$mean`, *SD* = `r exp4_d_gender_beliefs$SD`) (see @tbl-exp4-gender-beliefs for item text and means).
+
+<br>
+
+```{r}
+#| label: tbl-exp4-demographics
+#| tbl-cap: "Experiment 4: Participant demographics. Categories with higher totals allowed participants to select as many options as applied. All questions included the option to not respond."
+#| output: true
+
+demographics_table(
+  exp4_d_demographics,
+  categories = c(
+    "Age", "Gender", "Transgender & Gender-Diverse", "Sexuality",
+    "English Experience", "Race/Ethnicity"
+  ),
+  title = "Experiment 4: Participant Demographics"
+)
+```
+
+<br>
+
+```{r}
+#| label: fig-exp4-survey
+#| fig-cap: "Experiment 4: Prior Familiarity and Attitudes Survey. [A] Naturalness ratings on a 7-point Likert scale (1 = very unnatural, 7 = very natural) for singular *they* coreferring with generic and quantified referents and with proper names. [B] Experience with using they/them pronouns. [C] Gender binary and essentialism beliefs, with higher scores indicating higher endorsement and thus more negative attitudes towards transgender and gender non-conforming people. The mean response is indicated by the black line."
+#| fig-asp: 1
+#| output: true
+#| cache: true
+
+# Ratings----
+exp4_p_ratings <- exp4_d_survey %>%
+  filter(Category == "Sentence Naturalness Ratings") %>%
+  mutate(
+    Response_Num = Response_Num %>%
+      as.factor() %>%
+      fct_rev() %>%
+      recode("7" = "7 Very Natural"),
+    Item = Item %>%
+      as.factor() %>%
+      droplevels() %>%
+      str_replace("\n", " ") %>%
+      fct_relevel("Generic", after = 0) %>%
+      fct_relevel("Every", after = 1) %>%
+      fct_relevel("Neutral Name", after = 3) %>%
+      fct_relevel("Fem Name", after = 5)
+  ) %>%
+  ggplot(aes(y = fct_rev(Item), fill = Response_Num)) +
+  geom_bar(position = "fill") +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_discrete(expand = c(0, 0)) +
+  scale_fill_brewer(
+    palette = "Spectral", direction = -1,
+    guide = guide_legend(
+      title = "Very Unnatural",
+      byrow = TRUE, nrow = 1,
+      direction = "horizontal", reverse = TRUE,
+      keywidth = .8, keyheight = .8
+    )
+  ) +
+  theme_classic() +
+  survey_theme +
+  labs(
+    title = "Singular <i>They</i> Naturalness Ratings",
+    x = element_blank(), y = element_blank()
+  )
+
+# Experience using they/them----
+exp4_p_familiarity <- exp4_d_survey %>%
+  filter(str_detect(Category, "They/Them")) %>%
+  filter(Item != "Aggregate" & Response_Bool == TRUE) %>%
+  select(ParticipantID, Item, Response_Bool) %>%
+  pivot_wider(
+    names_from  = Item,
+    values_from = Response_Bool
+  ) %>%
+  mutate(.keep = c("unused"), HighestFamiliarity = case_when(
+    `Close To`    == TRUE ~ "Close To",
+    `Have Met`    == TRUE ~ "Have Met",
+    `Heard About` == TRUE ~ "Heard About"
+  )) %>%
+  group_by(HighestFamiliarity) %>%
+  summarise(n = n_distinct(ParticipantID)) %>%
+  add_row(
+    n = c(0, 0),
+    HighestFamiliarity = c("Myself", "Not Heard\nAbout")
+  ) %>%
+  mutate(
+    HighestFamiliarity = HighestFamiliarity %>%
+      factor(
+        levels = c(
+          "Myself", "Close To", "Have Met", "Heard About", "Not Heard\nAbout"
+        ),
+        ordered = TRUE
+    ),
+    Label = "Highest\nFamiliarity"
+  ) %>%
+  ggplot(aes(y = Label, x = n, fill = HighestFamiliarity)) +
+  geom_bar(position = "fill", stat = "identity") +
+  scale_fill_brewer(palette = "Spectral", direction = -1,
+    guide = guide_legend(
+      title = NULL, ncol = 6,
+      direction = "horizontal", reverse = TRUE,
+      keywidth = .8, keyheight = .8
+    )
+  ) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_discrete(expand = c(0, 0)) +
+  theme_classic() +
+  survey_theme +
+  labs(
+    title = "Experience Using They/Them Pronouns",
+    x     = element_blank(),
+    y     = element_blank(),
+    fill  = element_blank()
+  )
+
+# Gender beliefs----
+exp4_d_gender_beliefs <- exp4_d_survey %>%
+  filter(Category == "Gender Beliefs") %>%
+  mutate(Response_Scaled = Response_Num - 1) %>%
+  group_by(ParticipantID) %>%
+  summarise(Total = sum(Response_Scaled))
+
+exp4_p_gender_beliefs <- exp4_d_gender_beliefs %>%
+  ggplot(aes(x = Total, fill = as.factor(Total))) +
+  geom_histogram(binwidth = 1, show.legend = FALSE) +
+  geom_vline(aes(xintercept = mean(Total))) +
+  coord_cartesian(xlim = c(54, 0), expand = 0, clip = "off") +
+  scale_y_continuous(breaks = c(1, 2, 3)) +
+  scale_fill_manual(values =
+      rainbow %>%
+      filter(Score %in% exp4_d_gender_beliefs$Total) %>%
+      pull(Color)
+  ) +
+  theme_classic() +
+  survey_theme +
+  theme(
+    axis.title.y = element_text(
+      angle = 0,
+      margin = margin(r = -0.9, unit = "in")
+    )
+  ) +
+  labs(
+    title = "Gender Binary & Gender Essentialism Beliefs",
+    x     = "More Endorsement – Less Endorsement",
+    y     = "N\nParticipants"
+  )
+
+## Combine----
+exp4_p_ratings + exp4_p_familiarity + exp4_p_gender_beliefs +
+  plot_layout(heights = c(2.5, 1, 1.5)) +
+  plot_annotation(
+    title = "Experiment 4: Prior Familiarity & Attitudes",
+    tag_levels = "A",
+    theme = patchwork_theme
+  )
+```
+
+### Offline Measures
+
+#### Character Learning
+
+```{r}
+#| label: exp4-characters-data
+
+exp4_d_characters <- read.csv(
+  "data/exp4_characters.csv",
+  stringsAsFactors = TRUE
+)
+```
+
+```{r}
+#| label: exp4-characters-pretest
+
+exp4_n_pre <- exp4_d_characters %>%
+  filter(Section == "pre") %>%
+  group_by(ParticipantID) %>%
+  summarise(nRounds = n_distinct(Test_Round)) %>%
+  summarise(
+    min  = min(nRounds),
+    max  = max(nRounds),
+    mean = mean(nRounds) %>% round(2) %>% format(nsmall = 2),
+    sd   = sd(nRounds)   %>% round(2) %>% format(nsmall = 2)
+  )
+exp4_n_pre
+
+exp4_r_pretest <- exp4_d_characters %>%
+  filter(Section == "pre") %>%
+  group_by(T_Pronoun) %>%
+  summarise(
+    mean = mean(Acc) %>% round(2) %>% format(nsmall = 2),
+    sd   = sd(Acc)   %>% round(2) %>% format(nsmall = 2)
+  ) %>%
+  column_to_rownames(var = "T_Pronoun")
+exp4_r_pretest
+```
+
+```{r}
+#| label: exp4-characters-posttest
+
+exp4_n_post <- exp4_d_characters %>%
+  filter(Section == "post") %>%
+  group_by(ParticipantID) %>%
+  summarise(Correct = sum(Acc)) %>%
+  group_by(Correct) %>%
+  summarise(n = n_distinct(ParticipantID)) %>%
+  column_to_rownames("Correct")
+exp4_n_post
+```
+
+Participants were generally able to learn the name-image pairs within 2--3 test rounds (*M* = `r exp4_n_pre$mean`, *SD* = `r exp4_n_pre$sd`). Across all pretest rounds, accuracies for they/them characters (*M* = `r exp4_r_pretest['They', 'mean']`, *SD* = `r exp4_r_pretest['They', 'sd']`) and she/her characters (*M* = `r exp4_r_pretest['She', 'mean']`, *SD* = `r exp4_r_pretest['She', 'sd']`) were slightly lower than accuracy for he/him characters (*M* = `r exp4_r_pretest['He', 'mean']`, *SD* = `r exp4_r_pretest['He', 'sd']`). Participants remembered the names of the characters throughout the study, with most (N = `r exp4_n_post['6', 'n']`) getting all 6 correct in the post-test, and no participants excluded for getting 4 or fewer correct.
+
+#### Match Judgments
+
+```{r}
+#| label: exp4-match-data
+
+# Load data
+exp4_d_match <- read.csv("data/exp4_match-judgments.csv",
+                         stringsAsFactors = TRUE) %>%
+  filter(TrialType != "PR") %>%
+  filter(!is.na(Match_Num)) %>%  # drop missing data (unclear location)
+  mutate(Story = str_sub(TrialID, -2) %>% as.numeric()) %>%
+  select(ParticipantID, TrialType, Pronoun_Pair, T_Pronoun, C_Pronoun,
+         Story, TrialID, Match_Num, Match_RT, IsOutlier)
+
+# Contrast coding
+contrasts(exp4_d_match$Pronoun_Pair) <- cbind(
+  "=TheyTarget" = c(+.33, +.33, -.66),
+  "=TheyComp"   = c(+.50, -.50, 0)
+)
+contrasts(exp4_d_match$Pronoun_Pair)
+str(exp4_d_match)
+```
+
+```{r}
+#| label: exp4-match-acc-means
+
+exp4_r_match_means <- exp4_d_match %>%
+  group_by(TrialType, Pronoun_Pair) %>%
+  summarise(
+    mean = mean(Match_Num) %>% round(2) %>% format(nsmall = 2),
+    sd   = sd(Match_Num)   %>% round(2) %>% format(nsmall = 2)
+  ) %>%
+  ungroup() %>%
+  mutate(.keep = c("unused"), Condition =
+    str_c(TrialType, Pronoun_Pair, sep = " ")
+  ) %>%
+  column_to_rownames("Condition")
+exp4_r_match_means
+```
+
+```{r}
+#| label: exp4-match-acc-model-CR
+#| cache: true
+
+exp4_m_match_CR <- buildmer(
+  formula = Match_Num ~ Pronoun_Pair +
+            (Pronoun_Pair | ParticipantID) + (Pronoun_Pair | Story),
+  data = exp4_d_match %>% filter(TrialType == "CR"),
+  family = binomial,
+  buildmerControl(direction = c("order"))
+)
+summary(exp4_m_match_CR)
+exp4_r_match_CR <- exp4_m_match_CR@model %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp4-match-acc-model-FP
+#| cache: true
+
+# No wrong pronoun trials for HeShe|They condition
+# So mean-center effects code They|HeShe vs HeShe|SheHe
+exp4_d_match_FP <- exp4_d_match %>%
+  filter(TrialType == "FP") %>%
+  mutate(CorrectPronoun = droplevels(Pronoun_Pair))
+contrasts(exp4_d_match_FP$CorrectPronoun) <- cbind(
+  "=They_HeShe" = c(+.5, -.5)
+)
+contrasts(exp4_d_match_FP$CorrectPronoun)
+
+exp4_m_match_FP <- buildmer(
+  formula = Match_Num ~ CorrectPronoun +
+            (CorrectPronoun | ParticipantID) + (CorrectPronoun | Story),
+  data = exp4_d_match_FP,
+  family = binomial,
+  buildmerControl(direction = c("order"))
+)
+summary(exp4_m_match_FP)
+exp4_r_match_FP <- exp4_m_match_FP@model %>% tidy_model_results()
+```
+
+When asked if the description they heard matched the scene (@fig-exp4-match, left), participants correctly judged the majority of test trials to be matching. The match rates for singular *they* trials (*M* = `r exp4_r_match_means['CR They|HeShe', 'mean']`) were not significantly lower than the match rates for *he* and *she* trials (*M~HeShe\|They~* = `r exp4_r_match_means['CR HeShe|They', 'mean']`, *M~HeShe\|SheHe~* = `r exp4_r_match_means['CR HeShe|SheHe', 'mean']`) (@tbl-exp4-match-CR). For the wrong description trials, which referred to a color that was not pictured, participants were correctly at floor. For the wrong pronoun trials, which used the pronoun that neither of the two named characters used, participants varied. However, they were not less likely to indicate a mismatch when they/them characters were referred to with *he* or *she* (*M* = `r exp4_r_match_means['FP They|HeShe', 'mean']`) than when he/him or she/her characters were referred to with *they* (*M* = `r exp4_r_match_means['FP HeShe|SheHe', 'mean']`) (@tbl-exp4-match-FP).
+
+```{r}
+#| label: exp4-match-RT-means
+
+# Means for each trial type * pronoun pair condition
+exp4_r_RT_means <- exp4_d_match %>%
+  filter(IsOutlier == FALSE) %>%
+  group_by(TrialType, Pronoun_Pair) %>%
+  summarise(
+    mean = round(mean(Match_RT)),
+    sd   = round(sd(Match_RT))
+  ) %>%
+  ungroup() %>%
+  mutate(.keep = c("unused"), Condition =
+    str_c(TrialType, Pronoun_Pair, sep = " ")
+  )
+
+# Add means for each trial type, summarizing across pronoun pair
+exp4_r_RT_means %<>% bind_rows(
+  exp4_d_match %>%
+    filter(IsOutlier == FALSE) %>%
+    group_by(TrialType) %>%
+    summarise(
+      mean = round(mean(Match_RT)),
+      sd   = round(sd(Match_RT))
+    ) %>%
+    mutate(.keep = c("unused"), Condition =
+      str_c(TrialType, " All")
+    )
+  ) %>%
+  column_to_rownames("Condition")
+
+exp4_r_RT_means
+```
+
+```{r}
+#| label: exp4-match-RT-model
+#| cache: true
+
+exp4_m_match_RT <- buildmer(
+  formula = Match_RT ~ Pronoun_Pair +
+            (Pronoun_Pair | ParticipantID) + (Pronoun_Pair | Story),
+  data = exp4_d_match %>%
+    filter(TrialType == "CR" & !is.na(Match_Num) & IsOutlier == FALSE),
+  family = inverse.gaussian(link = "identity"),
+  buildmerControl(direction = c("order"))
+)
+summary(exp4_m_match_RT)
+exp4_r_match_RT <- exp4_m_match_RT@model %>% tidy_model_results()
+```
+
+Reaction times were calculated from the display of the match question until the participant's click, with responses outside of 3SD of the mean of each trial type excluded as outliers (@fig-exp4-match, right). Similar to the accuracy data, reaction times were shortest for the wrong description trials (*M* = `r exp4_r_RT_means['FD All', 'mean']`ms, *SD* = `r exp4_r_RT_means['FD All', 'sd']`ms), somewhat longer for test trials (*M* = `r exp4_r_RT_means['CR All', 'mean']`ms, *SD* = `r exp4_r_RT_means['CR All', 'sd']`ms), and longest and most variable for wrong pronoun trials (*M* = `r exp4_r_RT_means['FP All', 'mean']`ms, *SD* = `r exp4_r_RT_means['FP All', 'sd']`ms). An inverse Gaussian distribution with an identity link was fit to test whether Pronoun Pair affected reaction time in the test trials (@tbl-exp4-match-RT). This accounts for the non-normal distribution of reaction time data, but in contrast to applying a non-linear transformation (e.g., log), it maintains the theoretical assumption that experimental manipulations affect the total amount of time taken to make a decision [@lo2015]. The maximal model that converged included by-participant and by-item intercepts and slopes for Pronoun Pair [@bates2015; @voeten2023; @rcoreteam2023]. Participants were slower to make match judgments for stories using singular *they* than stories using *he* and *she* (`r exp4_r_match_RT['Pronoun_Pair=TheyTarget', 'Text']`). The pronoun of the competitor character did not affect reaction times (`r exp4_r_match_RT['Pronoun_Pair=TheyComp', 'Text']`).
+
+```{r}
+#| label: fig-exp4-match
+#| fig-cap: "Experiment 4: By-participant mean proportions of stories judged to match the picture (left) and reaction times (right). Lines indicate by-participant means between Pronoun Pair conditions; violins indicate the distribution of by-participant means; point ranges indicate condition means and 95% CIs calculated over the by-participant means. The correct answers are match (=1) for test trials and mismatch (=0) for wrong pronoun and wrong description trials. For the wrong description trials, he/him or she/her for a they/them character corresponds to the HeShe|SheHe condition; they/them for a he/him or she/her character corresponds to the They|HeShe condition; and there were no wrong pronoun trials for the HeShe|They condition."
+#| fig-width: 6.5
+#| fig-height: 7.5
+#| output: true
+#| cache: true
+
+# Setup----
+exp4_d_match_plots <- read.csv("data/exp4_match-judgments.csv",
+                               stringsAsFactors = TRUE) %>%
+  filter(TrialType != "PR") %>%
+  mutate(TrialType = factor(
+    TrialType,
+    levels = c("CR", "FD", "FP"),
+    labels = c("Test", "Wrong Description", "Wrong Pronoun")
+  )) %>%
+  filter(!is.na(Match_Num) & IsOutlier == FALSE) %>%
+  group_by(ParticipantID, TrialType, Pronoun_Pair) %>%
+  summarise(
+    Mean_Match = mean(Match_Num, na.rm = TRUE),
+    Mean_RT    = mean(Match_RT, na.rm = TRUE)
+  )
+
+# Test trials----
+exp4_p_match_test <- (
+  ggplot(
+    data = exp4_d_match_plots %>% filter(TrialType == "Test"),
+    aes(x = Pronoun_Pair, color = TrialType, y = Mean_Match)) +
+    geom_line(
+      aes(group = ParticipantID), color = "#3288BD",
+      position = position_jitter(width = 0, height = 0.02, seed = 4)
+    ) +
+    stat_summary(
+      fun.data = mean_se, geom = "pointrange",
+      color = "black", linewidth = 0.75, size = 0.25
+    ) +
+    scale_x_discrete(expand = c(0.15, 0.15), position = "top") +
+    scale_y_continuous(
+      expand = c(0, 0), limits = c(-0.03, 1.20),
+      breaks = c(0, 0.25, 0.5, 0.75, 1)) +
+    theme_classic() +
+    match_theme +
+    guides(color = guide_none()) +
+    labs(
+      title = "Test Trials",
+      x = element_blank(), y = element_blank()
+    ) +
+    annotate(
+      geom = "rect", fill = NA, color = "black",
+      xmin = c(0.5, 1.5, 2.5), xmax = c(1.5, 2.5, 3.5), ymin = 1.05, ymax = 1.20
+    )
+  ) + (
+  ggplot(
+    data = exp4_d_match_plots %>% filter(TrialType == "Test"),
+    aes(x = Pronoun_Pair, y = Mean_RT)) +
+    geom_violin(color = "#3288BD", fill = "#3288BD") +
+    stat_summary(
+      fun.data = mean_se, geom = "pointrange",
+      color = "black", linewidth = 0.75, size = 0.25
+    ) +
+    scale_x_discrete(expand = c(0.15, 0.15), position = "top") +
+    scale_y_continuous(
+      expand = c(0, 0),
+      breaks = c(2000, 4000, 6000, 8000, 10000)
+    ) +
+    theme_classic() +
+    match_theme +
+    guides(color = guide_none()) +
+    labs(title = element_blank(), x = element_blank(), y = element_blank()) +
+    annotate(
+      geom = "rect", fill = NA, color = "black",
+      xmin = c(0.5, 1.5, 2.5), xmax = c(1.5, 2.5, 3.5),
+      ymin = 10000, ymax = 11000
+    )
+  )
+
+# Wrong description trials----
+exp4_p_match_fd <- (
+  ggplot(
+    data = exp4_d_match_plots %>% filter(TrialType == "Wrong Description"),
+    aes(x = Pronoun_Pair, color = TrialType, y = Mean_Match)) +
+    geom_line(
+      aes(group = ParticipantID), color = "#99D594",
+      position = position_jitter(width = 0, height = 0.02, seed = 4)
+    ) +
+    stat_summary(
+      fun.data = mean_se, geom = "pointrange",
+      color = "black", linewidth = 0.75, size = 0.25
+    ) +
+    scale_x_discrete(expand = c(0.15, 0.15), position = "top") +
+    scale_y_continuous(
+      expand = c(0, 0), limits = c(-0.03, 1.20),
+      breaks = c(0, 0.25, 0.5, 0.75, 1)) +
+    theme_classic() +
+    match_theme +
+    guides(color = guide_none()) +
+    labs(
+      title = "Wrong Description Trials",
+      x = element_blank(),
+      y = "By-Participant Mean Matching"
+    ) +
+    annotate(
+      geom = "rect", fill = NA, color = "black",
+      xmin = c(0.5, 1.5, 2.5), xmax = c(1.5, 2.5, 3.5), ymin = 1.05, ymax = 1.20
+    )
+  ) + (
+  ggplot(
+    data = exp4_d_match_plots %>% filter(TrialType == "Wrong Description"),
+    aes(x = Pronoun_Pair, color = TrialType, y = Mean_RT)) +
+    geom_violin(color = "#99D594", fill = "#99D594") +
+    stat_summary(
+      fun.data = mean_se, geom = "pointrange",
+      color = "black", linewidth = 0.75, size = 0.25
+    ) +
+    scale_x_discrete(expand = c(0.15, 0.15), position = "top") +
+    scale_y_continuous(
+      expand = c(0, 0),
+      breaks = c(2000, 5500, 9000, 12500, 16000)
+    ) +
+    theme_classic() +
+    match_theme +
+    guides(color = guide_none()) +
+    labs(
+      title = element_blank(),
+      x = element_blank(),
+      y = "By-Participant Mean RT (ms)"
+    ) +
+    annotate(
+      geom = "rect", fill = NA, color = "black",
+      xmin = c(0.5, 1.5, 2.5), xmax = c(1.5, 2.5, 3.5),
+      ymin = 16500, ymax = 18500
+    )
+  )
+
+# Wrong pronoun trials----
+exp4_p_match_fp <- (
+  ggplot(
+    data = exp4_d_match_plots %>% filter(TrialType == "Wrong Pronoun"),
+    aes(x = Pronoun_Pair, color = TrialType, y = Mean_Match)) +
+    geom_line(
+      aes(group = ParticipantID), color = "#D53E4F",
+      position = position_jitter(width = 0, height = 0.02, seed = 4)
+    ) +
+    stat_summary(
+      fun.data = mean_se, geom = "pointrange",
+      color = "black", linewidth = 0.75, size = 0.25
+    ) +
+    scale_x_discrete(  # clarify labels for this condition
+      expand = c(0.15, 0.15), position = "top",
+      labels = c(
+        "HeShe|SheHe" = "They For He/She",
+        "They|HeShe" = "He/She For They"
+      )
+    ) +
+    scale_y_continuous(
+      expand = c(0, 0), limits = c(-0.03, 1.20),
+      breaks = c(0, 0.25, 0.5, 0.75, 1)) +
+    theme_classic() +
+    match_theme +
+    guides(color = guide_none()) +
+    labs(
+      title = "Wrong Pronoun Trials",
+      x = element_blank(), y = element_blank()
+    )  +
+    annotate(
+      geom = "rect", fill = NA, color = "black",
+      xmin = c(0.5, 1.5), xmax = c(1.5, 2.5), ymin = 1.05, ymax = 1.20
+    )
+  ) + (
+  ggplot(
+    data = exp4_d_match_plots %>% filter(TrialType == "Wrong Pronoun"),
+    aes(x = Pronoun_Pair, color = TrialType, y = Mean_RT)) +
+    geom_violin(color = "#D53E4F", fill = "#D53E4F") +
+    stat_summary(
+      fun.data = mean_se, geom = "pointrange",
+      color = "black", linewidth = 0.75, size = 0.25
+    ) +
+    scale_x_discrete(  # clarify labels for this condition
+      expand = c(0.15, 0.15), position = "top",
+      labels = c(
+        "HeShe|SheHe" = "They For He/She",
+        "They|HeShe"  = "He/She For They"
+      )
+    ) +
+    scale_y_continuous(
+      expand = c(0, 0),
+      breaks = c(2000, 5000, 8000, 11000, 14000)
+    ) +
+    theme_classic() +
+    match_theme +
+    guides(color = guide_none()) +
+    labs(title = element_blank(), x = element_blank(), y = element_blank()) +
+    annotate(
+      geom = "rect", fill = NA, color = "black",
+      xmin = c(0.5, 1.5), xmax = c(1.5, 2.5), ymin = 14000, ymax = 16000
+    )
+  )
+
+# Combine----
+exp4_p_match_test / exp4_p_match_fd / exp4_p_match_fp +
+  plot_annotation(
+    title = "Experiment 4: Match Judgments",
+    theme = patchwork_theme
+  )
+```
+
+### Online Processing
+
+```{r}
+#| label: exp4-eye-data
+
+# 30 subj * 96 trials * 103 timesteps = 296640
+# -6 trials with no data at all (618) = 296022
+exp4_d <- exp4_load_data_stats()
+str(exp4_d)
+
+# Pronoun, Order
+contrasts(exp4_d$Pronoun_Pair)  # double check contrast coding
+contrasts(exp4_d$Order)
+
+# Trend (rescaled, centered)
+summary(exp4_d$Time)
+summary(exp4_d$Time_Scaled)
+
+# AR(1)
+exp4_d %>% select(WasTarget, IsTarget) %>% summary()
+
+# Number of data points per trial
+exp4_d %>%
+  group_by(ParticipantID, TrialID) %>%
+  summarise(n = n()) %>%  # count observations per trial per participant
+  group_by(n) %>%
+  summarise(n_obs = n_distinct(n))  # all have 103 obs
+```
+
+@fig-exp4-6panel shows fixations to the target, competitor, distractor, and no characters, starting 500ms before the onset of the pronoun and continuing for 2500ms (e.g., *...spilling on the floor. They are standing in a blue triangle, and the painting looks amazing*). The He\|She and She\|He trials (first row) generally resemble prior results [@arnold2000; @arnold2007; @brown-schmidt2017], with participants starting to look at the target more than the competitor rapidly after the onset of the pronoun, and more so when the target character was mentioned first. Unexpectedly, the order of mention effect---where listeners look more at the character named first in the story than to the character named second---is only clear in He\|She trials, not in She\|He trials. The He\|They and She\|They trials (second row) show the expected order effect, but participants are less likely to be looking at the target than in the He\|She and She\|He trials. The They\|He and They\|She trials (third row) still show participants looking at the target more than the competitor before the onset of the shape word, but less than in the other two conditions, and no order effect is apparent. Examining fixations during the beginning of the story (@fig-exp4-names), participants looked at the target and competitor after each was named, and the time course did not differ by the character's pronouns. This confirms that participants knew the names of the characters and had identified the two possible referents before the start of the critical time window.
+
+<br>
+
+```{r}
+#| label: fig-exp4-6panel
+#| fig-cap: "Experiment 4: Eyetracking: Full Window. Proportions of looks to the target, competitor, distractor (average of 4), and no characters, split by target pronoun, competitor pronoun, and order of mention conditions. The gray box indicates the analysis region, starting 200ms after pronoun onset and ending at 1210ms, the earliest shape word onset across stimuli."
+#| fig-asp: 1.25
+#| output: true
+#| cache: true
+
+exp4_load_data_plots_full() %>%
+  ggplot(aes(x = Timestep_Start, y = Prop, color = Color, linetype = Order)) +
+  geom_rect(
+    xmin = 200, xmax = 1210, ymin = 0, ymax = 1,
+    fill = "grey95", color = "grey95"
+  ) +
+  geom_line(key_glyph = "timeseries", linewidth = 0.75) +
+  facet_wrap(~Pronoun_Pair, ncol = 2) +
+  scale_color_manual(values = c(
+    "#1B9E77", "#D95F02", "#7570B3", "grey30", "grey60")
+  ) +
+  scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
+  theme_classic() +
+  eyetracking_theme +
+  theme(plot.title.position = "plot") +
+  guides(
+    color = guide_legend(
+      order = 1,
+      override.aes = theme(linewidth = 1)
+    ),
+    linetype = guide_legend(
+      order = 2,
+      override.aes = theme(linewidth = 1)
+    )
+  ) +
+  labs(
+    x = "Time Relative to Pronoun Onset (ms)",
+    y = "Proportion of Looks",
+    color = "Item",
+    linetype = "Target\nMentioned",
+    title =
+      "Experiment 4: Looks During Full Window By Target & Competitor Pronouns"
+  )
+```
+
+The primary analysis window, shown in grey in @fig-exp4-6panel, was offset by 200ms after the onset of the pronoun, the estimated time it takes to plan and execute a saccade in response to the auditory stimulus [@hallett1986]. It continued until `r max(exp4_d$Time)`ms after the pronoun onset, which was the earliest shape word onset across all of the stimuli (range = `r exp4_audio_times$min`--`r exp4_audio_times$max`ms, *M* = `r exp4_audio_times$mean`ms, *SD* = `r exp4_audio_times$sd`ms). Results were analyzed with dynamic generalized mixed-effects models, predicting whether participants looked at the target character (=1) or not (=0) at each time point [@cho2018; @brown-schmidt2020]. Observations were down-sampled to 10ms bins, where bins that included \>5ms of a fixation on or a saccade to the target [@mcmurray2009; @mcmurray2019] were coded as 1, bins that included \<5ms were coded as 0, and bins that included 5ms were coded as 1 if they followed a bin that was coded as 1 and 0 if not. Aside from this, the data was not aggregated across trials or participants. The model included a fixed effect for Trend (timestep during trial, mean-centered) to capture linear changes across the trial in the level of fixations to the target. To account for autocorrelation between time points, the model included an AR(1) term, which captures whether the participant was looking at the target in the prior timestep. To calculate AR(1) for the start of the window, timesteps for 180ms and 190ms were included in the data, and then the first timestep with missing data for AR(1) was excluded prior to estimation, resulting in `r n_distinct(exp4_d$Timestep)` data points for each trial.
+
+The fixed effect of Pronoun Pair was coded with orthogonal Helmert contrasts, with the first contrast comparing trials with *they* target characters to trials with *he* or *she* target characters (They\|HeShe vs HeShe\|They + HeShe\|SheHe), and the second contrast comparing trials with *he* or *she* target and *they* competitor characters to trials with *he* or *she* target and *she* or *he* competitor characters (HeShe\|They vs HeShe\|SheHe). The fixed effect of Order was mean-center effects coded, comparing trials where the target character was mentioned second to trials where the target character was mentioned first. @fig-exp4-3panel shows the proportion of looks to the target and competitor characters during the analysis window, comparing the 3 Pronoun Pair and 2 Order of Mention conditions.
+
+<br>
+
+```{r}
+#| label: fig-exp4-3panel
+#| fig-cap: "Experiment 4: Eyetracking: Analysis Window. Proportion of looks to target, competitor, distractor (average of 4), and no characters, comparing between the 3 pronoun pair and 2 order of mention conditions. The window starts 200ms after pronoun onset and ends at 1210ms, the earliest shape word onset across stimuli."
+#| fig-asp: 0.6
+#| output: true
+#| cache: true
+
+exp4_load_data_plots_crit() %>%
+  ggplot(aes(x = Timestep_Start, y = Prop, color = Item, linetype = Order)) +
+  geom_line(key_glyph = "timeseries", linewidth = 0.75) +
+  facet_wrap(~Pronoun_Pair) +
+  scale_color_manual(values = c("#086FC4", "forestgreen", "grey50", "grey80")) +
+  scale_x_continuous(
+    expand = c(0, 0),
+    breaks = c(200, 400, 600, 800, 1000, 1200)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 0.75),
+    breaks = c(0, 0.25, 0.50, 0.75)
+  ) +
+  geom_vline(xintercept = 180, linewidth = 1) +
+  theme_classic() +
+  eyetracking_theme +
+  theme(
+    axis.line.y = element_blank(),
+    legend.margin = margin(l = -0.05, unit = "in"),
+    panel.spacing.x = unit(0.25, "in"),
+    plot.margin = margin(l = 0.05, r = 0.10, t = 0.10, b = 0.05, unit = "in")
+  ) +
+  guides(
+    color = guide_legend(order = 1, override.aes = theme(linewidth = 1)),
+    linetype = guide_legend(order = 2, override.aes = theme(linewidth = 1))
+  ) +
+  labs(
+    title = paste(
+      "Experiment 4: Proportion of Looks to Characters",
+      "During Critical Window"
+    ),
+    x = "Time Relative to Pronoun Onset (ms)",
+    y = element_blank(), # Proportion Looking at Item
+    color = "Item",
+    linetype = "Target\nMentioned"
+  )
+```
+
+The maximal random effects structure [@baayen2008; @barr2013] included by-participant and by-item slopes for Pronoun Pair, Order, AR(1), Trend (time point during trial), and Trial Number (time point during experiment), with items defined as the 60 story frames that named the 2 characters. The *lme4* and *buildmer* packages in R identified the most complex random effects structure that would converge [@bates2015; @rcoreteam2023; @voeten2023], which included by-participant slopes for AR, Order, and Trial Number and by-item slopes for Order and Trend (@tbl-exp4-pronoun-pair).
+
+```{r}
+#| label: exp4-model-main-build
+#| eval: false
+
+cluster7 <- makeCluster(7, type = "SOCK")
+clusterEvalQ(cluster7, library("buildmer"))
+clusterExport(cluster7, "exp4_d")
+
+exp4_m_pronoun_pair <- buildmer(
+  formula = IsTarget ~ Time_Centered + WasTarget + Pronoun_Pair * Order +
+    (Time_Centered * WasTarget * Trial_Scaled * Pronoun_Pair * Order |
+       ParticipantID) +
+    (Time_Centered * WasTarget * Trial_Scaled * Pronoun_Pair * Order |
+       Story),
+  data    = exp4_d,
+  family  = binomial,
+  buildmerControl(direction = "order", cl = cluster7))
+
+stopCluster(cluster7)
+```
+
+```{r}
+#| label: exp4-model-main-results
+
+exp4_m_pronoun_pair <- readRDS("r_data/exp4_pronoun-pair.RDS")
+exp4_m_pronoun_pair %>% summary()
+
+exp4_r_pronoun_pair <- exp4_m_pronoun_pair %>% tidy_model_results()
+```
+
+The AR(1) effect was significant (`r exp4_r_pronoun_pair['WasTarget', 'Text']`), reflecting the fact that participants were more likely to be looking at the target during the current timestep if they had been looking at the target during the previous timestep. Trend was not significant (`r exp4_r_pronoun_pair['Time', 'Text']`), indicating that the overall level of target fixations did not significantly increase or decrease in a linear fashion over the course of the trial.
+
+Both contrasts for Pronoun Pair were significant: Participants were more likely to look at the target character after the onset of *he* and *she* than after the onset of *they*, across Order conditions (`r exp4_r_pronoun_pair['Pronoun_Pair=TheyTarget', 'Text']`). After the onset of *he* or *she*, participants were more likely to look at the target character if the competitor character used he/him or she/her than if the competitor character used they/them (`r exp4_r_pronoun_pair['Pronoun_Pair=TheyComp', 'Text']`). Visual inspection of the data shows that in stories using *he* and *she*, looks to the target diverge from looks to the competitor and reach a proportion of 0.5 in the first quarter of the analysis window. In stories using *they*, looks to the target diverge from looks to the competitor in the first quarter of the analysis window, but do not reach 0.5 until the last quarter (@fig-exp4-3panel).
+
+```{r}
+#| label: exp4-model-order-build
+#| eval: false
+
+cluster6 <- makeCluster(6, type = "SOCK")
+clusterEvalQ(cluster6, library("buildmer"))
+clusterExport(cluster6, "exp4_d")
+
+# HeShe|SheHe
+exp4_m_HS.SH <- buildmer(
+  formula = IsTarget ~ WasTarget + Time_Centered + Pronoun_Pair_HS.SH * Order +
+    (WasTarget + Order + Trial_Scaled | ParticipantID) +
+    (Order + Time_Centered | Story),
+  data = exp4_d,
+  family  = binomial,
+  buildmerControl(direction = "order", cl = cluster6)
+)
+
+# HeShe|They
+exp4_m_HS.T <- buildmer(
+  formula = IsTarget ~ WasTarget + Time_Centered + Pronoun_Pair_HS.T * Order +
+    (WasTarget + Order + Trial_Scaled | ParticipantID) +
+    (Order + Time_Centered | Story),
+  data = exp4_d,
+  family  = binomial,
+  buildmerControl(direction = "order", cl = cluster6)
+)
+
+# They|HeShe
+exp4_m_T.HS <- buildmer(
+  formula = IsTarget ~ WasTarget + Time_Centered + Pronoun_Pair_T.HS * Order +
+    (WasTarget + Order + Trial_Scaled | ParticipantID) +
+    (Order + Time_Centered | Story),
+  data = exp4_d,
+  family  = binomial,
+  buildmerControl(direction = "order", cl = cluster6)
+)
+
+stopCluster(cluster7)
+```
+
+```{r}
+#| label: exp4-model-order-results
+
+# HeShe|SheHe
+exp4_m_HS.SH <- readRDS("r_data/exp4_pronoun-pair_HS-SH.RDS")
+exp4_m_HS.SH %>% summary()
+exp4_r_HS.SH <- exp4_m_HS.SH %>% tidy_model_results()
+
+# HeShe|They
+exp4_m_HS.T <- readRDS("r_data/exp4_pronoun-pair_HS-T.RDS")
+exp4_m_HS.T %>% summary()
+exp4_r_HS.T <- exp4_m_HS.T %>% tidy_model_results()
+
+# They|HeShe
+exp4_m_T.HS <- readRDS("r_data/exp4_pronoun-pair_T-HS.RDS")
+exp4_m_T.HS %>% summary()
+exp4_r_T.HS <- exp4_m_T.HS %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp4-order-dummy-code
+
+exp4_d %<>% mutate(
+  .after = Order,
+  Order_First0  = ifelse(Order == "first",  0, 1) %>% as.factor(),
+  Order_Second0 = ifelse(Order == "second", 0, 1) %>% as.factor()
+)
+exp4_d %>% count(Order, Order_First0, Order_Second0)
+```
+
+```{r}
+#| label: exp4-order-HS-T-dummy-model
+#| eval: false
+
+exp4_m_HS.T_First0 <- glmer(
+  IsTarget ~ WasTarget + Time_Centered + Pronoun_Pair_HS.T * Order_First0 +
+    (WasTarget + Order_First0 + Trial_Scaled  | ParticipantID) +
+    (Order_First0 + Time_Centered | Story),
+  data = exp4_d,
+  family  = binomial
+)
+
+exp4_m_HS.T_Second0 <- glmer(
+  IsTarget ~ WasTarget + Time_Centered + Pronoun_Pair_HS.T * Order_Second0 +
+    (WasTarget + Order_Second0 + Trial_Scaled | ParticipantID) +
+    (Time_Centered | Story),  # boundary fit errors with Order| Story
+  data = exp4_d,
+  family  = binomial
+)
+```
+
+```{r}
+#| label: exp4-order-HS-T-dummy-results
+
+# Pronoun Pair effect for first-mentioned targets
+exp4_m_HS.T_First0 <- readRDS("r_data/exp4_pronoun-pair_HS-T_first0.RDS")
+summary(exp4_m_HS.T_First0)
+exp4_r_HS.T_First0 <- exp4_m_HS.T_First0 %>% tidy_model_results()
+
+# Pronoun Pair effect for second-mentioned targets
+exp4_m_HS.T_Second0 <- readRDS("r_data/exp4_pronoun-pair_HS-T_second0.RDS")
+summary(exp4_m_HS.T_Second0)
+exp4_r_HS.T_Second0 <- exp4_m_HS.T_Second0 %>% tidy_model_results()
+```
+
+In the primary model, the main effect of Order was not significant, indicating that listeners were not more likely to be looking at target characters mentioned first than target characters mentioned second (`r exp4_r_pronoun_pair['Order=First', 'Text']`). Both interactions of Order with Pronoun Pair were nonsignificant (They\|HeShe vs HeShe\|They + HeShe\|SheHe: `r exp4_r_pronoun_pair['Pronoun_Pair=TheyTarget:Order=First', 'Text']`; HeShe\|They vs HeShe\|SheHe: `r exp4_r_pronoun_pair['Pronoun_Pair=TheyComp:Order=First', 'Text']`). The lack of an order effect was a surprise, given that this was a robust result in prior research using a similar paradigm [@arnold2000; @arnold2007; @brown-schmidt2017]. Post-hoc models explored the order of mention effect in each condition separately (@tbl-exp4-HS-SH, @tbl-exp4-HS-T, @tbl-exp4-T-HS). These analyses revealed a significant effect of Order in the HeShe\|They condition (`r exp4_r_HS.T['Order=First', 'Text']`), but not in the HeShe\|SheHe (`r exp4_r_HS.SH['Order=First', 'Text']`) or They\|HeShe conditions (`r exp4_r_T.HS['Order=First', 'Text']`).
+
+```{r}
+#| label: exp4-model-target-build
+#| eval: false
+
+cluster7 <- makeCluster(7, type = "SOCK")
+clusterEvalQ(cluster7, library("buildmer"))
+clusterExport(cluster7, "exp4_d")
+
+exp4_m_target_pronoun <- buildmer(
+  formula = IsTarget ~ Time_Centered + WasTarget + T_Pronoun * Order +
+    (Time_Centered * WasTarget * Trial_Scaled * T_Pronoun * Order | SubjID) +
+    (Time_Centered * WasTarget * Trial_Scaled * T_Pronoun * Order | Story),
+  data    = exp4_d,
+  family  = binomial,
+  buildmerControl(direction = "order", cl = cluster7))
+
+stopCluster(cluster7)
+```
+
+```{r}
+#| label: exp4-model-target-results
+
+exp4_m_target_pronoun <- readRDS("r_data/exp4_target-pronoun.RDS")
+exp4_m_target_pronoun@model %>% summary()
+
+exp4_r_target_pronoun <- exp4_m_target_pronoun@model %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp4-model-trend-build
+#| eval: false
+
+cl6 <- makeCluster(6, type = "SOCK")
+clusterEvalQ(cl6, library("buildmer"))
+clusterExport(cl6, "exp4_d")
+
+exp4_m_trend <- buildmer(
+  formula = IsTarget ~ WasTarget + Time_Centered * Pronoun_Pair * Order +
+    (WasTarget * Time_Centered * Pronoun_Pair * Order * Trial_Scaled
+     | Story) +
+    (WasTarget * Time_Centered * Pronoun_Pair * Order * Trial_Scaled
+     | ParticipantID),
+  data    = exp4_d,
+  family  = binomial,
+  buildmerControl(direction = "order", cl = cl6)
+)
+
+stopCluster(cl6)
+```
+
+```{r}
+#| label: exp4-model-trend-results
+
+exp4_m_trend <- readRDS("r_data/exp4_trend.RDS")
+exp4_m_trend@model %>% summary()
+exp4_r_trend <- exp4_m_trend@model %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp4-model-AR-build
+#| eval: false
+
+cl6 <- makeCluster(6, type = "SOCK")
+clusterEvalQ(cl6, library("buildmer"))
+clusterExport(cl6, "exp4_d")
+
+exp4_m_AR <- buildmer(
+  formula = IsTarget ~  Time_Centered + WasTarget * Pronoun_Pair * Order +
+    (WasTarget * Time_Centered * Pronoun_Pair * Order * Trial_Scaled
+     | Story) +
+    (WasTarget * Time_Centered * Pronoun_Pair * Order * Trial_Scaled
+     | ParticipantID),
+  data    = exp4_d,
+  family  = binomial,
+  buildmerControl(direction = "order", cl = cl6)
+)
+
+stopCluster(cl6)
+```
+
+```{r}
+#| label: exp4-model-AR-results
+
+exp4_m_AR <- readRDS("r_data/exp4_AR.RDS")
+exp4_m_AR@model %>% summary()
+exp4_r_AR <- exp4_m_AR@model %>% tidy_model_results()
+```
+
+After noting differences between the He\|She and She\|He trials in @fig-exp4-6panel, an exploratory analysis tested the effect of Target Pronoun. As in previous experiments, it was coded with orthogonal Helmert contrasts, with the first contrast comparing they/them to he/him + she/her target trials, and the second contrast comparing she/her to he/him target trials. The comparison between *he* and *she* trials was not significant (`r exp4_r_target_pronoun['T_Pronoun=S_H', 'Text']`) (@tbl-exp4-target-pronoun). Additional exploratory analyses tested if Trend and AR(1) interacted with Pronoun Pair and Order, finding no significant effects in addition to those reported in the main model (@tbl-exp4-trend, @tbl-exp4-AR).
+
+<br>
+
+```{r}
+#| label: tbl-exp4-pronoun-pair
+#| tbl-cap: "Experiment 4: Model results for the effects of Pronoun Pair, Order, AR(1), and Trend on the likelihood of looking at the target character (1) or not (0)."
+#| output: true
+
+exp4_tb_pronoun_pair <- tab_model(
+  model = exp4_m_pronoun_pair,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Looks to Target",
+  pred.labels = exp4_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp4_tb_pronoun_pair$knitr %<>%
+  tab_model_title_row("Experiment 4: Looks to the Target Character") %>%
+  exp4_tb_random_effects() %>%
+  drop_sigma()
+exp4_tb_pronoun_pair
+```
+
+## Discussion
+
+```{r}
+#| label: exp4-save-workspace
+
+save.image("r_data/exp4.RData")
+```
+
+Experiment 4 tested online processing of singular *they* coreferring with proper names, in a context where listeners can come to anticipate it for certain referents. Participants learned about two he/him, two she/her, and two they/them characters and passed a pretest to ensure that they learned the mappings between the names and images. In the eyetracking trials, each of the six characters was pictured in a colored shape. The stories named two characters---always a pair with different pronouns---and used a verb that allows an upcoming pronoun to refer to either of the named characters (e.g., *Jaime is painting a portrait of Sam, as some paint is spilling on the floor*). The pronoun phrase described the target character's location (e.g., *They are standing in a blue triangle*), leaving about 1200ms between the onset of the pronoun and the onset of the disambiguating shape word to measure how listeners used the pronoun to identify the target character. Trials varied by two within-participants conditions: the pronouns of the two named characters (HeShe\|SheHe, HeShe\|They, They\|HeShe) and whether the pronoun referred to the character mentioned first or second.
+
+Visual inspection of the data suggests that listeners do comprehend *they* as singular and use this information to identify which character is being referred to, just to a lesser degree than with *he* and *she.* Looks to the target diverged from looks to the competitor at about 500ms after the onset of *they*, compared to about 200ms after the onset of *he* or *she*. This is similar to the patterns seen in young children [@arnold2007; @song2005] and in adult second language learners [@cunnings2017; @gruter2012; @speyer2019]. Singular *they*, however, did not show an order of mention effect, suggesting that listeners may be using different cues to disambiguate singular *they* from plural *they* than when *he* or *she* could refer to multiple referents (e.g., if both of the named characters used he/him). After each trial, participants judged whether the story matched the scene, and they were not less likely to say that stories used singular they matched, but their responses were slower than for he and she.
+
+Even though the competitor character's pronouns were never used in a given story, it did affect processing. Within *he* and *she* trials, listeners were less likely to be looking at the target character when the competitor character used they/them than when the competitor character used she/her or he/him. One explanation is that participants were paying more attention in general to the they/them characters, since they were atypical or more difficult, or because they were inferred to be the goal of the study. Examining the fixations during the 1000ms where the screen was displayed before the audio started (@fig-exp4-preview) and during the first phrase when the two characters were named (@fig-exp4-names) rules out this explanation, because participants were not more likely to be looking at the they/them characters than the he/him and she/her characters during either window.
+
+One unexpected result is that the *he* and *she* trials did not entirely replicate the order of mention effect, which has been robust in previous experiments [@arnold2000; @arnold2007; @brown-schmidt2017; @falandays2020]. While there was a clear order of mention effect in the HeShe\|They trials, the effect of order was not significant in the HeShe\|SheHe trials. Breaking the data down further shows that the expected order pattern appeared for He\|She trials, but not She\|He Trials. Replication data collection is in progress, to determine whether this is a consistent pattern. With a larger data set, it will also be possible to conduct a dynamic tree-based item response analysis [@cho2020], which can test additional hypotheses by making a distinction between looks to the competitor character and looks to the distractor characters.

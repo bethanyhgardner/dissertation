@@ -1,0 +1,1488 @@
+---
+title: "Experiment 1"
+subtitle: "**Associating Pronouns with a Person**"
+toc-title: "Experiment 1: Associating Pronouns with a Person"
+---
+
+```{r}
+#| label: exp1-setup
+#| include: false
+
+library(tidyverse) # data wrangling
+library(magrittr)
+library(sjmisc)
+options(dplyr.group.inform = FALSE, dplyr.summarise.inform = FALSE)
+
+library(lme4) #  stats
+library(lmerTest)
+library(buildmer)
+library(brms)
+
+library(insight) # model results
+library(broom.mixed)
+
+library(kableExtra)  # tables
+library(sjPlot)
+
+library(patchwork)  # plots
+library(RColorBrewer)
+library(ggsignif)
+library(ggh4x)
+library(ggdist)
+library(ggtext)
+
+source("resources/data-functions/exp1_load_data.R")  # setting up data
+source("resources/formatting/printing.R")   # model results in text
+source("resources/formatting/aesthetics.R") # plot and table themes
+```
+
+[![](resources/icons/preregistered.svg){title="Preregistration" width="30"}](https://osf.io/cmkw5) [![](resources/icons/open-materials.svg){title="Materials" width="30"}](https://github.com/bethanyhgardner/dissertation/blob/main/materials/exp1) [![](resources/icons/open-data.svg){title="Data" width="30"}](https://github.com/bethanyhgardner/dissertation/blob/main/data) [![](resources/icons/file-code-fill.svg){title="Analysis Code" width="30"}](https://github.com/bethanyhgardner/dissertation/blob/main/exp1.qmd)
+
+<br>
+
+## Motivation
+
+In addition to learning that the grammatical representation of *they* allows it to co-refer with specific singular referents, learning to use they/them pronouns may require a change in how speakers access pronouns during language production. Extending existing models of pronoun production from grammatical gender to social gender [@ackerman2019; @mcconnell-ginet2014] would predict that pronouns are accessed based on morphosyntactic gender marking associated with a person's name [e.g., @schmitt1999] or based on semantic/conceptual features of a person [e.g., @antón-méndez2010]. In order to use they/them for a person instead of the expected he/him or she/her, speakers may instead need to recall episodic information about the person's stated pronouns or which pronouns other speakers use to refer to them. It is clear from other contexts, such as referring to pets with *he* and *she*, that people can learn which gender-marked pronouns to use in contexts with few gender cues based on name or appearance. This suggests that learning specific singular *they* should be feasible, but may involve retrieving a person's pronouns from memory, rather than inferring them based on cues such as their name.
+
+The first experiment investigated how people learn to associate pronouns with a person when someone's pronouns cannot be inferred from the gender association of their first name. Participants read a series of vignettes which introduced 12 characters, each of whom was associated with a name, pronouns (he/him, she/her, or they/them), a pet, and a job. Memory for pronouns was tested in a multiple-choice recognition task, and production of pronouns was tested in a written sentence completion task.
+
+## Experiment 1A
+
+```{r}
+#| label: exp1a-load-data
+
+exp1a_d_all <- exp1_load_data_all("a")  # all memory questions
+
+exp1a_d <- exp1_load_data_pronoun("a")  # pronoun Qs with 1 row per char
+summary(exp1a_d)
+contrasts(exp1a_d$Pronoun)
+```
+
+### Methods
+
+The design and analysis plan were [preregistered](https://doi.org/10.17605/OSF.IO/CMKW5 "Experiment 1 Preregistration") on the Open Science Framework. [Materials](https://github.com/bethanyhgardner/dissertation/tree/main/materials/exp1 "Experiment 1 Materials"), de-identified [data](https://github.com/bethanyhgardner/dissertation/blob/main/data "Experiment 1 Data"), and [analysis code](https://github.com/bethanyhgardner/dissertation/blob/main/exp1.qmd "Source Code") are available at this dissertation's [Github repository](https://github.com/bethanyhgardner/dissertation "Github repository").
+
+#### Participants
+
+```{r}
+#| label: exp1a-n-participants
+
+# Age
+exp1a_n_age <- read.csv("data/exp1a_data.csv") %>%
+  select(SubjID, SubjAge) %>%
+  unique() %>%
+  summarise(mean = mean(SubjAge), sd = sd(SubjAge)) %>%
+  round(2) %>%
+  format(n.small = 2)
+exp1a_n_age
+
+# Gender
+exp1a_n_gender <- read.csv("data/exp1a_data.csv") %>%
+  group_by(SubjGender) %>%
+  summarise(n = n_distinct(SubjID)) %>%
+  mutate(Text = str_c(as.character(n), " ", SubjGender)) %>%
+  pull(Text) %>%
+  str_flatten_comma()
+exp1a_n_gender
+
+# English Experience
+exp1a_n_english <- read.csv("data/exp1a_data.csv") %>%
+  group_by(SubjEnglish) %>%
+  summarise(n = n_distinct(SubjID)) %>%
+  arrange(desc(n)) %>%
+  mutate(Text = str_c(as.character(n), " \"", SubjEnglish, "\"")) %>%
+  pull(Text) %>%
+  str_flatten_comma()
+exp1a_n_english
+```
+
+`r n_distinct(exp1a_d$Participant)` undergraduate students from Vanderbilt University completed the study for partial course credit. The study was conducted online and took approximately 15 minutes. To characterize the participant sample, they were asked about their age (*M*~age~ = `r exp1a_n_age$mean`, *SD*~age~ = `r exp1a_n_age$sd`); gender (`r exp1a_n_gender`), and English experience (`r exp1a_n_english`). Following best practices for TGD-inclusive study design, the question about gender was a free-response box [@cameron2019; @zimman2017; @ansara2014; @nasem2022].
+
+#### Materials & Procedure
+
+Participants were introduced to 12 characters, each of whom had 4 associated facts: name, pronouns, job, and pet. There were 6 typically-masculine names (Andrew, Brian, Daniel, James, Kevin, Michael) and 6 typically-feminine names (Amanda, Emily, Jessica, Laura, Melissa, Stephanie), such that 4 characters had he/him pronouns and masculine names, 4 characters had she/her pronouns and feminine names, 2 characters had they/them pronouns and masculine names, and 2 characters had they/them pronouns and feminine names. While people who use they/them pronouns have a variety of names, the choice of gendered names here means that whether a character used the gendered pronouns associated with their name or they/them could not be predicted on the basis of the name. Thus, participants had to learn each name-pronoun pairing. Characters also had 1 of 12 jobs and 1 of 3 pets. The pet fact had the same distributional characteristics as the pronouns, but was not associated with prior expectations based on the name or with strong sociopolitical beliefs, making pet learning a reference point for comparison. Participants were randomly assigned to 1 of 3 lists. Name-pronoun pairs were counterbalanced such that each name appeared with the expected he/him or she/her in 2 lists and they/them in 1 list.
+
+Participants read descriptions of each character in the frame *\[Name\] uses \[pronouns\]. \[Name\] works as a \[job\] and has a \[pet\]*. After a brief distractor task consisting of simple math questions, there were two tasks measuring learning of pronouns: In the **memory task**, participants were given the character's name and answered multiple-choice questions about their pronouns, job, and pet (e.g., *What pronouns does Emily use? What is Emily's job? What kind of pet does Emily have?*). The 3 questions about each character always appeared together, the order of the 12 characters was pseudo-randomized, and the orders of the choices for each question were randomized. In the **production task**, participants saw sentence fragments for each character (in a randomized order) that included their name and job (e.g., *After Emily got home from working as a teacher...*). Participants were asked to complete the sentence in a way that made sense to them, to measure which pronouns (if any) they used to refer to the character (e.g., *...they made dinner*). Finally, participants were shown 3 characters, 1 for each pronoun, and asked what they would say if they were introducing the character to someone. This task measured if participants used a pronoun in reference to the character or specifically mentioned which pronouns the character used, as a pilot for more open-ended prompts.
+
+### Predictions
+
+Given that people who use they/them pronouns report high rates of both unintentional errors and intentional [misgendering]{.underline} [@cordoba2020; @goldberg2019; @james2016; @mclemore2018; @thetrevorproject2020], we predict that he/him and she/her will be remembered and produced more accurately than they/them. This outcome could be observed for one or more reasons: Participants may be unfamiliar with singular *they*, or familiar with comprehending it but unused to producing it. Singular *they* is also less frequent than *he* and *she*, and as a result may be more difficult to use, even for speakers already familiar with it. Additionally, if participants avoid using they/them as an option, instead choosing the pronouns typically associated with the character's name, accuracy for they/them would also be lower than accuracy for he/him and she/her. Alternatively, the relative novelty of they/them may improve memory, as distinctive information tends to be remembered better [@vonrestorff1933; @wallace1965]. Under this account, accuracy remembering and producing they/them would be *higher* than for he/him and she/her.
+
+We hypothesize that learning to use singular *they* requires a change from inferring a person's pronoun (*he* or *she*) based on semantic/conceptual features of a person [e.g., @antón-méndez2010] or based on morphosyntactic gender associated with a person's name [e.g., @schmitt1999], and instead recalling episodic information about a person's stated pronouns. In the context of this experiment, the gender association of the character's name cannot predict whether that character uses *he/she* or *they*, meaning that the only way to consistently produce the correct pronouns is to remember the information from the character introductions. As a result, we predict that correctly remembering that a character uses they/them in the multiple-choice task should predict correctly producing *they* in the sentence completion task. Alternatively, pronoun choice in the production task may not be influenced by episodic memory for which pronouns a character uses. This would occur if, in language production, a speaker attempts to infer the character's pronouns based on their name rather than retrieving them from memory, or if a speaker chooses to not produce singular *they*. In this scenario, accuracy in the memory task would not predict accuracy in the production task.
+
+### Results
+
+Responses were analyzed using logistic mixed-effects regression models using *lme4* in R [@bates2015; @rcoreteam2023], with the first model analyzing memory accuracy (@tbl-exp1a-mem), the second analyzing production accuracy (@tbl-exp1a-prod), and the third analyzing a relation between memory and production accuracy (@tbl-exp1a-both). The fixed effect of pronoun was coded with orthogonal Helmert contrasts; the first contrast compared they/them to he/him and she/her, and the second contrast compared he/him to she/her. In the model that included memory accuracy as a fixed effect, it was mean-center effects coded. The maximal models included by-participant and by-item (12 names) random intercepts and slopes for pronoun [@baayen2008; @barr2013]. The *buildmer* package [@voeten2023] was used to select the maximal converging models; all three final models included by-participant intercepts, the memory and production models also included by-participant slopes, and the memory model also included by-item intercepts.
+
+#### Memory
+
+```{r}
+#| label: exp1a-mem-means
+
+exp1a_r_memory_means <- exp1a_d %>%
+  group_by(Pronoun) %>%
+  summarise(  # mean and SD for each pronoun
+    mean = mean(M_Acc),
+    sd = sd(M_Acc)
+  ) %>%
+  add_row(  # for he+she
+    Pronoun = "HS",
+    mean = exp1a_d %>% filter(Pronoun != "they/them") %>% pull(M_Acc) %>% mean,
+    sd = exp1a_d %>% filter(Pronoun != "they/them") %>% pull(M_Acc) %>% sd,
+  ) %>%
+  add_row(  # for all 3
+    Pronoun = "all",
+    mean = mean(exp1a_d$M_Acc),
+    sd = sd(exp1a_d$M_Acc),
+  ) %>%
+  tidy_means() # add percentage, round values, fix labels
+
+exp1a_r_memory_means
+```
+
+```{r}
+#| label: exp1a-mem-model
+#| cache: true
+
+exp1a_m_memory <- buildmer(
+  formula = M_Acc ~ Pronoun + (Pronoun | Participant) + (Pronoun | Name),
+  data = exp1a_d, family = binomial,
+  buildmerControl(direction = "order")
+)
+summary(exp1a_m_memory)
+exp1a_r_memory <- exp1a_m_memory@model %>% tidy_model_results()
+```
+
+For accuracy in the multiple-choice memory task (@tbl-exp1a-mem), participants responded more accurately than inaccurately across all three pronoun conditions (`r exp1a_r_memory['Intercept', 'Text']`). He/him and she/her (*M* = `r exp1a_r_memory_means['HS', 'mean']`) were remembered significantly more accurately than they/them (*M* = `r exp1a_r_memory_means['T', 'mean']`) (`r exp1a_r_memory['Pronoun=They_HeShe', 'Text']`). Errors were asymmetric: not remembering that a character used they/them was more common than incorrectly attributing they/them to a character (@fig-exp1a-mem).
+
+<br>
+
+```{r}
+#| label: tbl-exp1a-mem
+#| tbl-cap: "Experiment 1A: Model results for the effect of Pronoun on Memory Accuracy."
+#| output: true
+#| warning: false
+
+exp1a_tb_memory <- tab_model(
+  model = exp1a_m_memory@model,
+  transform = NULL, # show log-odds not odds ratios
+  show.stat = TRUE, string.stat = "z", # show z
+  show.ci = FALSE, # show SE instead of CI
+  show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE, # don't make sense for logistic models
+  # shows intercept, p values, random effects, n group, n obs by default
+  digits = 3, digits.re = 3, # round to 3
+  dv.labels = "Memory Accuracy", # labels
+  pred.labels = exp1_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp1a_tb_memory$knitr %<>%
+  tab_model_title_row("Experiment 1A: Memory") %>%  # add title row
+  exp1_tb_random_labels() %>%  # change random effects labels
+  drop_sigma()  # drop sigma squared because it doesn't make sense for logistic
+exp1a_tb_memory
+```
+
+```{r}
+#| label: fig-exp1a-mem
+#| fig-cap: "[A] Pronoun accuracy in the multiple-choice memory task. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means. [B] Distribution of memory responses, with the correct pronoun on the X axis and the selected pronoun by color."
+#| fig-asp: 0.45
+#| output: true
+#| cache: true
+
+# accuracy
+exp1a_p_mem_acc <- exp1a_d %>%
+  group_by(Participant, Pronoun) %>%
+  summarise(M_Acc = mean(M_Acc)) %>%
+  ggplot(aes(x = Pronoun, y = M_Acc, fill = Pronoun, color = Pronoun)) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "bar",
+    alpha = 0.4, color = "NA"
+  ) +
+  geom_point(
+    position = position_jitter(width = 0.35, height = 0.01, seed = 1),
+    size = 0.5
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    color = "black", linewidth = 0.75, width = 0.5
+  ) +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_color_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0.01, 0.01)) +
+  guides(fill = guide_none(), color = guide_none()) +
+  theme_classic() +
+  dissertation_plot_theme + # nudge Y title over from A label:
+  theme(axis.title.y = element_text(margin = margin(l = 4, r = 2))) +
+  labs(x = "Pronoun", y = "By-Participant Mean Accuracy")
+
+# distribution
+exp1a_p_mem_dist <- exp1a_d %>%
+  ggplot(aes(x = Pronoun, fill = M_Response)) +
+  geom_bar(position = "fill") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(legend.margin = margin(l = -5)) +
+  labs(
+    x    = "Correct Pronoun",
+    y    = "Proportion of Trials",
+    fill = "Pronoun\nSelected"
+  )
+
+# combine
+exp1a_p_mem_acc + exp1a_p_mem_dist + plot_annotation(
+  title = "Experiment 1A: Accuracy & Distribution of Memory Responses",
+  tag_levels = "A",
+  theme = patchwork_theme
+)
+```
+
+<br>
+
+```{r}
+#| label: exp1a-pets-means
+
+# mean and sd of accuracy for pet questions
+exp1a_r_pet_means <- exp1a_d_all %>%
+  filter(M_Type == "pet") %>%
+  group_by(Pronoun) %>%  # mean + sd for each pronoun
+  summarise(
+    mean = mean(M_Acc),
+    sd = sd(M_Acc)
+  ) %>%
+  add_row(  # mean + sd for all 3
+    Pronoun = "all",
+    mean = exp1a_d_all %>% filter(M_Type == "pet") %>% pull(M_Acc) %>% mean,
+    sd = exp1a_d_all %>% filter(M_Type == "pet") %>% pull(M_Acc) %>% sd,
+  ) %>%
+  tidy_means()
+exp1a_r_pet_means
+```
+
+```{r}
+#| label: exp1a-pets-model
+#| cache: true
+
+# take just pet and pronoun memory questions
+exp1a_d_pets <- exp1_load_data_pets(exp1a_d_all)
+
+# mean-center contrast code with pet as negative and pronoun as positive
+contrasts(exp1a_d_pets$M_Type)
+contrasts(exp1a_d_pets$CharPronoun)
+
+# find random effects structure
+exp1a_m_pet <- buildmer(
+  formula = M_Acc ~ CharPronoun * M_Type +
+    (M_Type * CharPronoun | Participant) +
+    (M_Type * CharPronoun | Name),
+  data = exp1a_d_pets, family = binomial,
+  buildmerControl(direction = "order")
+)
+exp1a_r_pet <- exp1a_m_pet@model %>% tidy_model_results()
+
+# dummy code pronoun to get question type in they/them characters only
+exp1a_d_pets %>% count(CharPronoun, CharPronoun_They0)
+exp1a_m_pet_they <- glmer(
+  formula = M_Acc ~ CharPronoun_They0 * M_Type + (M_Type | Participant),
+  data = exp1a_d_pets, family = binomial
+)
+exp1a_r_pet_they <- exp1a_m_pet_they %>% tidy_model_results()
+
+# dummy code pronoun to get question type in he/she characters only
+exp1a_d_pets %>% count(CharPronoun, CharPronoun_HeShe0)
+
+exp1a_m_pet_heshe <- glmer(
+  formula = M_Acc ~ CharPronoun_HeShe0 * M_Type + (M_Type | Participant),
+  data = exp1a_d_pets, family = binomial
+)
+exp1a_r_pet_heshe <- exp1a_m_pet_heshe %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp1a-jobs-means
+
+exp1a_r_job <- exp1a_d_all %>%
+  filter(M_Type == "job") %>%
+  summarise(
+    mean = mean(M_Acc) %>% format(digits = 2, nsmall = 2),
+    sd   = sd(M_Acc)   %>% format(digits = 2, nsmall = 2)
+  )
+exp1a_r_job
+```
+
+Recall that just as each character was associated with one of three pronouns, each character was also associated with one of three pets. For they/them characters, pronoun accuracy was compared to pet accuracy (*M* = `r exp1a_r_pet_means['T', 'mean']`)---which exhibits similar distributional characteristics---showing no significant difference (`r exp1a_r_pet_they['M_Type=Pet_Pronoun', 'Text']`). Accuracy for the characters' 12 possible jobs (*M* = `r exp1a_r_job$mean`) was not at floor, suggesting that overall, the task was not too difficult for participants (@fig-exp1a-job-pet). The pet and job questions are discussed in more detail in the [appendix](#supplementary-exp1a).
+
+#### Production
+
+```{r}
+#| label: exp1a-prod-counts
+
+exp1a_tb_prod <- table(exp1a_d$Pronoun, exp1a_d$P_Response) %>%
+  prop.table() %>%
+  addmargins() %>%
+  round(2)
+
+exp1a_tb_prod
+```
+
+```{r}
+#| label: exp1a-prod-means
+
+exp1a_r_prod_means <- exp1a_d %>%
+  group_by(Pronoun) %>%
+  summarise(  # mean and SD for each pronoun
+    mean = mean(P_Acc),
+    sd = sd(P_Acc)
+  ) %>%
+  add_row(  # for he+she
+    Pronoun = "HS",
+    mean = exp1a_d %>% filter(Pronoun != "they/them") %>% pull(P_Acc) %>% mean,
+    sd = exp1a_d %>% filter(Pronoun != "they/them") %>% pull(P_Acc) %>% sd,
+  ) %>%
+  add_row(  # for all 3
+    Pronoun = "all",
+    mean = mean(exp1a_d$P_Acc),
+    sd = sd(exp1a_d$P_Acc),
+  ) %>%
+  tidy_means() # add percentage, round values, fix labels
+
+exp1a_r_prod_means
+```
+
+```{r}
+#| label: exp1a-prod-model
+#| cache: true
+
+exp1a_m_prod <- buildmer(
+  formula = P_Acc ~ Pronoun + (Pronoun | Participant) + (Pronoun | Name),
+  data = exp1a_d, family = binomial,
+  buildmerControl(direction = "order")
+)
+summary(exp1a_m_prod)
+exp1a_r_prod <- exp1a_m_prod@model %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp1a-useThey
+
+# count how many times each participant used they/them in production task
+exp1a_d_they <- exp1a_d %>%
+  mutate(P_IsThey = ifelse(P_Response == "they/them", 1, 0)) %>%
+  group_by(Participant) %>%
+  summarise(N_They = sum(P_IsThey)) %>%
+  mutate(
+    N_They_Cat = N_They %>%
+      as.factor() %>%
+      recode(
+        "6" = "6+", "7" = "6+", "8" = "6+", "9" = "6+",
+         "10" = "6+", "11" = "6+", "12" = "6+"
+      )
+  ) %>%
+  mutate(Dummy = "")
+
+# proportion of participant who produced they/them at least once
+exp1a_r_they <- (
+  (exp1a_d_they %>% filter(N_They > 0) %>% n_distinct)
+  / n_distinct(exp1a_d$Participant)
+)
+exp1a_r_they <- round(exp1a_r_they * 100, 0)
+```
+
+Responses were coded by whether the sentence continuation used he/him, she/her, they/them, or no pronoun to refer to the character (@fig-exp1a-prod). Responses that did not include a pronoun referring to the character either used the character's name as the subject of the continuing clause (e.g., *After Emily got home from working as a teacher...Emily made dinner*), or were ungrammatical continuations with no subject (e.g., *...made dinner*). Because these responses were infrequent (`r exp1a_tb_prod['Sum', 'none']*100`% of trials) and evenly distributed between pronoun conditions, they are included in the analysis (@tbl-exp1a-prod) as incorrect responses. Participants responded more accurately than inaccurately across all three pronoun conditions (`r exp1a_r_prod['Intercept', 'Text']`). He/him and she/her (*M* = `r exp1a_r_prod_means['HS', 'mean']`) were produced significantly more accurately than they/them (*M* = `r exp1a_r_prod_means['T', 'mean']`) (`r exp1a_r_prod['Pronoun=They_HeShe', 'Text']`). They/them was incorrectly produced as he/him and she/her each about one third of the time, while he/him and she/her were each incorrectly produced as they/them about an eighth of the time. Approximately `r exp1a_r_they`% of participants produced singular *they* at least once, regardless of accuracy.
+
+<br>
+
+```{r}
+#| label: tbl-exp1a-prod
+#| tbl-cap: "Experiment 1A: Model results for the effect of Pronoun on Production Accuracy."
+#| output: true
+#| warning: false
+
+exp1a_tb_prod <- tab_model(
+  model = exp1a_m_prod@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Production Accuracy",
+  pred.labels = exp1_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp1a_tb_prod$knitr %<>%
+  tab_model_title_row("Experiment 1A: Production") %>%
+  exp1_tb_random_labels() %>%
+  str_replace(  # bug with tab_model() makes it drop random slope labels
+    "&rho;<sub>01</sub>",
+    "&rho;<sub>01 Pronoun (They vs He + She) | Participant</sub>"
+  ) %>%
+  str_replace(
+    'bottom:0.1cm;"></td>',
+    'bottom:0.1cm;">&rho;<sub>01 Pronoun (He vs She) | Participant</sub></td>'
+  ) %>%
+  drop_sigma()
+exp1a_tb_prod
+```
+
+```{r}
+#| label: fig-exp1a-prod
+#| fig-cap: "Experiment 1A: [A] Pronoun accuracy in the written sentence completion task. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means. [B] Distribution of pronoun production responses, with the correct pronoun on the X axis and the selected pronoun by color. [C] Number of times each participant produced they/them (correct = 4), regardless of accuracy."
+#| fig-asp: 1
+#| output: true
+#| cache: true
+
+# accuracy
+exp1a_p_prod_acc <- exp1a_d %>%
+  group_by(Participant, Pronoun) %>%
+  summarise(P_Acc = mean(P_Acc)) %>%
+  ggplot(aes(x = Pronoun, y = P_Acc, fill = Pronoun, color = Pronoun)) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "bar", alpha = 0.4, color = "NA"
+  ) +
+  geom_point(
+    position = position_jitter(width = 0.35, height = 0.01, seed = 1),
+    size = 0.5
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    color = "black", linewidth = 0.75, width = 0.5
+  ) +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_color_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0.01, 0.01)) +
+  guides(fill = guide_none(), color = guide_none()) +
+  theme_classic() +
+  dissertation_plot_theme +
+  labs(
+    x = " ",  # not blank to make margins line up with other plots
+    y = "By-Participant Mean Accuracy"
+  )
+
+# distribution
+exp1a_p_prod_dist <- exp1a_d %>%
+  ggplot(aes(x = Pronoun, fill = P_Response)) +
+  geom_bar(position = "fill") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(
+    axis.text.x   = element_text(size = 11, angle = 20, vjust = 0.75),
+    axis.title.x  = element_text(margin = margin(t = 0)),
+    legend.margin = margin(l = 0)
+  ) +
+  labs(
+    x    = "Correct Pronoun",
+    y    = "Proportion of Trials",
+    fill = "Pronoun\nProduced"
+  )
+
+# number of they/them responses per participant
+exp1a_p_prod_they <- exp1a_d_they %>%
+  ggplot(aes(x = Dummy, fill = N_They_Cat)) +
+  geom_bar(position = "fill") +
+  scale_fill_manual(values = c("#666666", brewer.pal(6, "Purples"))) +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(
+    axis.title.x  = element_text(margin = margin(t = -10)),
+    legend.margin = margin(l = 0)
+  ) +
+  labs(
+    x    = "Number of They/Them\nResponses per Participant",
+    y    = "Proportion of Participants",
+    fill = element_blank()
+  )
+
+# combine
+exp1a_p_prod_acc / (exp1a_p_prod_dist | exp1a_p_prod_they) +
+  plot_annotation(
+    title = "Experiment 1A: Accuracy & Distribution of Production Responses",
+    tag_levels = "A",
+    theme = patchwork_theme
+  )
+```
+
+#### Memory Predicting Production
+
+```{r}
+#| label: exp1a-mp-means
+
+exp1a_r_mp_means <- exp1a_d %>%
+  group_by(Pronoun, M_Acc) %>%
+  summarise(mean = mean(P_Acc), sd = sd(P_Acc)) %>%
+  tidy_means()
+
+exp1a_r_mp_means
+```
+
+```{r}
+#| label: exp1a-mp-model
+#| cache: true
+
+# memory accuracy as mean-centered factor
+contrasts(exp1a_d$M_Acc_Factor)
+
+exp1a_m_mp <- buildmer(
+  formula = P_Acc ~ Pronoun * M_Acc_Factor +
+    (1 + Pronoun | Participant) + (1 + Pronoun | Name),
+  data = exp1a_d, family = binomial,
+  buildmerControl(direction = "order")
+)
+summary(exp1a_m_mp)
+exp1a_r_mp <- exp1a_m_mp@model %>% tidy_model_results()
+```
+
+Extending the second model to test the effects of pronoun and memory accuracy on production accuracy (@tbl-exp1a-both) showed that participants were more likely to produce the correct pronoun when they had correctly remembered it (`r exp1a_r_mp['M_Acc=Wrong_Right', 'Text']`). Memory accuracy interacted with pronoun for the comparison between they/them and he/him + she/her (`r exp1a_r_mp['Pronoun=They_HeShe:M_Acc=Wrong_Right', 'Text']`), such that memory improved production more for they/them characters than for he/him + she/her characters (@fig-exp1a-both). Remembering but not producing they/them was more common than producing it but not remembering it.
+
+<br>
+
+```{r}
+#| label: tbl-exp1a-both
+#| tbl-cap: "Experiment 1A: Model results for the effects of Pronoun and Memory Accuracy on Production Accuracy."
+#| output: true
+
+exp1a_tb_mp <- tab_model(
+  model = exp1a_m_mp@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Production Accuracy",
+  pred.labels = exp1_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp1a_tb_mp$knitr %<>%
+  tab_model_title_row("Experiment 1A: Memory Predicting Production") %>%
+  exp1_tb_random_labels() %>%
+  drop_sigma()
+exp1a_tb_mp
+```
+
+```{r}
+#| label: fig-exp1a-both
+#| fig-cap: "Experiment 1A: [A] Production accuracy, split by memory accuracy. Error bars indicate 95% CIs calculated over trials. [B] Distribution of combined memory and production accuracy."
+#| fig-asp: 0.45
+#| output: true
+#| cache: true
+
+# combined accuracy
+exp1a_p_compare <- exp1a_d %>%
+  mutate(MP_Acc =
+    case_when(
+      M_Acc == 1 & P_Acc == 1 ~ "Both Right",
+      M_Acc == 1 & P_Acc == 0 ~ "Memory Only",
+      M_Acc == 0 & P_Acc == 1 ~ "Production Only",
+      M_Acc == 0 & P_Acc == 0 ~ "Both Wrong"
+    ) %>%
+    factor(levels = c(
+      "Memory Only", "Production Only", "Both Wrong", "Both Right"
+    ))
+  ) %>%
+  ggplot(aes(x = Pronoun, fill = MP_Acc)) +
+  geom_bar(position = "fill") +
+  scale_fill_manual(
+    values = c("pink3", "#E6AB02", "tomato3", "#367ABF"),
+    labels = c("Memory\nOnly", "Production\nOnly", "Both\nWrong", "Both\nRight")
+  ) +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(
+    axis.text.x = element_text(size = 11, angle = 25, vjust = .65),
+    legend.box.margin = margin(t = -6),
+    legend.text = element_text(margin = margin(t = 3.5, b = 3.5, l = 0, r = 0)),
+    legend.title = element_blank(),
+    plot.title = element_text(
+      size = 11,
+      margin = margin(t = -5),
+      face = "plain"
+    )
+  ) +
+  labs(
+    title = "Combined Accuracy",
+    x     = "Pronoun",
+    y     = "Proportion of Characters",
+    fill  = element_blank()
+  )
+
+# production accuracy split by memory accuracy
+exp1a_p_split <- exp1a_d %>%
+  ggplot(aes(x = Pronoun, y = P_Acc, fill = Pronoun, alpha = as.factor(M_Acc))) +
+  stat_summary(fun.data = mean_cl_boot, geom = "bar", position = "dodge") +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    position = position_dodge(width = 0.9),
+    color = "black", linewidth = 0.5, width = 0.5) +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_alpha_discrete(
+    range = c(0.5, 1),
+    labels = c("Memory\nIncorrect", "Memory\nCorrect")
+  ) +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 1)) +
+  guides(
+    alpha = guide_legend(override.aes = theme(color = NA)),
+    color = guide_none(),
+    fill  = guide_none()) +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(
+    axis.text.x = element_text(size = 11, angle = 25, vjust = .65),
+    legend.box.margin = margin(l = -10),
+    legend.text = element_text(margin = margin(t = 3, b = 3, l = 0, r = 0)),
+    legend.title = element_blank(),
+    plot.title = element_text(
+      size = 11,
+      margin = margin(t = -5),
+      face = "plain"
+    )
+  ) +
+  labs(
+    title = "Production Accuracy \nSplit By Memory Accuracy",
+    x     = "Pronoun",
+    y     = "Production Accuracy",
+    alpha = "Memory \nAccuracy"
+  )
+
+# combine
+exp1a_p_split + exp1a_p_compare + plot_annotation(
+  title = "Experiment 1A: Memory & Production",
+  tag_levels = "A",
+  theme = theme(
+    plot.title = element_text(face = "bold", size = 12),
+    plot.margin = margin(t = 0.1, b = 0, l = 0.1, r = 0, unit = "in")
+  )
+)
+```
+
+<br>
+
+## Experiment 1B
+
+In the first experiment, people learned about a set of 12 characters whose pronouns---they/them or the expected he/him or she/her---could not be predicted from their name or other cues. These results demonstrate that, after only a brief exposure, people can learn that a character uses they/them pronouns and retrieve this information from memory to produce singular they in reference to them. Remembering that the character used they/them was a strong predictor of accurate pronoun production, with `r exp1a_r_mp_means['T Right', 'percent']` of production trials correct when the memory trial had been correct, but only `r exp1a_r_mp_means['T Wrong', 'percent']` of production trials correct when the memory trial had been incorrect. These results are congruent with a model where learning to use singular they requires a change from inferring a person's pronouns (*he* or *she*) based on semantic/conceptual features of a person or based on morphosyntactic gender associated with a person's name, and instead recalling episodic information about a person's stated pronouns.
+
+```{r}
+#| label: exp1a-taskDiff-setup
+
+# pivot back to get 1 row per task
+exp1a_d_long <- exp1a_d %>%
+  pivot_longer(
+    cols      = c(M_Acc, P_Acc),
+    names_to  = "Task",
+    values_to = "Acc"
+  )
+
+# mean-center effects code Task
+exp1a_d_long$Task %<>% as.factor()
+contrasts(exp1a_d_long$Task) <- cbind("=M_P" = c(-.5, .5))
+contrasts(exp1a_d_long$Task)
+
+# add dummy codes for pronoun
+exp1a_d_long %<>% mutate(
+  Pronoun_They0  = ifelse(Pronoun == "they/them", 0, 1),
+  Pronoun_HeShe0 = ifelse(Pronoun != "they/them", 0, 1)
+)
+```
+
+```{r}
+#| label: exp1a-taskDiff-model
+#| cache: true
+
+exp1a_m_task <- buildmer(
+  formula = Acc ~ Task * Pronoun +
+    (Pronoun | Participant) + (Pronoun | Name),
+  data = exp1a_d_long, family = binomial,
+  buildmerControl(direction = "order")
+)
+summary(exp1a_m_task)
+exp1a_r_task <- exp1a_m_task@model %>% tidy_model_results()
+
+exp1a_m_task_they <- glmer(
+  formula = Acc ~ Task * Pronoun_They0 + (Pronoun | Participant),
+  data = exp1a_d_long, family = binomial
+)
+summary(exp1a_m_task_they)
+exp1a_r_task_they <- exp1a_m_task_they %>% tidy_model_results()
+
+exp1a_m_task_heshe <- glmer(
+  formula = Acc ~ Task * Pronoun_HeShe0 + (Pronoun | Participant),
+  data = exp1a_d_long, family = binomial
+)
+summary(exp1a_m_task_heshe)
+exp1a_r_task_heshe <- exp1a_m_task_heshe %>% tidy_model_results()
+```
+
+While memory accuracy did predict production accuracy, it was not a guarantee. For they/them characters, memory was significantly more accurate than production (`r exp1a_r_task_they['Task=M_P', 'Text']`). Conversely, for he/him and she/her characters, memory was significantly less accurate than production (`r exp1a_r_task_heshe['Task=M_P', 'Text']`) ([appendix](#supplementary-exp1a)). I interpret these findings as demonstrating that memory for which pronouns a person uses and accuracy of producing a person's pronouns are distinct but interacting processes. Yet, another consideration is that the order of the memory and production tasks is in play. Consider that participants only had one brief exposure to information about the characters, then solved math problems for around five minutes, then answered 36 multiple-choice questions about each character's job, pet, and pronouns. By the time participants completed the production task, they may have begun to forget which characters used they/them pronouns, instead relying more on inferences from the characters' names. This would also result in higher production accuracy for he/him + she/her and lower production accuracy for they/them, but not necessarily due to different task demands between remembering which pronoun the character uses and selecting the correct pronoun to produce. A replication study that counter-balanced task order was conducted to ensure that the pattern of results in Experiment 1A was not determined by task order. While participants in Experiment 1A completed the memory task before the production task, participants in Experiment 1B completed the production task before the memory task. In all other respects, Experiment 1B was identical.
+
+```{r}
+#| label: exp1b-load-data
+
+exp1b_d_all <- exp1_load_data_all("b")  # all memory questions
+
+exp1b_d <- exp1_load_data_pronoun("b")  # pronoun questions with 1 row per char
+summary(exp1b_d)
+contrasts(exp1b_d$Pronoun)
+```
+
+```{r}
+#| label: exp1-join-data
+
+# join dataframes
+exp1_d <- bind_rows(
+  .id = "Experiment",
+  "1A" = exp1a_d,
+  "1B" = exp1b_d
+)
+
+# mean-center effects code experiment
+exp1_d$Experiment %<>% as.factor()
+contrasts(exp1_d$Experiment) <- cbind("=A_B" = c(-.5, .5))
+contrasts(exp1_d$Experiment)
+
+# and add pronoun effects coding back
+contrasts(exp1_d$Pronoun) <- cbind(
+  "=They_HeShe" = c(.33, .33, -.66),
+  "=He_She"     = c(-.50, .50, 0)
+)
+contrasts(exp1_d$Pronoun)
+```
+
+### Methods
+
+```{r}
+#| label: exp1b-n-participants
+
+exp1b_n_age <- read.csv("data/exp1b_data.csv") %>%
+  select(SubjID, SubjAge) %>%
+  unique() %>%
+  summarise(mean = mean(SubjAge), sd = sd(SubjAge)) %>%
+  round(2) %>%
+  format(n.small = 2)
+exp1b_n_age
+
+exp1b_n_gender <- read.csv("data/exp1b_data.csv") %>%
+  mutate(SubjGender_Group = case_when(
+    str_detect(SubjGender, "female")   ~ "women",
+    str_detect(SubjGender, "man|male") ~ "men"
+  )) %>%
+  group_by(SubjGender_Group) %>%
+  summarise(n = n_distinct(SubjID)) %>%
+  column_to_rownames("SubjGender_Group")
+exp1b_n_gender
+
+exp1b_n_english <- read.csv("data/exp1b_data.csv") %>%
+  mutate(SubjEnglish_Group = case_when(
+    str_detect(SubjEnglish, "birth")     ~ "native",
+    str_detect(SubjEnglish, "competent") ~ "competent",
+    str_detect(SubjEnglish, "limited")   ~ "limited"
+  )) %>%
+  group_by(SubjEnglish_Group) %>%
+  summarise(n = n_distinct(SubjID)) %>%
+  column_to_rownames("SubjEnglish_Group")
+exp1b_n_english
+```
+
+`r n_distinct(exp1b_d$Participant)` Vanderbilt undergraduates completed the study for partial course credit (*M*~age~ = `r exp1b_n_age$mean`, *SD*~age~ = `r exp1b_n_age$sd`). `r exp1b_n_gender['women', 'n']` were women, and `r exp1b_n_gender['men', 'n']` were men, as reported in a free response box. `r exp1b_n_english['native', 'n']` rated their English ability as "native (learned from birth)", `r exp1b_n_english['competent', 'n']` as "fully competent, but not native", and `r exp1b_n_english['limited', 'n']` as "limited but adequate competence." The only difference from Experiment 1A was switching the order of the memory and production tasks.
+
+### Results
+
+Responses were analyzed using the same logistic mixed-effects model specifications as in Experiment 1A [@bates2015; @rcoreteam2023; @voeten2023], although the maximal random effects structures that converged differed slightly in this data set. @fig-exp1ab-they highlights results for the they/them characters; results for all three pronouns, parallel to the figures in Experiment 1A, are included in the appendix (@fig-exp1ab-panel1, @fig-exp1ab-panel2). To compare these results to those of Experiment 1A, an additional trio of models with the combined data included Experiment as a mean-centered fixed effect.
+
+<br>
+
+```{r}
+#| label: fig-exp1ab-they
+#| fig-cap: "[A] By-participant mean memory accuracy for they/them characters, split by task order. [B] By-participant mean production accuracy for they/them characters, split by task order. [C] Production accuracy for they/them characters, split by memory accuracy and task order. Error bars indicate 95% CIs."
+#| fig-asp: 1
+#| output: true
+#| cache: true
+
+# memory for they/them characters
+exp1_p_memory_they <- exp1_d %>%
+  filter(Pronoun == "they/them") %>%
+  group_by(Experiment, Participant, Pronoun) %>%
+  summarise(M_Acc_Subj = mean(M_Acc)) %>%
+  ggplot(aes(
+    x = Experiment, y = M_Acc_Subj,
+    color = Experiment, fill = Experiment
+  )) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "bar",
+    position = position_dodge(width = 0.5), color = "NA", alpha = 0.4
+  ) +
+  geom_point(
+    position = position_jitter(width = 0.4, height = 0.01, seed = 1),
+    size = 0.5, show.legend = FALSE
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    position = position_dodge(width = 0.9),
+    linewidth = 0.5, width = 0.5, color = "black"
+  ) +
+  geom_signif(
+    comparisons = list(c("1A", "1B")), map_signif_level = TRUE,
+    color = "black", tip_length = 0, textsize = 3, vjust = -0.2
+  ) +
+  scale_color_manual(
+    values = c("grey50", "#7570B3"),
+    labels = c("1A:\nMemory\nFirst", "1B:\nProduction\nFirst")
+  ) +
+  scale_fill_manual(
+    values = c("grey50", "#7570B3"),
+    labels = c("1A:\nMemory\nFirst", "1B:\nProduction\nFirst")
+  ) +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(
+    expand = c(0, 0), limits = c(-0.01, 1.15),
+    breaks = c(0, 0.25, 0.5, 0.75, 1)
+  ) +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(  # Text sizes/spacing for this set are a bit different
+    axis.text.y   = element_text(size = 9),
+    axis.ticks.y  = element_line(),
+    axis.title.y  = element_text(size = 9),
+    legend.text   = element_text(size = 11, margin = margin(t = 3, b = 3)),
+    plot.title    = element_text(size = 11)
+  ) +
+  guides(fill = guide_legend(byrow = TRUE)) +
+  labs(
+    title = "Memory",
+    x     = element_blank(),
+    y     = "Mean Accuracy By Participant",
+    fill  = "Experiment"
+  )
+
+# production for they/them characters
+exp1_p_prod_they <- exp1_d %>%
+  filter(Pronoun == "they/them") %>%
+  group_by(Experiment, Participant, Pronoun) %>%
+  summarise(P_Acc_Subj = mean(P_Acc)) %>%
+  ggplot(aes(
+    x = Experiment, y = P_Acc_Subj,
+    color = Experiment, fill = Experiment
+  )) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "bar",
+    position = position_dodge(width = 0.5), color = "NA", alpha = 0.4
+  ) +
+  geom_point(
+    position = position_jitter(width = 0.4, height = 0.01, seed = 1),
+    size = 0.5, show.legend = FALSE
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    position = position_dodge(width = 0.9),
+    linewidth = 0.5, width = 0.5, color = "black"
+  ) +
+  geom_signif(
+    comparisons = list(c("1A", "1B")), map_signif_level = TRUE,
+    color = "black", tip_length = 0, textsize = 3, vjust = -0.2
+  ) +
+  scale_color_manual(
+    values = c("grey50", "#7570B3"),
+    labels = c("1A:\nMemory\nFirst", "1B:\nProduction\nFirst")
+  ) +
+  scale_fill_manual(
+    values = c("grey50", "#7570B3"),
+    labels = c("1A:\nMemory\nFirst", "1B:\nProduction\nFirst")
+  ) +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(
+    expand = c(0, 0), limits = c(-0.01, 1.15),
+    breaks = c(0, 0.25, 0.5, 0.75, 1)
+  ) +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(  # Text sizes/spacing for this set are a bit different
+    axis.text.y   = element_text(size = 9),
+    axis.ticks.y  = element_line(),
+    axis.title.y  = element_text(size = 9),
+    legend.text   = element_text(size = 11, margin = margin(t = 3, b = 3)),
+    plot.title    = element_text(size = 11)
+  ) +
+  guides(fill = guide_legend(byrow = TRUE)) +
+  labs(
+    title = "Production",
+    x     = element_blank(),
+    y     = "Mean Accuracy By Participant",
+    fill  = "Experiment"
+  )
+
+# production split by memory for they/them characters
+exp1_p_both_they <- exp1_d %>%
+  filter(Pronoun == "they/them") %>%
+  mutate(M_Acc_Label =
+    case_when(
+      M_Acc == 0 ~ "Memory\nIncorrect",
+      M_Acc == 1 ~ "Memory\nCorrect"
+    ) %>%
+    factor(ordered = TRUE) %>%
+    fct_rev()
+  ) %>%
+  ggplot(aes(
+    x = interaction(M_Acc_Label, Experiment),
+    y = P_Acc,
+    fill = Experiment, alpha = M_Acc_Label
+  )) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "bar",
+    position = position_dodge(), color = "NA"
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    position = position_dodge(width = 0.9), key_glyph = "rect",
+    color = "black", linewidth = 0.5, width = 0.5
+  ) +
+  geom_signif(
+    xmin = c(1, 3, 1.5), xmax = c(2, 4, 3.5), y = c(0.75, 0.75, 0.9),
+    annotations = c("***", "***", "NS."), color = "black", alpha = 1,
+    tip_length = 0, textsize = 3, vjust = -0.2
+  ) +
+  scale_alpha_manual(values = c(0.5, 1)) +
+  scale_fill_manual(values = c("grey50", "#7570B3")) +
+  scale_x_discrete(expand = c(0, 0), guide = "axis_nested") +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 1)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(  # text sizes/spacing for this set are a bit different
+    axis.text.y   = element_text(size = 9),
+    axis.ticks.y  = element_line(),
+    axis.title.y  = element_text(size = 9),
+    plot.title    = element_text(size = 11)
+  ) +
+  guides(alpha = guide_none(), fill = guide_none()) +
+  labs(
+    title = "Production Split By Memory",
+    x     = element_blank(),
+    y     = "Production Accuracy"
+  )
+
+# combine
+exp1_p_memory_they +
+  exp1_p_prod_they +
+  exp1_p_both_they +
+  guide_area() +
+  plot_layout(
+    guides = "collect",
+    design = "AABB
+              CCCD"
+  ) +
+  plot_annotation(
+    title = "Experiments 1A & 1B: Accuracy for They/Them Characters",
+    theme = patchwork_theme
+  ) +
+  plot_annotation(theme = theme(
+    plot.margin = margin(t = 10, b = -5, l = 10, r = 10)
+  ))
+```
+
+#### Memory
+
+```{r}
+#| label: exp1b-mem-means
+
+exp1b_r_memory_means <- exp1b_d %>%
+  group_by(Pronoun) %>%
+  summarise(  # mean and SD for each pronoun
+    mean = mean(M_Acc),
+    sd = sd(M_Acc)
+  ) %>%
+  add_row(  # for he+she
+    Pronoun = "HS",
+    mean = exp1b_d %>% filter(Pronoun != "they/them") %>% pull(M_Acc) %>% mean,
+    sd = exp1b_d %>% filter(Pronoun != "they/them") %>% pull(M_Acc) %>% sd,
+  ) %>%
+  add_row(  # for all 3
+    Pronoun = "all",
+    mean = mean(exp1b_d$M_Acc),
+    sd = sd(exp1b_d$M_Acc),
+  ) %>%
+  tidy_means() # add percentage, round values, fix labels
+
+exp1b_r_memory_means
+```
+
+```{r}
+#| label: exp1b-mem-model
+#| cache: true
+
+exp1b_m_memory <- buildmer(
+  formula = M_Acc ~ Pronoun + (Pronoun | Participant) + (Pronoun | Name),
+  data = exp1b_d, family = binomial,
+  buildmerControl(direction = "order")
+)
+summary(exp1b_m_memory)
+exp1b_r_memory <- exp1b_m_memory@model %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp1b-pets-means
+
+# mean and sd of accuracy for pet questions
+exp1b_r_pet_means <- exp1b_d_all %>%
+  filter(M_Type == "pet") %>%
+  group_by(Pronoun) %>%
+  summarise(mean = mean(M_Acc), sd = sd(M_Acc)) %>%
+  add_row(
+    Pronoun = "all",
+    mean = exp1b_d_all %>% filter(M_Type == "pet") %>% pull(M_Acc) %>% mean(),
+    sd = exp1b_d_all %>% filter(M_Type == "pet") %>% pull(M_Acc) %>% sd()
+  ) %>%
+  tidy_means()
+exp1b_r_pet_means
+```
+
+```{r}
+#| label: exp1b-pets-model
+#| cache: true
+
+# take just pet and pronoun memory questions
+exp1b_d_pets <- exp1_load_data_pets(exp1b_d_all)
+contrasts(exp1b_d_pets$M_Type)
+contrasts(exp1b_d_pets$CharPronoun)
+
+# find random effects structure
+exp1b_m_pet <- buildmer(
+  formula = M_Acc ~ CharPronoun * M_Type +
+    (M_Type * CharPronoun | Participant) +
+    (M_Type * CharPronoun | Name),
+  data = exp1b_d_pets, family = binomial,
+  buildmerControl(direction = "order")
+)
+exp1b_r_pet <- exp1b_m_pet@model %>% tidy_model_results()
+
+# Dummy code pronoun to get question type in they/them characters only
+exp1b_d_pets %>% count(CharPronoun, CharPronoun_They0)
+exp1b_m_pet_they <- glmer(
+  formula = M_Acc ~ CharPronoun_They0 * M_Type +
+    (M_Type | Participant) + (1 | Name),
+  data = exp1b_d_pets, family = binomial
+)
+exp1b_r_pet_they <- exp1b_m_pet_they %>% tidy_model_results()
+
+# Dummy code pronoun to get question type in he/she characters only
+exp1b_d_pets %>% count(CharPronoun, CharPronoun_HeShe0)
+exp1b_m_pet_heshe <- glmer(
+  formula = M_Acc ~ CharPronoun_HeShe0 * M_Type +
+    (M_Type | Participant) + (1 | Name),
+  data = exp1b_d_pets, family = binomial
+)
+exp1b_r_pet_heshe <- exp1b_m_pet_heshe %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp1b-job-means
+
+exp1b_r_job <- exp1b_d_all %>%
+  filter(M_Type == "job") %>%
+  summarise(
+    mean = mean(M_Acc) %>% round(2),
+    sd = sd(M_Acc) %>% round(2)
+  )
+exp1b_r_job
+```
+
+```{r}
+#| label: exp1-mem-model
+#| cache: true
+
+exp1_m_memory <- buildmer(
+  formula = M_Acc ~ Pronoun * Experiment +
+    (Pronoun | Participant) + (Pronoun | Name),
+  data = exp1_d, family = binomial,
+  buildmerControl(direction = "order")
+)
+summary(exp1_m_memory)
+exp1_r_memory <- exp1_m_memory@model %>% tidy_model_results()
+```
+
+Analyzing the effects of pronoun condition on accuracy in the multiple-choice memory task (@tbl-exp1b-mem), participants responded more accurately than inaccurately across all three pronouns (`r exp1b_r_memory['Intercept', 'Text']`). He/him and she/her (*M* = `r exp1b_r_memory_means['HS', 'mean']`) were remembered more accurately than they/them (*M* = `r exp1b_r_memory_means['T', 'mean']`) (`r exp1b_r_memory['Pronoun=They_HeShe', 'Text']`). Comparing accuracy for the 3 pets, which was designed as a control condition for pronouns, indicated that for he/him + she/her characters, pronoun accuracy was higher than pet accuracy (`r exp1b_r_pet_heshe['M_Type=Pet_Pronoun', 'Text']`). For they/them characters, the difference between pronoun and pet accuracy was not significant (`r exp1b_r_pet_they['M_Type=Pet_Pronoun', 'Text']`) (@tbl-exp1b-pet). Memory for the characters' 12 jobs (*M* = `r exp1b_r_job$mean`, *SD* = `r exp1b_r_job$sd`) was again above floor and was numerically higher than Experiment 1A (@fig-exp1b-job-pet). When comparing memory accuracy between experiments (@tbl-exp1-mem), neither the main effect of experiment (`r exp1_r_memory['Experiment=A_B', 'Text']`) nor its interactions with pronoun (`r exp1_r_memory['Pronoun=They_HeShe:Experiment=A_B', 'Text']`) were significant. Overall, completing the memory task last showed little effect on accuracy.
+
+#### Production
+
+```{r}
+#| label: exp1b-prod-counts
+
+exp1b_tb_prod <- table(exp1b_d$Pronoun, exp1b_d$P_Response) %>%
+  prop.table() %>%
+  addmargins() %>%
+  round(2)
+
+exp1b_tb_prod
+```
+
+```{r}
+#| label: exp1b-prod-means
+
+exp1b_r_prod_means <- exp1b_d %>%
+  group_by(Pronoun) %>%
+  summarise(  # mean and SD for each pronoun
+    mean = mean(P_Acc),
+    sd = sd(P_Acc)
+  ) %>%
+  add_row(  # for he+she
+    Pronoun = "HS",
+    mean = exp1b_d %>% filter(Pronoun != "they/them") %>% pull(P_Acc) %>% mean,
+    sd = exp1b_d %>% filter(Pronoun != "they/them") %>% pull(P_Acc) %>% sd,
+  ) %>%
+  add_row(  # for all 3
+    Pronoun = "all",
+    mean = mean(exp1b_d$P_Acc),
+    sd = sd(exp1b_d$P_Acc),
+  ) %>%
+  tidy_means() # add percentage, round values, fix labels
+
+exp1b_r_prod_means
+```
+
+```{r}
+#| label: exp1b-prod-model
+#| cache: true
+
+exp1b_m_prod <- buildmer(
+  formula = P_Acc ~ Pronoun + (Pronoun | Participant) + (Pronoun | Name),
+  data = exp1b_d, family = binomial,
+  buildmerControl(direction = "order")
+)
+summary(exp1b_m_prod)
+exp1b_r_prod <- exp1b_m_prod@model %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp1-prod-model
+#| cache: true
+
+exp1_m_prod <- buildmer(
+  formula = P_Acc ~ Pronoun * Experiment +
+    (Pronoun | Participant) + (Pronoun | Name),
+  data = exp1_d, family = binomial,
+  buildmerControl(direction = "order")
+)
+
+summary(exp1_m_prod)
+exp1_r_prod <- exp1_m_prod@model %>% tidy_model_results()
+
+# means
+exp1_d %>%
+  group_by(Experiment, Pronoun) %>%
+  summarise(mean = round(mean(P_Acc), 2)) %>%
+  pivot_wider(names_from = "Experiment", values_from = "mean")
+
+# beta estimate for 1A
+exp1a_r_prod["Pronoun=They_HeShe", "Beta"]
+
+# beta estimate for 1B
+exp1b_r_prod["Pronoun=They_HeShe", "Beta"]
+```
+
+When analyzing the effects of pronoun on accuracy in the sentence completion task (@tbl-exp1b-prod), responses that did not include a pronoun referring to the character were again infrequent (`r exp1b_tb_prod['Sum', 'none']*100`%) and are included in the analysis as incorrect responses. Participants used the correct pronoun to refer to the character more often than not across pronoun conditions (`r exp1b_r_prod['Intercept', 'Text']`). He/him and she/her (*M* = `r exp1b_r_prod_means['HS', 'mean']`) were produced more accurately than they/them (*M* = `r exp1b_r_prod_means['T', 'mean']`) (`r exp1b_r_prod['Pronoun=They_HeShe', 'Text']`). Overall accuracy was not significantly different from the main experiment (`r exp1_r_prod['Experiment=A_B', 'Text']`). However, the interaction between pronoun and experiment was significant (`r exp1_r_prod['Pronoun=They_HeShe:Experiment=A_B', 'Text']`), such that the difference in accuracy between they/them and he/him + she/her was reduced when the production task came first, compared to when the production task came second (@tbl-exp1-prod).
+
+#### Memory Predicting Production
+
+```{r}
+#| label: exp1b-mp-means
+
+exp1b_r_mp_means <- exp1b_d %>%
+  group_by(Pronoun, M_Acc) %>%
+  summarise(mean = mean(P_Acc), sd = sd(P_Acc)) %>%
+  tidy_means()
+
+exp1b_r_mp_means
+```
+
+```{r}
+#| label: exp1b-mp-model
+#| cache: true
+
+# memory accuracy as make mean-centered factor
+contrasts(exp1b_d$M_Acc_Factor)
+
+exp1b_m_mp <- buildmer(
+  formula = P_Acc ~ Pronoun * M_Acc_Factor +
+    (Pronoun * M_Acc_Factor | Participant) +
+    (Pronoun * M_Acc_Factor | Name),
+  data = exp1b_d, family = binomial,
+  buildmerControl(direction = "order")
+)
+summary(exp1b_m_mp)
+exp1b_r_mp <- exp1b_m_mp@model %>% tidy_model_results()
+
+# Tried adding back random intercepts and comparing optimizers. Even though
+# the optimizers agree on estimates, the z values are weird.
+```
+
+```{r}
+#| label: exp1-mp-model
+#| cache: true
+
+# memory accuracy as mean-centered factor
+contrasts(exp1_d$M_Acc_Factor) <- cbind("=Wrong_Right" = c(-.5, .5))
+contrasts(exp1_d$M_Acc_Factor)
+
+exp1_m_mp <- buildmer(
+  formula = P_Acc ~ Pronoun * M_Acc_Factor * Experiment +
+    (Pronoun | Participant) + (Pronoun | Name),
+  data = exp1_d, family = binomial,
+  buildmerControl(direction = "order")
+)
+summary(exp1_m_mp)
+exp1_r_mp <- exp1_m_mp@model %>% tidy_model_results()
+```
+
+Testing the effects of pronoun condition and memory accuracy on production accuracy (@tbl-exp1b-both) showed that, in addition to the effects described above, participants were more likely to produce the correct pronoun if they also remembered it(`r exp1b_r_mp['M_Acc=Wrong_Right', 'Text']`). Memory accuracy interacted with pronoun for the comparison between they/them and he/him + she/her (`r exp1b_r_mp['Pronoun=They_HeShe:M_Acc=Wrong_Right', 'Text']`), such that memory improved production more for they/them than for he/him + she/her. Remembering but not producing they/them was again more common than producing but not remembering it. Comparing between experiments, memory accuracy did not interact with task order (@tbl-exp1-both).
+
+```{r}
+#| label: exp1-compare-diff
+
+# calculate difference between memory and production accuracy for each
+# participant for they/them characters
+exp1_d_diff <- exp1_d %>%
+  group_by(Experiment, Participant, Pronoun) %>%
+  summarise(
+    M_Acc = mean(M_Acc),
+    P_Acc = mean(P_Acc),
+    Diff  = M_Acc - P_Acc
+  ) %>%
+  ungroup()
+
+# simple lm with diff as outcome
+exp1_m_diff <- lm(formula = Diff ~ Experiment * Pronoun, data = exp1_d_diff)
+summary(exp1_m_diff)
+exp1_r_diff <- exp1_m_diff %>% tidy_model_results()
+```
+
+@fig-exp1-taskDiff shows each participant's mean difference in accuracy between the two tasks. For they/them characters, participants in both experiments are more accurate in the memory task. Conversely, for he/him + she/her characters, participants in both experiments are more accurate in the production task. Both patterns are consistent with participants forgetting that a character uses they/them or choosing not to use singular *they*, then defaulting to the pronouns associated with the character's name. In a linear regression with pronoun and task order predicting the by-participant mean task differences, there were no significant effects of task order (@tbl-exp1-task).
+
+<br>
+```{r}
+#| label: fig-exp1-taskDiff
+#| fig-cap: "Experiments 1A & 1B: Differences between memory accuracy and production accuracy for each participant, split by character pronoun and task order."
+#| fig-asp: 0.8
+#| output: true
+#| cache: true
+
+exp1_d %>%
+  group_by(Experiment, Participant, Pronoun) %>%
+  summarise(
+    M_Acc_Subj = mean(M_Acc),
+    P_Acc_Subj = mean(P_Acc),
+    Diff_Acc = M_Acc_Subj - P_Acc_Subj
+  ) %>%
+  ggplot(aes(
+    x = Diff_Acc,
+    y = fct_rev(Pronoun), fill = Pronoun,
+    alpha = fct_rev(Experiment))
+  ) +
+  stat_slab(
+    normalize = "xy",
+    justification = 0.5,
+    position = position_dodge(width = 1),
+    density = density_unbounded(bandwidth = "nrd0")  # density estimator <3.3.0
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "pointrange",
+    key_glyph = "rect",
+    position = position_dodgejust(width = 1, justification = 0.05),
+    fill = "black", size = 0.5, linewidth = 0.75
+  ) +
+  geom_vline(xintercept = 0) +
+  scale_alpha_manual(
+    values = c(0.5, 1),
+    labels = c("1B:\nProduction\nFirst", "1A:\nMemory\nFirst")
+  ) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(
+    axis.text.x  = element_text(size = 9),
+    axis.text.y  = element_blank(),
+    axis.ticks.x = element_line()
+  ) +
+  guides(alpha = guide_legend(byrow = TRUE, reverse = TRUE)) +
+  labs(
+    title = "Experiments 1A & 1B: Difference Between Tasks",
+    x     = "Production More Accurate – Memory More Accurate",
+    y     = element_blank(),
+    alpha = "Experiment"
+  )
+```
+
+#### Reliability
+
+```{r}
+#| label: exp1a-reliability-setup
+
+# Split trials in half
+exp1a_d %<>% arrange(Participant, Pronoun) %>%
+  mutate(Obs_Num = seq(1, length(Pronoun))) %>%
+  mutate(Obs_Half = case_when(
+    is_even(Obs_Num) ~ "even",
+    is_odd(Obs_Num)  ~ "odd"
+  ))
+
+# Contrast code to have 1 variable that compares they/them to he/him + she/her
+# just in even trials (with the odd trials coded as 0), and vice versa
+exp1a_d %<>% mutate(
+  Pronoun_Even = case_when(
+    Obs_Half == "even" & Pronoun == "they/them" ~ -0.66,
+    Obs_Half == "even" & Pronoun != "they/them" ~ +0.33,
+    Obs_Half == "odd" ~ 0
+  ),
+  Pronoun_Odd = case_when(
+    Obs_Half == "odd" & Pronoun == "they/them" ~ -0.66,
+    Obs_Half == "odd" & Pronoun != "they/them" ~ +0.33,
+    Obs_Half == "even" ~ 0
+  )
+)
+exp1a_d %>% count(Pronoun, Pronoun_Even, Pronoun_Odd)
+```
+
+```{r}
+#| label: exp1a-reliability-memory-run
+#| cache: true
+
+exp1a_m_mem_reliability <- brm(
+  formula = M_Acc ~ Pronoun_Even + Pronoun_Odd + # fixed effects for each half
+    (1 + Pronoun_Even + Pronoun_Odd | Participant),  # random slopes by subj
+  data = exp1a_d,
+  family = bernoulli(),  # keep default priors
+  seed = 4, cores = 2,
+  chains = 4, iter = 4000,
+  file = "r_data/exp1a_memory_reliability"
+)
+exp1a_m_mem_reliability
+```
+
+```{r}
+#| label: exp1a-reliability-prod-run
+#| cache: true
+
+exp1a_m_prod_reliability <- brm(
+  formula = P_Acc ~ Pronoun_Even + Pronoun_Odd + # fixed effects for each half
+    (1 + Pronoun_Even + Pronoun_Odd | Participant),  # random slopes by subj
+  data = exp1a_d,
+  family = bernoulli(),  # keep default priors
+  seed = 4, cores = 2,
+  chains = 4, iter = 4000,
+  file = "r_data/exp1a_production_reliability"
+)
+exp1a_m_prod_reliability
+```
+
+```{r}
+#| label: exp1b-reliability-setup
+
+# Split trials in half
+exp1b_d %<>% arrange(Participant, Pronoun) %>%
+  mutate(Obs_Num = seq(1, length(Pronoun)))  %>%
+  mutate(Obs_Half = case_when(
+    is_even(Obs_Num) ~ "even",
+    is_odd(Obs_Num)  ~ "odd")
+  )
+
+# Contrast code to have 1 variable that compares they/them to he/him + she/her
+# just in even trials (with the odd trials coded as 0), and vice versa
+exp1b_d %<>% mutate(
+  Pronoun_Even = case_when(
+    Obs_Half == "even" & Pronoun == "they/them" ~ -0.66,
+    Obs_Half == "even" & Pronoun != "they/them" ~ +0.33,
+    Obs_Half == "odd" ~ 0
+  ),
+  Pronoun_Odd = case_when(
+    Obs_Half == "odd" & Pronoun == "they/them" ~ -0.66,
+    Obs_Half == "odd" & Pronoun != "they/them" ~ +0.33,
+    Obs_Half == "even" ~ 0
+  )
+)
+exp1b_d %>% count(Pronoun, Pronoun_Even, Pronoun_Odd)
+```
+
+```{r}
+#| label: exp1b-reliability-memory-run
+#| cache: true
+
+exp1b_m_mem_reliability <- brm(
+  formula = M_Acc ~ Pronoun_Even + Pronoun_Odd + # fixed effects for each half
+    (1 + Pronoun_Even + Pronoun_Odd | Participant),  # random slopes by subj
+  data = exp1b_d,
+  family = bernoulli(),  # keep default priors
+  seed = 4, cores = 2,
+  chains = 4, iter = 4000,
+  file = "r_data/exp1b_memory_reliability"
+)
+exp1b_m_mem_reliability
+```
+
+```{r}
+#| label: exp1b-reliability-prod-run
+#| cache: true
+
+exp1b_m_prod_reliability <- brm(
+  formula = P_Acc ~ Pronoun_Even + Pronoun_Odd + # fixed effects for each half
+    (1 + Pronoun_Even + Pronoun_Odd | Participant),  # random slopes by subj
+  data = exp1b_d,
+  family = bernoulli(),  # keep default priors
+  seed = 4, cores = 2,
+  chains = 4, iter = 4000,
+  file = "r_data/exp1b_production_reliability"
+)
+exp1b_m_prod_reliability
+```
+
+```{r}
+#| label: exp1-reliability-results
+#| warning: false
+
+exp1_r_reliability <- bind_rows(.id = "experiment",
+  "1A" = bind_rows(.id = "task",
+    "memory"     = exp1a_m_mem_reliability  %>% tidy(),
+    "production" = exp1a_m_prod_reliability %>% tidy()
+  ),
+  "1B" = bind_rows(.id = "task",
+    "memory"     = exp1b_m_mem_reliability  %>% tidy(),
+    "production" = exp1b_m_prod_reliability %>% tidy()
+  )) %>%
+  filter(str_detect(term, "Even") & str_detect(term, "Odd")) %>%
+  mutate(label = str_c(experiment, task, sep = " ")) %>%
+  column_to_rownames("label") %>%
+  select(estimate, std.error, conf.low, conf.high) %>%
+  mutate(across(everything(), ~round(., 2)))
+
+exp1_r_reliability
+```
+
+To estimate the internal reliability of the memory and production tasks, I used the Bayesian mixed-effects model approach described in [@staub2021]. The trials from Experiments 1A & 1B were split in half, so that each half included 2 he/him, 2 she/her, and 2 they/them characters for each participant. Pronoun was coded as 2 variables: the first comparing they/them (-.66) to he/him (+.33) and she/her (+.33) in even trials, with odd trials coded as 0, and the other comparing they/them to he/him + she/her in odd trials, with even trials coded as 0. The *brms* package [@bürkner2017] fit 4 Bayesian mixed-effects models: memory and production accuracy for 1A and 1B. Each model included the odd and even trial pronoun variables as fixed effects and by-participant slopes. All models were fit using the default priors and 4 chains, each chain with 4000 iterations, of which 2000 were warm-up.
+
+The random slope estimates represent the relative accuracy of they/them compared to he/him + she/her for each participant (@fig-exp1-reliability). For the memory task, the correlation between slopes was low in both 1A, *r* = `r exp1_r_reliability['1A memory', 'estimate']` \[`r exp1_r_reliability['1A memory', 'conf.low']`, `r exp1_r_reliability['1A memory', 'conf.high']`\], and 1B, *r* = `r exp1_r_reliability['1B memory', 'estimate']` \[`r exp1_r_reliability['1B memory', 'conf.low']`, `r exp1_r_reliability['1B memory', 'conf.high']`\], indicating low internal reliability. For the production task, the correlation between slopes was high in 1A, *r* = `r exp1_r_reliability['1A production', 'estimate']` \[`r exp1_r_reliability['1A production', 'conf.low']`, `r exp1_r_reliability['1A production', 'conf.high']`\], but medium in 1B, *r* = `r exp1_r_reliability['1B production', 'estimate']` \[`r exp1_r_reliability['1B production', 'conf.low']`, `r exp1_r_reliability['1B production', 'conf.high']`\]. Internal reliabilities below 0.80 for the memory task in both experiments and for the production task in 1B indicate that analyzing individual differences would not be warranted.
+
+## Discussion
+
+Experiment 1 investigated how people associate pronouns with a person, in a context where producing the correct pronoun required recalling stated information about the character's pronouns, instead of choosing the pronoun based on the gender association of the name or an inference about the gender of the character. Participants learned about a set of 12 characters whose pronouns---they/them or the expected he/him or she/her---could not be predicted from their name or other cues. Memory for pronouns was measured in a multiple-choice task, and production of pronouns was measured in a written sentence completion task. After only a brief exposure to the characters, participants correctly recalled that the character used they/them pronouns in about half of trials and correctly produced singular they in reference to the character in about a third of trials. Participants originally completed the memory task before the production task, and a follow-up experiment presented the production task first, to rule out the possibility that differences between memory and production accuracy were caused by task order. In both experiments, remembering that the character used they/them pronouns strongly predicted---but did not guarantee---producing singular they. These results provide support for a model where speakers can select pronouns by retrieving information from episodic memory about a person's stated pronouns, instead of selecting pronouns based on morphosyntactic gender information from the name or a gender inference about the person.
+
+One limitation is that Experiment 1 was conducted with undergraduate students at a private university, which represents a particular subset of English speakers located in the US: primarily ages 18--22 and highly educated. Prior data allows us to infer that the participants are more likely to be socially liberal, have prior knowledge about LGBTQ+ topics, and to consider singular they acceptable [@minkin2021; @parker2019]. However, more extensive demographic and language experience data were not included in the first experiment, because investigation of individual differences would first need to establish the internal reliability of the measures, in order to then be able to associate them with other person-specific variables.
+
+There is an increasing awareness in psycholinguistics, and in cognitive psychology more broadly, of the importance of demonstrating sufficient internal reliability as a first step in conducting individual differences research [@cronbach1957; @hedge2017; @staub2021]. This often proves difficult, because reliably measuring effects of experimental manipulations and reliably measuring individual differences are mathematically at odds with each other. Individual differences measures aim to characterize between-participant variability (e.g., the extent to which someone endorses the gender binary and gender essentialism), and reliability means that the measure ranks participants consistently. This requires a low degree of within-participant variability: participants' responses would be consistent both within trials in the same experiment and if they completed the experiment again at a later date. Conversely, most cognitive psychology measures aim to characterize changes in behavior in different experimental contexts (e.g., singular they takes more time to read than plural they), which is within-participant variability. In this context, reliability means that the effect replicates in different experiments. This requires a low degree of between-participant variability, where most participants show the same pattern of responses. @hedge2017 describe this incompatibility as the "reliability paradox", because "robust experimental paradigms...are likely to be sub-optimal for correlational studies for the same reasons that they produce robust experimental effects."
+
+If a measure shows low internal reliability---where each participants' responses are not consistent within halves of the same experiment, or when completing the experiment twice---testing for individual differences would be possible, but not warranted [@hedge2017]. One of the primary issues is that the reliability of the measures constrains the maximum expected true correlation that one would expect to find [@spearman1904], meaning that correlations with a low-reliability task will be underestimated. This is the position we find ourselves in with Experiment 1. Analyzing the data using @staub2021's split-half mixed-effects model approach showed that the internal reliability of the memory task (*r*~A~ = `r exp1_r_reliability['1A memory', 'estimate']`, *r*~B~ = `r exp1_r_reliability['1B memory', 'estimate']`) was too low to warrant individual differences analysis, and the reliability of the production task was high enough in Experiment 1A but not 1B (*r*~A~ = `r exp1_r_reliability['1A production', 'estimate']`, *r*~B~ = `r exp1_r_reliability['1B production', 'estimate']`). While increasing the number of trials per participant can increase reliability [@liceralde2023], this is not feasible with a memory task, as adding more characters to learn about would make the experiment too difficult for participants. Overall, this means that while people clearly do vary in their accuracy remembering and producing singular they, it is not clear how much of this variability arises from theoretically interesting factors (e.g., language and gender beliefs), how much arises from general psychological factors (e.g., ability in memory tests, attention to the experiment), and how much is random noise. Instead of pursuing individual differences questions with the character learning task, we turn to investigating how presenting information about singular they can support accurate memory and production.
+
+```{r}
+#| label: exp1-save-workspace
+
+save.image("r_data/exp1.RData")
+```

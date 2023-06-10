@@ -1,0 +1,820 @@
+---
+title: "Experiment 2"
+subtitle: "**Effects of a PSA and Usage Modeling on Memory and Written Production**"
+toc-title: "Experiment 2: Effects of a PSA and Usage Modeling on Memory and Written Production"
+---
+
+```{r}
+#| label: exp2-setup
+#| include: false
+
+library(tidyverse) # data wrangling
+library(magrittr)
+library(sjmisc)
+options(dplyr.group.inform = FALSE, dplyr.summarise.inform = FALSE)
+
+library(lme4) #  stats
+library(lmerTest)
+library(buildmer)
+library(brms)
+
+library(insight) # model results
+library(broom.mixed)
+
+library(kableExtra)  # tables
+library(sjPlot)
+
+library(patchwork)  # plots
+library(RColorBrewer)
+library(ggtext)
+
+source("resources/data-functions/exp2_load_data.R")  # setting up data
+source("resources/formatting/printing.R")  # model results in text
+source("resources/formatting/aesthetics.R")  # plot and table themes
+```
+
+[![](resources/icons/preregistered.svg){title="Preregistration" width="30"}](https://osf.io/3dze4) [![](resources/icons/open-materials.svg){title="Materials" width="30"}](https://github.com/bethanyhgardner/dissertation/blob/main/materials/exp2) [![](resources/icons/open-data.svg){title="Data" width="30"}](https://github.com/bethanyhgardner/dissertation/blob/main/data) [![](resources/icons/file-code-fill.svg){title="Analysis Code" width="30"}](https://github.com/bethanyhgardner/dissertation/blob/main/exp2.qmd)
+
+<br>
+
+## Motivation
+
+The results of Experiment 1 suggest that people can learn to associate pronouns with a person, but that accuracy for they/them remains lower than for he/him and she/her. Although remembering which characters used they/them was a strong predictor of producing singular *they*, accuracy in the sentence completion task was significantly lower than in the multiple-choice memory task. Experiment 2 investigated what kinds of exposure can support accurately remembering and producing singular *they*. The first factor tested is the role of conceptual knowledge about singular *they* and discussing gendered language preferences. Recent results show that participants are more likely to interpret *they* as the intended singular, instead of plural, after being told explicitly that the character uses they/them pronouns [@arnold2021, described in chapter 1]. This is also supported by prior experiments about the generic masculine: When a course instructor included information about why they would be using generic *she* instead of generic *he* [@adamsky1981], and when alternatives were taught as options to students [@flanagan1982], students were less likely to use generic *he* in their assignments and more likely to use gender-neutral alternatives or generic *she*. Similarly, in German (where nouns are gender-marked) reading brief arguments in favor of gender-neutral language increased participants' use of gender-neutral generic nouns [@koeser2014].
+
+The second factor tested is exposure. As singular *they* becomes more common and accepted [@balhorn2004; @camilliere2021; @hekanaho2020; @minkin2021; @parker2019], speakers are increasingly likely to be exposed to it via media and social circles, and many of these instances do not come prefaced with a discussion about pronouns or gender identity. Potentially-comparable results from studies about non-sexist language reforms are mixed: students who saw alternatives to generic masculine forms modeled in task instructions increased their use of non-sexist forms, but did not decrease their use of generic masculine forms [@cronin1995]. In German, women were more likely to use alternatives to generic masculine role nouns after reading a text using them, but men did not change their language use until the instructions drew their attention to the gendered language used [@koeser2015].
+
+## Methods
+
+The design and analysis plan were [preregistered](https://osf.io/3dze4 "Experiment 2 Preregistration") on the Open Science Framework. [Materials](https://github.com/bethanyhgardner/dissertation/tree/main/materials/exp2 "Experiment 2 Materials"), de-identified [data](https://github.com/bethanyhgardner/dissertation/blob/main/data "Experiment 2 Data"), and [analysis code](https://github.com/bethanyhgardner/dissertation/blob/main/exp1.qmd "Source Code") are available at this dissertation's [Github repository](https://github.com/bethanyhgardner/dissertation "Github repository").
+
+### Participants
+
+```{r}
+#| label: exp2-n-participants
+
+# Age
+exp2_n_age <- read.csv("data/exp2_data.csv") %>%
+  select(Participant, Age) %>%
+  unique() %>%
+  summarise(mean = mean(Age), sd = sd(Age)) %>%
+  round(2) %>%
+  format(n.small = 2)
+exp2_n_age
+
+# Gender
+exp2_n_gender <- read.csv("data/exp2_data.csv") %>%
+  group_by(Gender) %>%
+  summarise(n = n_distinct(Participant)) %>%
+  arrange(desc(n)) %>%
+  mutate(
+    Gender = replace_na(Gender, value = "did not provide"),
+    Text = str_c(as.character(n), " ", Gender)
+  ) %>%
+  pull(Text) %>%
+  str_flatten_comma()
+exp2_n_gender
+
+# English Experience
+exp2_n_english <- read.csv("data/exp2_data.csv") %>%
+  group_by(English) %>%
+  summarise(n = n_distinct(Participant)) %>%
+  arrange(desc(n)) %>%
+  mutate(Text = case_when(
+    str_detect(English, "native \\(learned") ~
+      str_c(as.character(n), " \"", English, "\""),
+    str_detect(English, "competent") ~
+      str_c(as.character(n), " \"fully competent, but not native\""),
+    str_detect(English, "limited") ~
+      str_c(as.character(n), " \"limited but adequate competence\""),
+    str_detect(English, "some") ~
+      str_c(as.character(n), " \"some familiarity\"")
+  )) %>%
+  pull(Text) %>%
+  str_flatten_comma()
+exp2_n_english
+```
+
+427 responses were collected from Amazon Mechanical Turk, completing a task that took approximately 20 minutes. Participants were required to be in the U.S. and comfortable reading and writing in English. 107 participants were excluded for nonsensical responses in the sentence completion task, for a total of `r read.csv("data/exp2_data.csv") %>% pull(Participant) %>% unique() %>% length()` participants in the final data set. As in Experiment 1, participants were asked about their age (*M~age~* = `r exp2_n_age$mean`, *SD~age~* = `r exp2_n_age$sd`), gender (`r exp2_n_gender`), and English experience (`r exp2_n_english`) in order to characterize the sample.
+
+### Materials & Procedure
+
+Participants read 1 of 2 500-word PSAs ([materials](https://github.com/bethanyhgardner/dissertation/blob/main/materials/exp2/PSA.md)). The pronoun PSA was modified from a GSLEN resource and discussed talking about gendered language preferences, using singular *they*, and responding to misgendering someone [@glsen2020]. The neutral PSA was modified from a Humane Society resource and discussed the importance of spaying/neutering cats and dogs [@humanesociety2020]. Participants also read 2 fictional biographies, which made repeated third-person reference to a single character, in order to model pronoun use without explicitly commenting on it ([materials](https://github.com/bethanyhgardner/dissertation/blob/main/materials/exp2/biographies.md)). The character in the first biography had a feminine name and was referred to with they/them or she/her pronouns (4 subject, 1 object, 4 possessive). The character in the second biography had a masculine name and was referred to with they/them or he/him pronouns (7 subject, 7 possessive). The other materials were identical to Experiment 1. Participants read 1 PSA and 1 pair of biographies (2 they/them characters, or 1 he/him character and 1 she/her character). These were crossed to create 4 between-participants conditions \[**PSA: Gendered Language vs Unrelated; Biographies: They vs He/She**\]. Participants then completed the same pronoun memory and production tasks as in Experiment 1. Participants were randomly assigned to 1 of 3 lists with each condition, counterbalancing the name-pronoun combinations. The experiment was coded and hosted using PCIbex [@zehr2018].
+
+## Predictions
+
+The PSA contains information about why paying attention to gendered language matters, mentions singular *they* as an option and shows examples of its usage, and provides scripts for talking about gendered language preferences [@glsen2020]. This addresses conceptual knowledge about singular *they* and misgendering, chosen to be similar to Diversity, Equity, and Inclusion materials that people may see in their schools or workplaces. If learning or being reminded of this information affects language use, we predict that participants who read the gendered language PSA will be more accurate at remembering and producing they/them, compared to participants who read the unrelated PSA.
+
+As singular *they* becomes more common and accepted [@balhorn2004; @camilliere2021; @hekanaho2020; @minkin2021; @parker2019], speakers are increasingly likely to be exposed to it via media and social circles, and many of these instances do not come prefaced with a discussion about gendered language or gender identity. As such, the biographies model the use of singular *they*, but do not explicitly call attention to it. The biography genre allows for repeated reference to one individual, giving participants multiple examples and making it more straightforward to interpret they as singular and not plural. If seeing singular *they* modeled supports learning, we predict that participants who read the stories about characters referred to with they/them pronouns will be more accurate at remembering and producing singular *they*, compared to participants who read the stories about characters referred to with he/him and she/her pronouns.
+
+## Results
+
+```{r}
+#| label: exp2-load-data
+
+exp2_d_all <- exp2_load_data_all()  # all memory questions, then just pronouns
+exp2_d <- exp2_d_all %>% filter(M_Type == "pronoun") %>% select(-M_Type)
+
+summary(exp2_d)
+contrasts(exp2_d$Pronoun)
+contrasts(exp2_d$PSA)
+contrasts(exp2_d$Biography)
+```
+
+Three logistic mixed-effects models analyzed Pronoun, PSA, and Biography predicting memory accuracy (@tbl-exp2-memory), production accuracy (@tbl-exp2-prod), and a model relating the two measures (@tbl-exp2-both). The fixed effects of PSA and Biography were mean-center effects coded; all other model specifications followed Experiment 1 [@baayen2008; @bates2015; @rcoreteam2023; @voeten2023]. For all three models, the most complex random effects structure that converged included only by-item intercepts, and no by-participant effects.
+
+### Memory
+
+```{r}
+#| label: exp2-memory-means
+
+exp2_r_memory_means_heshe <- exp2_d %>%
+  filter(Pronoun != "they/them") %>%
+  group_by(PSA, Biography) %>%
+  summarise(mean = mean(M_Acc), sd = sd(M_Acc)) %>%  # condition means
+  ungroup() %>%
+  add_row(  # for they in across PSA + Bio conditions
+    PSA = "All", Biography = "",
+    mean = exp2_d %>% filter(Pronoun != "they/them") %>% pull(M_Acc) %>% mean,
+    sd = exp2_d %>% filter(Pronoun != "they/them") %>% pull(M_Acc) %>% sd,
+  ) %>%
+  tidy_means()
+
+exp2_r_memory_means_heshe
+
+exp2_r_memory_means_they <- exp2_d %>%
+  filter(Pronoun == "they/them") %>%
+  group_by(PSA, Biography) %>%
+  summarise(mean = mean(M_Acc), sd = sd(M_Acc)) %>%  # condition means
+  ungroup() %>%
+  add_row(  # for they in across PSA + Bio conditions
+    PSA = "All", Biography = "",
+    mean = exp2_d %>% filter(Pronoun == "they/them") %>% pull(M_Acc) %>% mean,
+    sd = exp2_d %>% filter(Pronoun == "they/them") %>% pull(M_Acc) %>% sd,
+  ) %>%
+  tidy_means()
+
+exp2_r_memory_means_they
+```
+
+```{r}
+#| label: exp2-memory-model
+#| cache: true
+
+exp2_m_memory <- buildmer(
+  formula = M_Acc ~ Pronoun * PSA * Biography +
+    (Pronoun | Participant) + (Pronoun | Name),
+  data = exp2_d,
+  family = binomial,
+  buildmerControl(direction = "order")
+)
+summary(exp2_m_memory)
+exp2_r_memory <- exp2_m_memory@model %>% tidy_model_results()
+```
+
+In the multiple-choice memory task (@tbl-exp2-memory), participants responded more accurately than not across pronouns and training conditions (`r exp2_r_memory['Intercept', 'Text']`). He/him and she/her (*M* = `r min(exp2_r_memory_means_heshe$mean)`--`r max(exp2_r_memory_means_heshe$mean)` between PSA and Biography conditions) were remembered more accurately than they/them (*M* = `r min(exp2_r_memory_means_they$mean)`--`r max(exp2_r_memory_means_they$mean)`) (`r exp2_r_memory['Pronoun=They_HeShe', 'Text']`). There was no difference in accuracy between he/him and she/her, and they/them was misremembered as he/him and she/her at similar rates ([Figure @fig-exp2-memory]A). The lower accuracy of they/them compared to she/her and he/him ([Figure @fig-exp2-memory]B) was attenuated when participants read the gendered language PSA compared to the unrelated PSA (`r exp2_r_memory['Pronoun=They_HeShe:PSA=GenLang', 'Text']`).
+
+<br>
+
+```{r}
+#| label: tbl-exp2-memory
+#| tbl-cap: "Experiment 2: Model results for the effects of Pronoun, PSA, and Biography on Memory Accuracy."
+#| output: true
+#| warning: false
+
+exp2_tb_memory <- tab_model(
+  model = exp2_m_memory@model,
+  transform = NULL, # show log-odds not odds ratios
+  show.stat = TRUE, string.stat = "z", # show z
+  show.ci = FALSE, # show SE instead of CI
+  show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE, # don't make sense for logistic models
+  # shows intercept, p values, random effects, n group, n obs by default
+  digits = 3, digits.re = 3, # round to 3
+  dv.labels = "Memory Accuracy", # labels
+  pred.labels = exp2_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp2_tb_memory$knitr %<>%
+  tab_model_title_row("Experiment 2: Memory") %>%  # add title row
+  drop_sigma()  # drop sigma squared because it doesn't make sense for logistic
+exp2_tb_memory
+```
+
+```{r}
+#| label: fig-exp2-memory
+#| fig-cap: "Experiment 2: [A] Pronoun accuracy in the multiple-choice memory task, split by PSA and Biography conditions. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means. [B] Mean and 95% CI of memory accuracy for he/him + she/her characters and they/them characters, comparing PSA and Biography conditions. The distribution of responses is shown in the appendix (@fig-exp2-dist)."
+#| fig-asp: 0.8
+#| output: true
+#| cache: true
+
+# accuracy
+exp2_p_memory_acc <- exp2_d %>%
+  group_by(Participant, Pronoun, PSA, Biography) %>%
+  summarise(M_Acc = mean(M_Acc)) %>%
+  ggplot(aes(x = Pronoun, y = M_Acc, fill = Pronoun, color = Pronoun)) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "bar",
+    alpha = 0.4, color = NA
+  ) +
+  geom_point(
+    position = position_jitter(height = 0.01, width = 0.35, seed = 2),
+    size = 0.3
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    color = "black", linewidth = 0.5, width = 0.5
+  ) +
+  facet_grid((Biography ~ PSA), labeller = labeller(
+    PSA = c("GenLang" = "Gendered Language PSA", "Unrelated" = "Unrelated PSA"),
+    Biography = c("They" = "They Bios", "HeShe" = "He/She Bios")
+  )) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  theme_classic() +
+  dissertation_plot_theme + # main formatting
+  gray_facet_theme + # light grey facet labels w/ outline around panel
+  labs(x = element_blank(), y = "By-Participant Mean Accuracy") +
+  guides(fill = guide_none(), color = guide_none())
+
+# PSA effect
+exp2_p_memory_PSA <- exp2_d %>%
+  mutate(
+    Pronoun_Group =
+      ifelse(Pronoun == "they/them", "they/them", "he/him +\nshe/her")
+  ) %>%
+  group_by(PSA, Biography, Participant, Pronoun_Group) %>%
+  summarise(M_Acc = mean(M_Acc)) %>% # summarize across he + she
+  group_by(PSA, Biography, Pronoun_Group) %>%
+  summarise(mean_se(M_Acc)) %>% # summarize across participants
+  mutate(Condition = str_c(PSA, Biography, sep = " + ")) %>%
+  ggplot(aes(
+    x = Pronoun_Group, y = y, ymin = ymin, ymax = ymax,
+    group = Condition, color = PSA
+  )) +
+  geom_line(aes(linetype = Biography)) +
+  geom_pointrange(size = 0.25) +
+  scale_color_manual(
+    labels = c("GenLang" = "Gendered\nLanguage", "Unrelated" = "Unrelated"),
+    values = c("tomato3", "#367ABF")
+  ) +
+  scale_linetype_discrete(labels = c("They" = "They", "HeShe" = "He/She")) +
+  scale_x_discrete(expand = c(0.06, 0.06)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(
+    axis.text.x  = element_text(margin = margin(b = -10)),
+    axis.title.y = element_text(margin = margin(l = 10)), # nudge away from tag
+    axis.ticks.y = element_line(),
+    legend.box   = "horizontal",
+    legend.text  = element_text(size = 11)
+  ) +
+  labs(x = element_blank(), y = "Mean Accuracy")
+
+# combine
+exp2_p_memory_acc + exp2_p_memory_PSA +
+  plot_annotation(
+    title = "Experiment 2: Accuracy of Memory Responses",
+    tag_levels = "A",
+    theme = patchwork_theme
+  ) +
+  plot_layout(
+    design = "AAAAAAA
+              BBBBBB#",
+    heights = c(2, 1.5)
+  )
+```
+
+<br>
+
+```{r}
+#| label: exp2-compare-pets-setup
+
+# mean and sd of accuracy for pet questions
+exp2_r_pet_means <- exp2_d_all %>%
+  filter(M_Type == "pet") %>%
+  summarise(
+    mean = mean(M_Acc) %>% format(digits = 2, nsmall = 2),
+    sd   = sd(M_Acc)   %>% format(digits = 2, nsmall = 2)
+  )
+
+# take just pet and pronoun memory questions
+exp2_d_pets <- exp2_load_data_pets()
+
+# mean-center contrast code with pet as negative and pronoun as positive
+contrasts(exp2_d_pets$M_Type)
+
+# double check other contrasts
+contrasts(exp2_d_pets$CharPronoun)
+contrasts(exp2_d_pets$PSA)
+contrasts(exp2_d_pets$Biography)
+```
+
+```{r}
+#| label: exp2-compare-pets-model-all
+#| cache: true
+
+# find random effects structure
+exp2_m_pet <- buildmer(
+  formula = M_Acc ~ CharPronoun * PSA * Biography + # conditions
+    M_Type + # add question type
+    CharPronoun * M_Type + # but only its interaction with Pronoun
+    (M_Type * CharPronoun | Participant) +
+    (M_Type * CharPronoun | Name),
+  data = exp2_d_pets, family = binomial,
+  buildmerControl(direction = "order")
+)
+summary(exp2_m_pet)
+exp2_r_pet <- exp2_m_pet@model %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp2-compare-pets-model-they0
+#| cache: true
+
+# Dummy code pronoun to get question type in they/them characters only
+exp2_d_pets %>% count(CharPronoun, CharPronoun_They0)
+
+exp2_m_pet_they <- glmer( # same model from buildmer, just swap CharPronoun
+  formula = M_Acc ~ M_Type + CharPronoun_They0 + M_Type:CharPronoun_They0 +
+    PSA + Biography + CharPronoun_They0:PSA + PSA:Biography +
+    CharPronoun_They0:Biography + CharPronoun_They0:PSA:Biography +
+    (M_Type | Name) + (1 | Participant),
+  data = exp2_d_pets, family = binomial
+)
+summary(exp2_m_pet_they)
+exp2_r_pet_they <- exp2_m_pet_they %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp2-compare-pets-model-heshe0
+#| cache: true
+
+# Dummy code pronoun to get question type in he/she characters only
+exp2_d_pets %>% count(CharPronoun, CharPronoun_HeShe0)
+
+exp2_m_pet_heshe <- glmer( # same model from buildmer, just swap CharPronoun
+  formula = M_Acc ~ M_Type + CharPronoun_HeShe0 + M_Type:CharPronoun_HeShe0 +
+    PSA + Biography + CharPronoun_HeShe0:PSA + PSA:Biography +
+    CharPronoun_HeShe0:Biography + CharPronoun_HeShe0:PSA:Biography +
+    (M_Type | Name) + (1 | Participant),
+  data = exp2_d_pets, family = binomial
+)
+summary(exp2_m_pet_heshe)
+exp2_r_pet_heshe <- exp2_m_pet_heshe %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp2-memory-jobs
+
+exp2_r_job <- exp2_d_all %>%
+  filter(M_Type == "job") %>%
+  summarise(
+    mean = mean(M_Acc) %>% round(2),
+    sd   = sd(M_Acc)   %>% round(2)
+  )
+exp2_r_job
+```
+
+Participants also learned that each character had 1 of 3 pets, which was designed to have the same distributional characteristics but be less marked in comparison to the 3 pronouns. As in Experiment 1, there was no significant difference between accuracy for the they/them characters' pets (*M* = `r exp2_r_pet_means$mean`) and pronouns (`r exp2_r_pet_they['M_Type=Pet_Pronoun', 'Text']`). Accuracy for the 12 possible jobs was relatively high (*M* = `r exp2_r_job$mean`), confirming that the experiment was not too difficult for participants. Job and pet accuracy are discussed in more detail in the [appendix](#supplementary-exp2-pet-job).
+
+### Production
+
+```{r}
+#| label: exp2-prod-dist-all
+
+exp2_tb_prod <- table(exp2_d$Pronoun, exp2_d$P_Response) %>%
+  prop.table() %>%
+  addmargins() %>%
+  round(2)
+
+exp2_tb_prod
+```
+
+```{r}
+#| label: exp2-prod-means
+
+exp2_r_prod_means_heshe <- exp2_d %>%
+  filter(Pronoun != "they/them") %>%
+  group_by(PSA, Biography) %>%
+  summarise(mean = mean(P_Acc), sd = sd(P_Acc)) %>%  # condition means
+  ungroup() %>%
+  add_row(  # for he/she in across PSA + Bio conditions
+    PSA = "All", Biography = "",
+    mean = exp2_d %>% filter(Pronoun != "they/them") %>% pull(P_Acc) %>% mean,
+    sd = exp2_d %>% filter(Pronoun != "they/them") %>% pull(P_Acc) %>% sd,
+  ) %>%
+  tidy_means()
+
+exp2_r_prod_means_heshe
+
+exp2_r_prod_means_they <- exp2_d %>%
+  filter(Pronoun == "they/them") %>%
+  group_by(PSA, Biography) %>%
+  summarise(mean = mean(P_Acc), sd = sd(P_Acc)) %>%  # condition means
+  ungroup() %>%
+  add_row(  # for they in across PSA + Bio conditions
+    PSA = "All", Biography = "",
+    mean = exp2_d %>% filter(Pronoun == "they/them") %>% pull(P_Acc) %>% mean,
+    sd = exp2_d %>% filter(Pronoun == "they/them") %>% pull(P_Acc) %>% sd,
+  ) %>%
+  tidy_means()
+
+exp2_r_prod_means_they
+```
+
+```{r}
+#| label: exp2-prod-model
+#| cache: true
+
+exp2_m_prod <- buildmer(
+  formula = P_Acc ~ Pronoun * PSA * Biography +
+    (Pronoun | Participant) + (Pronoun | Name),
+  data = exp2_d, family = binomial,
+  buildmerControl(direction = "order")
+)
+summary(exp2_m_prod)
+exp2_r_prod <- exp2_m_prod@model %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp2-prod-interaction-HS
+#| cache: true
+
+# The main model has Helmert coding for Pronoun and Effects coding (.5, -.5)
+# for PSA and Biography. This means Pronoun (T vs HS) * PSA * Bio is
+# testing the interaction between Pronoun and PSA across both Biography
+# conditions.
+
+# Dummy coding Biography with they/them biographies as 1 and he/she
+# biographies as 0 tests the interaction between Pronoun and PSA for just
+# the he/she biographies:
+
+exp2_d %<>% mutate(Bio_Ref_HeShe = Biography)
+contrasts(exp2_d$Bio_Ref_HeShe) <- cbind("0" = c(1, 0))
+
+# check:
+contrasts(exp2_d$PSA)
+contrasts(exp2_d$Bio_Ref_HeShe)
+
+exp2_m_prod_bio_heshe0 <- glmer(
+  formula = P_Acc ~ Pronoun * PSA * Bio_Ref_HeShe + (1 | Name),
+  data = exp2_d, family = binomial
+)
+summary(exp2_m_prod_bio_heshe0)
+exp2_r_prod_bio_heshe0 <- exp2_m_prod_bio_heshe0 %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp2-prod-interaction-T
+#| cache: true
+
+# Conversely, dummy coding Biography with he/she biographies as 1 and
+# they biographies as 0 tests the interaction between Pronoun and PSA for
+# just the they biographies.
+
+exp2_d %<>% mutate(Bio_Ref_They = Biography)
+contrasts(exp2_d$Bio_Ref_They) <- cbind("0" = c(0, 1))
+
+exp2_m_prod_bio_they0 <- glmer(
+  formula = P_Acc ~ Pronoun * PSA * Bio_Ref_They + (1 | Name),
+  data = exp2_d, family = binomial
+)
+summary(exp2_m_prod_bio_they0)
+exp2_r_prod_bio_they0 <- exp2_m_prod_bio_they0 %>% tidy_model_results()
+```
+
+```{r}
+#| label: exp2-interaction-mean-diff
+
+# Get mean difference for he/him + she/her and they/them for each condition
+# to double check the interpretation of the interactions
+exp2_d %>%
+  mutate(Pronoun_Group = ifelse(Pronoun == "they/them", "They", "He+She")) %>%
+  group_by(PSA, Biography, Pronoun_Group) %>%
+  summarise(mean = round(mean(P_Acc), 2)) %>%
+  pivot_wider(names_from = Pronoun_Group, values_from = mean) %>%
+  mutate(Diff = `He+She` - They) %>%
+  arrange(Diff)
+```
+
+```{r}
+#| label: exp2-prod-useThey-means
+
+exp2_d_use_they <- exp2_d %>%
+  mutate(P_IsThey = ifelse(P_Response == "they/them", 1, 0)) %>%
+  group_by(PSA, Biography, Participant) %>%
+  summarise(
+    N_They  = sum(P_IsThey),
+    UseThey = ifelse(N_They >= 1, 1, 0)
+  )
+summary(exp2_d_use_they)
+
+exp2_r_use_they_means <- exp2_d %>%
+  filter(P_Response == "they/them") %>%
+  group_by(PSA, Biography) %>%
+  summarise(UseThey = n_distinct(Participant)) %>%
+  mutate(n = 80) %>%
+  mutate(
+    prop    = UseThey / n %>% round(2),
+    percent = (prop * 100) %>% round() %>% format(nsmall = 0)
+  ) %>%
+  mutate(Condition = str_c(PSA, Biography, sep = " ")) %>%
+  column_to_rownames(var = "Condition") %>%
+  select(UseThey, prop, percent)
+exp2_r_use_they_means
+```
+
+```{r}
+#| label: exp2-prod-useThey-model
+
+exp2_m_use_they <- glm(
+  UseThey ~ PSA * Biography,
+  data = exp2_d_use_they, family = binomial
+)
+summary(exp2_m_use_they)
+exp2_r_use_they <- exp2_m_use_they %>% tidy_model_results()
+```
+
+Responses were coded by whether the sentence continuation used he/him, she/her, they/them, or no pronouns to refer to the character (@fig-exp2-prod). Responses that did not include a pronoun were `r exp2_tb_prod['Sum', 'none']*100`% of the data and are included in the analysis as incorrect responses (@tbl-exp2-prod). Across all conditions, participants produced the correct pronoun more often than not (`r exp2_r_prod['Intercept', 'Text']`). He/him and she/her (*M* = `r min(exp2_r_prod_means_heshe$mean)`--`r max(exp2_r_prod_means_heshe$mean)` between PSA and Biography conditions) were produced more accurately than they/them (*M* = `r min(exp2_r_prod_means_they$mean)`--`r max(exp2_r_prod_means_they$mean)`) (`r exp2_r_prod['Pronoun=They_HeShe', 'Text']`). He/him was produced somewhat more accurately than she/her (`r exp2_r_prod['Pronoun=He_She', 'Text']`). The relative difficulty of they/them was attenuated with the gendered language PSA (`r exp2_r_prod['Pronoun=They_HeShe:PSA=GenLang', 'Text']`), and there was a significant interaction between PSA and Biography (`r exp2_r_prod['PSA=GenLang:Biography=They', 'Text']`). These effects were qualified by a three-way interaction between Pronoun, PSA, and Biography (`r exp2_r_prod['Pronoun=They_HeShe:PSA=GenLang:Biography=They', 'Text']`). A follow-up analysis probing this interaction found that the gendered language PSA reduced the relative difficulty of they/them more when paired with the biographies that used he/him and she/her (`r exp2_r_prod_bio_heshe0['Pronoun=They_HeShe:PSA=GenLang', 'Text']`) than when paired with the biographies that used they/them (`r exp2_r_prod_bio_they0['Pronoun=They_HeShe:PSA=GenLang', 'Text']`). However, examining the means for the two conditions with the gendered language PSA (red in [Figure @fig-exp2-prod]B) indicates that the difference in relative accuracy for they/them compared to he/him + she/her is due to Biography affecting accuracy for he/him + she/her characters, but not accuracy for they/them characters. Finally, an exploratory analysis measured the proportion of participants who produced singular *they* at all, regardless of accuracy (@tbl-exp2-prod-they). Participants who read the gendered language PSA were more likely to produce singular *they* at least once (`r exp2_r_use_they['PSA=GenLang', 'Text']`), with proportions rising from `r exp2_r_use_they_means['Unrelated HeShe', 'percent']`% and `r exp2_r_use_they_means['Unrelated They', 'percent']`% in conditions that read the unrelated PSA to `r exp2_r_use_they_means['GenLang They', 'percent']`% and `r exp2_r_use_they_means['GenLang HeShe', 'percent']`% in conditions that read the gendered language PSA.
+
+<br>
+
+```{r}
+#| label: tbl-exp2-prod
+#| tbl-cap: "Experiment 2: Model results for the effects of Pronoun, PSA, and Biography on Production Accuracy."
+#| output: true
+#| warning: false
+
+exp2_tb_prod <- tab_model(
+  model = exp2_m_prod@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE,
+  show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Production Accuracy",
+  pred.labels = exp2_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp2_tb_prod$knitr %<>%
+  tab_model_title_row("Experiment 2: Production") %>%
+  drop_sigma()
+exp2_tb_prod
+```
+
+```{r}
+#| label: fig-exp2-prod
+#| fig-cap: "Experiment 2: [A] Pronoun accuracy in written sentence completion task, split by PSA and Biography conditions. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means. [B] Production accuracy for he/him + she/her characters and they/them characters, split by PSA and Biography conditions. [C] Number of times each participant produced singular *they*, split by PSA and Biography conditions. The distribution of all pronoun responses is shown in the appendix (@fig-exp2-dist)."
+#| fig-asp: 1
+#| output: true
+#| cache: true
+
+# accuracy
+exp2_p_prod_acc <- exp2_d %>%
+  group_by(Participant, Pronoun, PSA, Biography) %>%
+  summarise(P_Acc = mean(P_Acc)) %>%
+  ggplot(aes(x = Pronoun, y = P_Acc, fill = Pronoun, color = Pronoun)) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "bar",
+    alpha = 0.4, color = NA
+  ) +
+  geom_point(
+    position = position_jitter(height = 0.01, width = 0.35, seed = 2),
+    size = 0.3
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    color = "black", linewidth = 0.5, width = 0.5
+  ) +
+  facet_grid(Biography ~ PSA, labeller = labeller(
+    PSA = c("GenLang" = "Gendered Language PSA", "Unrelated" = "Unrelated PSA"),
+    Biography = c("They" = "They Bios", "HeShe" = "He/She Bios")
+  )) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  gray_facet_theme +
+  labs(x = element_blank(), y = "By-Participant Mean Accuracy") +
+  guides(fill = guide_none(), color = guide_none())
+
+# PSA effect
+exp2_p_prod_PSA <- exp2_d %>%
+  mutate(Pronoun_Group = ifelse(
+    Pronoun == "they/them", "they/them", "he/him +\nshe/her"
+  )) %>%
+  group_by(PSA, Biography, Participant, Pronoun_Group) %>%
+  summarise(P_Acc = mean(P_Acc)) %>% # summarize across he + she
+  group_by(PSA, Biography, Pronoun_Group) %>%
+  summarise(mean_se(P_Acc)) %>% # summarize across participants
+  mutate(Condition = str_c(PSA, Biography, sep = " + ")) %>%
+  ggplot(aes(
+    x = Pronoun_Group, y = y, ymin = ymin, ymax = ymax,
+    group = Condition, color = PSA
+  )) +
+  geom_line(aes(linetype = Biography)) +
+  geom_pointrange(size = 0.25) +
+  scale_color_manual(
+    labels = c("GenLang" = "Gendered\nLanguage", "Unrelated" = "Unrelated"),
+    values = c("tomato3", "#367ABF")
+  ) +
+  scale_linetype_discrete(labels = c("They" = "They", "HeShe" = "He/She")) +
+  scale_x_discrete(expand = c(0.05, 0.05)) +
+  scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(axis.ticks.y = element_line()) +
+  labs(x = element_blank(), y = "Mean Accuracy")
+
+# use they/them
+exp2_p_prod_they <- exp2_d %>%
+  mutate(P_IsThey = ifelse(P_Response == "they/them", 1, 0)) %>%
+  group_by(Participant, PSA, Biography) %>%
+  summarise(P_Count = sum(P_IsThey)) %>%
+  mutate(
+    Dummy = "",
+    P_Count = P_Count %>%
+      as.factor() %>%
+      recode(
+        "6" = "6+", "7" = "6+", "8" = "6+", "9" = "6+",
+        "10" = "6+", "11" = "6+", "12" = "6+"
+      )
+  ) %>%
+  ggplot(aes(x = Dummy, fill = P_Count)) +
+  geom_bar(position = "fill") +
+  scale_fill_manual(values = c("#666666", brewer.pal(6, "Purples"))) +
+  facet_grid(Biography ~ PSA, labeller = labeller(
+    PSA = c("GenLang" = "Gendered \nLang. PSA", "Unrelated" = "Unrelated\nPSA"),
+    Biography = c("They" = "They Bios", "HeShe" = "He/She Bios")
+  )) +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  gray_facet_theme +
+  theme(
+    axis.title.x  = element_text(margin = margin(t = -20)),
+    legend.margin = margin(l = 0)
+  ) +
+  labs(
+    x    = "Number of They/Them\nResponses per Participant",
+    y    = "Proportion of Participants",
+    fill = element_blank()
+  )
+
+# combine
+exp2_p_prod_acc + exp2_p_prod_PSA + exp2_p_prod_they +
+  plot_annotation(
+    title = "Experiment 2: Accuracy & Distribution of Production Responses",
+    tag_levels = "A",
+    theme = patchwork_theme
+  ) +
+  plot_layout(
+    design = "AAAAA
+              BBCCC"
+  ) +
+  plot_annotation(theme = theme(
+    plot.margin = margin(t = 10, b = 0, l = 0, r = 0)
+  ))
+```
+
+### Memory Predicting Production
+
+```{r}
+#| label: exp2-mp-model
+#| cache: true
+
+contrasts(exp2_d$M_Acc_Factor)
+
+exp2_m_mp <- buildmer(
+  formula = P_Acc ~ Pronoun * PSA * Biography * M_Acc_Factor +
+    (Pronoun | Participant) + (Pronoun | Name),
+  data = exp2_d, family = binomial,
+  buildmerControl(direction = "order")
+)
+summary(exp2_m_mp)
+exp2_r_mp <- exp2_m_mp@model %>% tidy_model_results()
+```
+
+The third model tested the effects of memory accuracy, PSA, Biography, and pronoun on production accuracy (@tbl-exp2-both). In addition to the effects described above, participants were more likely to accurately use a character's pronouns in the sentence completion task if they had remembered that character's pronouns in the multiple-choice task (`r exp2_r_mp['M_Acc=Wrong_Right', 'Text']`). No other interactions with memory accuracy were significant. Examining the combined distribution of responses, it was again more common to remember but not produce they/them than to produce but not remember they/them (@fig-exp2-both).
+
+<br>
+
+```{r}
+#| label: fig-exp2-both
+#| fig-cap: "Experiment 2: [A] Production accuracy, split by memory accuracy in the prior task, then PSA and Biography conditions. The lighter colors indicate trials where memory had been incorrect, and the darker colors indicate trials where memory had been correct. Error bars indicate 95% CIs calculated over trials. [B] Distribution of combined memory and production accuracy, split by PSA and Biography conditions."
+#| fig-asp: 1.1
+#| output: true
+#| cache: true
+
+# compare
+exp2_p_mp_compare <- exp2_d %>%
+  mutate(
+    CompareTask = case_when(
+      M_Acc == 1 & P_Acc == 1 ~ "Both\nRight",
+      M_Acc == 0 & P_Acc == 0 ~ "Both\nWrong",
+      M_Acc == 1 & P_Acc == 0 ~ "Memory\nOnly",
+      M_Acc == 0 & P_Acc == 1 ~ "Production\nOnly"
+    ) %>%
+    factor(
+      ordered = TRUE,
+      levels = c(
+        "Memory\nOnly", "Production\nOnly",
+        "Both\nWrong", "Both\nRight"
+    ))
+  ) %>%
+  ggplot(aes(x = Pronoun, fill = CompareTask)) +
+  geom_bar(position = "fill") +
+  facet_grid(Biography ~ PSA, labeller = labeller(
+    PSA = c("GenLang" = "Gendered Language PSA", "Unrelated" = "Unrelated PSA"),
+    Biography = c("They" = "They Bios", "HeShe" = "He/She Bios")
+  )) +
+  scale_fill_manual(values = c("pink3", "#E6AB02", "tomato3", "#367ABF")) +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  gray_facet_theme +
+  theme(legend.text = element_text(size = 11)) +
+  guides(fill = guide_legend(byrow = TRUE)) +
+  labs(
+    title = "Combined Accuracy",
+    x     = element_blank(),
+    y     = "Proportion of Characters",
+    fill  = element_blank()
+  )
+
+# production split by memory
+exp2_p_mp_split <- exp2_d %>%
+  ggplot(aes(x = Pronoun, y = P_Acc, fill = Pronoun, alpha = M_Acc_Factor)) +
+  stat_summary(fun.data = mean_cl_boot, geom = "bar", position = "dodge") +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    position = position_dodge(0.9),
+    width = 0.5, linewidth = 0.5
+  ) +
+  facet_grid(Biography ~ PSA, labeller = labeller(
+    PSA = c("GenLang" = "Gendered Language PSA", "Unrelated" = "Unrelated PSA"),
+    Biography = c("They" = "They Bios", "HeShe" = "He/She Bios")
+  )) +
+  scale_alpha_discrete(
+    range = c(0.5, 1),
+    labels = c("Memory\nIncorrect", "Memory\nCorrect")
+  ) +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 1)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  gray_facet_theme +
+  theme(legend.text = element_text(size = 11)) +
+  guides(
+    alpha = guide_legend(byrow = TRUE, override.aes = theme(color = NA)),
+    color = guide_none(),
+    fill  = guide_none()
+  ) +
+  labs(
+    title = "Production Split By Memory Accuracy",
+    x     = element_blank(),
+    y     = "Production Accuracy",
+    alpha = element_blank()
+  )
+
+# combine
+exp2_p_mp_split / exp2_p_mp_compare +
+  plot_annotation(
+    title = "Experiment 2: Memory & Production",
+    tag_levels = "A",
+    theme = patchwork_theme
+  ) +
+  plot_annotation(theme = theme(
+    plot.margin = margin(t = 10, b = 0, l = 5, r = 0)
+  ))
+```
+
+## Discussion
+
+```{r}
+#| label: exp2-save-workspace
+
+save.image("r_data/exp2.RData")
+```
+
+```{r}
+#| label: compare-exp1-exp2
+
+load("r_data/exp1.RData")
+```
+
+In Experiment 2, participants read either a PSA about gendered language or an unrelated topic, then two fictional biographies where both characters used they/them or one character used he/him and one character used she/her. Participants then completed the same character learning, memory, and production tasks as in Experiment 1. Reading the PSA about gendered language---which explained why people are talking more about their preferences for gendered language, how they/them pronouns work, and how to respond if someone corrects you---increased how likely participants were to produce singular *they* at least once and improved their accuracy when doing so. Seeing singular *they* modeled in the biographies did not directly affect memory or production, but did interact with the PSA. This demonstrates that while learning singular *they* may be difficult, it is not impossible, and even brief interventions can support this learning.
+
+Compared to Experiment 1, which included undergraduates participating for course credit, Amazon MTurk participants vary more---particularly in terms of age, race, education, and socioeconomic status---but are still not fully representative of English speakers in the U.S. context [@arechar2021; @levay2016]. MTurk participants lean more liberal than U.S. adults, and are more likely to agree that trans people are discriminated against and to support marriage equality and anti-discrimination laws for gay people [@chandler2019; @levay2016]. Most, but not all, participants in both experiments reported being native English speakers; while all participants were physically located in the U.S. in Experiment 1, in Experiment 2 the web-based restrictions that limited participation to U.S.-based individuals may not have been foolproof.
+
+However, overall performance was, broadly speaking, similar across the two studies despite the sampling differences: While participants in the Unrelated PSA + He/She Bios condition---the condition in Experiment 2 most similar to Experiment 1---were less likely to correctly produce *they* than participants in Experiment 1 (*M~1A~* = `r exp1a_r_prod_means['T', 'mean']`, *M~1B~* = `r exp1b_r_prod_means['T', 'mean']`, *M~2~* = `r exp2_r_prod_means_they['Unrelated HeShe', 'mean']`), this is unlikely to be due to overall lower accuracy or attention to the task. Looking at the memory questions unrelated to pronouns, participants in Experiment 2 were numerically more accurate than participants in Experiment 1 for both the characters' jobs (*M~1A~* = `r exp1a_r_job$mean`, *M~1B~* = `r exp1b_r_job$mean`, *M~2~* = `r exp2_r_job$mean`) and pets (*M~1A~* = `r exp1a_r_pet_means['all', 'mean']`, *M~1B~* = `r exp1b_r_pet_means['all', 'mean']`, *M~2~* = `r exp2_r_pet_means$mean`). While participants in Experiment 2 were less likely to have experience with singular they than participants in Experiment 1, the PSA manipulation was intended to provide participants with some of the social context around gendered language that they may have been less familiar with. In sum, our findings show that providing people with brief information about how they/them pronouns work, why people use them, and why people choose to talk directly about the gendered language they prefer did support peoples' use of singular *they*. Whether or not this effect may vary depending on participants' prior knowledge and experience is an area for future research.
+
+The finding that reading a brief PSA increased both the overall usage and accuracy of singular they is promising, given that a PSA is an easily implemented and not time-intensive tool. Nevertheless, in order to be useful in applied contexts, future research will need to investigate whether the effects of the gendered language PSA and other learning interventions persist past the duration of an experiment. Future work should also investigate whether the effects on written production extend to spoken production.

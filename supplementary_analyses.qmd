@@ -1,0 +1,2052 @@
+```{r}
+#| label: supplementary-setup
+#| include: false
+
+library(tidyverse) # data wrangling
+library(magrittr)
+library(sjmisc)
+options(dplyr.group.inform = FALSE, dplyr.summarise.inform = FALSE)
+
+library(lme4) #  stats
+library(lmerTest)
+library(buildmer)
+library(brms)
+
+library(insight) # model results
+library(broom.mixed)
+
+library(flextable)  # tables
+library(sjPlot)
+
+library(patchwork)  # plots
+library(RColorBrewer)
+library(ggtext)
+library(png)
+
+source("resources/formatting/aesthetics.R")   # plot and table themes
+source("resources/data-functions/demographics.R")
+source("resources/data-functions/exp1_load_data.R")
+source("resources/data-functions/exp2_load_data.R")
+source("resources/data-functions/exp3_load_data.R")
+source("resources/data-functions/exp4_load_data.R")
+```
+
+# Supplementary Analyses
+
+## Experiment 1 {#supplementary-exp1}
+
+```{r}
+#| label: load-workspace-exp1
+
+load("r_data/exp1.RData")
+```
+
+### Experiment 1A: Additional Results {#supplementary-exp1a}
+
+In addition to whether the characters used he/him, she/her, or they/them, participants were also asked about the characters' job and pets (@fig-exp1a-job-pet). Accuracy matching the 12 jobs to the 12 characters was lower (*M* = `r exp1a_r_job$mean`, *SD* = `r exp1a_r_job$sd`) than for the 3 pets (*M* = `r exp1a_r_pet_means['all', 'mean']`, *SD* = `r exp1a_r_pet_means['all', 'sd']`) and 3 pronouns (*M* = `r exp1a_r_memory_means['all', 'mean']`, *SD* = `r exp1a_r_memory_means['all', 'sd']`), but not at floor. Neither job nor pet accuracy varied based on the character's pronouns. Accuracy for the characters' pets (cat, dog, or fish) was designed as a comparison to pronoun accuracy, and the two were compared in a model including the character's pronouns (contrast coded as in the main analyses) and question type (pronoun vs pet, mean-center effects coded) as fixed effects. The most complex model that converged included by-participant random slopes for question type (@tbl-exp1a-pet). Averaging across the three character pronouns, participants were significantly more accurate for pronoun questions than pet questions (`r exp1a_r_pet['M_Type=Pet_Pronoun', 'Text']`). The interaction between character pronoun (they/them vs he/him + she/her) and question type was significant (`r exp1a_r_pet['M_Type=Pet_Pronoun:CharPronoun=They_HeShe', 'Text']`), reflecting that the character pronouns affected accuracy for the pronoun question, but not the pet question. Probing this interaction indicated that for they/them characters, there was no significant difference in accuracy between pronouns and pets (`r exp1a_r_pet_they['M_Type=Pet_Pronoun', 'Text']`), but that for he/him + she/her characters, pronoun accuracy was higher than pet accuracy (`r exp1a_r_pet_heshe['M_Type=Pet_Pronoun', 'Text']`).
+
+<br>
+
+```{r}
+#| label: fig-exp1a-job-pet
+#| fig-cap: "Experiment 1A: By-participant mean accuracy in the multiple-choice memory task for each character's pronouns, pet, and job, with colors indicating the character's pronouns. Error bars indicate a 95% CI calculated over the by-participant means."
+#| fig-asp: 0.6
+#| output: true
+#| cache: true
+
+read.csv("data/exp1a_data.csv", stringsAsFactors = TRUE) %>%
+  filter(Task == "memory") %>%
+  group_by(SubjID, M_Type, Pronoun) %>%
+  summarise(M_Acc_Subj = mean(M_Acc)) %>% # by-subject means
+  ggplot(aes(x = M_Type, y = M_Acc_Subj, fill = Pronoun, color = Pronoun)) +
+  geom_point(
+    position = position_jitterdodge(
+      dodge.width = 0.9, jitter.width = 0.6, jitter.height = 0.01, seed = 1
+    ),
+    size = 0.15, key_glyph = "rect"  # make legend full saturation colors
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "bar",
+    position = position_dodge(width = 0.9),
+    alpha = 0.4, color = NA
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    position = position_dodge(width = 0.9),
+    color = "black", linewidth = 0.5, width = 0.5
+  ) +
+  scale_color_brewer(palette = "Dark2", guide = guide_none()) +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0.01, 0.01)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(legend.margin = margin(l = -5)) +
+  guides(fill = guide_legend(byrow = TRUE)) +
+  labs(
+    title = "Experiment 1A: All Memory Questions",
+    x     = "Question Type",
+    y     = "By-Participant Mean Accuracy",
+    fill  = "Character\nPronouns"
+  )
+```
+
+<br>
+
+```{r}
+#| label: tbl-exp1a-pet
+#| tbl-cap: "Experiment 1A: Model results for the effects of Character Pronoun and Question Type (character's pronoun or pet) on Memory Accuracy. Character Pronoun is contrast-coded as in the main analysis."
+#| output: true
+
+exp1a_tb_pets_all <- tab_model(
+  model = exp1a_m_pet@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Memory Accuracy",
+  pred.labels = c(
+    "M_Type=Pet_Pronoun" =
+      "<b>Question Type: Pet</b> (-.5) <b>vs Pronoun</b> (+.5)",
+    exp1_tb_fixed_labels
+  ),
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp1a_tb_pets_all$knitr %<>%
+  tab_model_title_row("Experiment 1A: Memory for Pronouns vs Pets") %>%
+  exp1_tb_random_labels() %>%
+  drop_sigma()
+exp1a_tb_pets_all
+```
+
+The memory and production tasks were compared directly by creating a model predicting accuracy in both tasks, with Task as a mean-center effects coded fixed effect (@tbl-exp1a-task). The main effect of Task was not significant (`r exp1a_r_task['Task=M_P', 'Text']`), but the interaction between Pronoun (They vs He + She) was significant (`r exp1a_r_task['Pronoun=They_HeShe:Task=M_P', 'Text']`). Probing this interaction indicated that memory was more accurate than production for they/them characters (`r exp1a_r_task_they['Task=M_P', 'Text']`). Conversely, memory was less accurate than production for he/him and she/her characters (`r exp1a_r_task_heshe['Task=M_P', 'Text']`).
+
+<br>
+
+```{r}
+#| label: tbl-exp1a-task
+#| tbl-cap: "Experiment 1A: Model results for the effects of Pronoun and Task (memory vs production) on accuracy."
+#| output: true
+
+exp1a_tb_task <- tab_model(
+  model = exp1a_m_task@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Accuracy",
+  pred.labels = c(
+    "Task=M_P" = "Task: Memory (-.5) vs Production (+.5)",
+    exp1_tb_fixed_labels
+  ),
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp1a_tb_task$knitr %<>%
+  tab_model_title_row(
+    "Experiment 1A: Comparing Memory and Production Accuracy"
+  ) %>%
+  exp1_tb_random_labels() %>%
+  str_replace(  # bug with tab_model() makes it drop random slope labels
+    "&rho;<sub>01</sub>",
+    "&rho;<sub>01 Pronoun (They vs He + She) | Participant</sub>"
+  ) %>%
+  str_replace(
+    'bottom:0.1cm;"></td>',
+    'bottom:0.1cm;">&rho;<sub>01 Pronoun (He vs She) | Participant</sub></td>'
+  ) %>%
+  drop_sigma()
+exp1a_tb_task
+```
+
+### Experiment 1B: Additional Results {#supplementary-exp1b}
+
+<br>
+
+```{r}
+#| label: tbl-exp1b-mem
+#| tbl-cap: "Experiment 1B: Model results for the effect of Pronoun on Memory Accuracy, when the memory task was completed after the production task."
+#| output: true
+
+exp1b_tb_mem <- tab_model(
+  model = exp1b_m_memory@model,
+  transform = NULL, # show log-odds not odds ratios
+  show.stat = TRUE, string.stat = "z", # show z
+  show.ci = FALSE, # show SE instead of CI
+  show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE, # don't make sense for logistic models
+  # shows intercept, p values, random effects, n group, n obs by default
+  digits = 3, digits.re = 3, # round to 3
+  dv.labels = "Memory Accuracy", # labels
+  pred.labels = exp1_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp1b_tb_mem$knitr %<>%
+  tab_model_title_row("Experiment 1B: Memory") %>%
+  drop_sigma()
+exp1b_tb_mem
+```
+
+```{r}
+#| label: tbl-exp1b-prod
+#| tbl-cap: "Experiment 1B: Model results for the effect of Pronoun on Production Accuracy, when the memory task was completed after the production task."
+#| output: true
+
+exp1b_tb_prod <- tab_model(
+  model = exp1b_m_prod@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Production Accuracy",
+  pred.labels = exp1_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp1b_tb_prod$knitr %<>%
+  tab_model_title_row("Experiment 1B: Production") %>%
+  drop_sigma()
+exp1b_tb_prod
+```
+
+```{r}
+#| label: exp1b-mp-table
+#| output: true
+#| results: asis
+
+exp1b_tb_mp <- tab_model(
+  model = exp1b_m_mp@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Production Accuracy",
+  pred.labels = exp1_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp1b_tb_mp$knitr %<>%
+  tab_model_title_row(
+    "Experiment 1B: Memory Predicting Production"
+  ) %>%
+  drop_sigma()
+cat(exp1b_tb_mp$knitr)
+```
+
+|     |     |
+|-----|-----|
+|     |     |
+
+: Experiment 1B: Model results for the effects of Pronoun and Memory Accuracy on Production Accuracy, when the memory task was completed after the production task. {#tbl-exp1b-both}
+
+<br>
+
+```{r}
+#| label: fig-exp1b-job-pet
+#| fig-cap: "Experiment 1B: By-participant mean accuracy in the multiple-choice memory task for each character's pronouns, pet, and job, with colors indicating the character's pronouns. Error bars indicate 95% CIs calculated over the by-participant means."
+#| fig-asp: 0.6
+#| output: true
+#| cache: true
+
+read.csv("data/exp1b_data.csv", stringsAsFactors = TRUE) %>%
+  filter(Task == "memory") %>%
+  group_by(SubjID, M_Type, Pronoun) %>%
+  summarise(M_Acc_Subj = mean(M_Acc)) %>% # by-subject means
+  ggplot(aes(x = M_Type, y = M_Acc_Subj, fill = Pronoun, color = Pronoun)) +
+  geom_point(
+    position = position_jitterdodge(
+      dodge.width = 0.9, jitter.width = 0.6, jitter.height = 0.01, seed = 1
+    ),
+    size = 0.15, key_glyph = "rect"  # make legend full saturation colors
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "bar",
+    position = position_dodge(width = 0.9),
+    alpha = 0.4, color = NA
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    position = position_dodge(width = 0.9),
+    color = "black", linewidth = 0.5, width = 0.5
+  ) +
+  scale_color_brewer(palette = "Dark2", guide = guide_none()) +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0.01, 0.01)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(legend.margin = margin(l = -5)) +
+  guides(fill = guide_legend(byrow = TRUE)) +
+  labs(
+    title = "Experiment 1B: All Memory Questions",
+    x     = "Question Type",
+    y     = "By-Participant Mean Accuracy",
+    fill  = "Character\nPronouns"
+  )
+```
+
+<br>
+
+```{r}
+#| label: tbl-exp1b-pet
+#| tbl-cap: "Experiment 1B: Model results for the effects of Character Pronoun and Question Type on accuracy in the pronoun and pet memory questions, when the memory task was completed after the production task."
+#| output: true
+
+exp1b_tb_pets_all <- tab_model(
+  model = exp1b_m_pet@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Memory Accuracy",
+  pred.labels = c(
+    "M_Type=Pet_Pronoun" =
+      "<b>Question Type: Pet</b> (-.5) <b>vs Pronoun</b> (+.5)",
+    exp1_tb_fixed_labels
+  ),
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp1b_tb_pets_all$knitr %<>%
+  tab_model_title_row("Experiment 1B: Memory for Pronouns vs Pets") %>%
+  exp1_tb_random_labels() %>%
+  drop_sigma()
+exp1b_tb_pets_all
+```
+
+### Comparing Experiments 1A & 1B {#supplementary-exp1ab}
+
+<br>
+
+```{r}
+#| label: fig-exp1ab-panel1
+#| fig-cap: "Experiments 1A & 1B. Memory accuracy, distribution of memory responses, production accuracy, and distribution of pronoun responses, comparing between task orders. Points indicate by-participant means, and error bars indicate 95% CIs calculated over the by-participant means."
+#| fig-asp: 0.8
+#| output: true
+#| cache: true
+
+## Memory distribution----
+exp1b_p_memory_dist <- exp1_d %>%
+  ggplot(aes(x = Experiment, fill = M_Response, alpha = Experiment)) +
+  geom_bar(position = "fill") +
+  facet_wrap(~Pronoun, strip.position = "bottom") +
+  scale_alpha_manual(
+    values = c(1, 1),
+    labels = c("1A:\nMemory\nFirst", "1B:\nProduction\nFirst")
+  ) +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  grouped_strip_theme + # hack to group labels
+  theme(
+    axis.text.y = element_text(size = 8),  # smaller text
+    plot.title  = element_text(size = 11),
+    strip.text  = element_text(face = "plain")
+  ) +
+  guides(
+    alpha = guide_legend(
+      byrow = TRUE, override.aes = theme(fill = NA),
+      label.position = "left", label.hjust = 0
+    ),
+    fill = guide_none()
+  ) +
+  labs(
+    title = "Memory Distribution",
+    x     = element_blank(),
+    y     = "Proportion of Trials",
+    fill  = "Pronoun\nSelected",
+    alpha = "Experiment"
+  )
+
+## Memory accuracy----
+exp1b_p_memory_acc <- exp1_d %>%
+  group_by(Experiment, Participant, Pronoun) %>%
+  summarise(M_Acc_Subj = mean(M_Acc)) %>%
+  ggplot(aes(x = Experiment, y = M_Acc_Subj, fill = Pronoun, color = Pronoun)) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "bar",
+    alpha = 0.4, color = "NA"
+  ) +
+  geom_point(
+    position = position_jitter(width = 0.35, height = 0.02, seed = 1),
+    size = 0.15
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    color = "black", linewidth = 0.5, width = 0.5
+  ) +
+  facet_wrap(~Pronoun, strip.position = "bottom") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_color_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0.02, 0.02)) +
+  guides(fill = guide_none(), color = guide_none()) +
+  theme_classic() +
+  dissertation_plot_theme +
+  grouped_strip_theme + # hack to group labels
+  theme(
+    axis.text.y = element_text(size = 8), # smaller text
+    plot.title  = element_text(size = 11),
+    strip.text  = element_text(face = "plain")
+  ) +
+  labs(
+    title = "Memory Accuracy",
+    x     = element_blank(),
+    y     = "By-Participant Mean Accuracy"
+  )
+
+## Production distribution----
+exp1b_p_prod_dist <- exp1_d %>%
+  ggplot(aes(x = Experiment, fill = P_Response)) +
+  geom_bar(position = "fill") +
+  facet_wrap(~Pronoun, strip.position = "bottom") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  grouped_strip_theme + # hack to group labels
+  theme(
+    axis.text.y = element_text(size = 8), # smaller text
+    plot.title  = element_text(size = 11),
+    strip.text  = element_text(face = "plain")
+  ) +
+  labs(
+    title = "Production Distribution",
+    x     = element_blank(),
+    y     = "Proportion of Trials",
+    fill  = "Pronoun\nSelected"
+  )
+
+## Production accuracy----
+exp1b_p_prod_acc <- exp1_d %>%
+  group_by(Experiment, Participant, Pronoun) %>%
+  summarise(P_Acc_Subj = mean(P_Acc)) %>%
+  ggplot(aes(x = Experiment, y = P_Acc_Subj, fill = Pronoun, color = Pronoun)) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "bar",
+    alpha = 0.4, color = "NA"
+  ) +
+  geom_point(
+    position = position_jitter(width = 0.35, height = 0.02, seed = 1),
+    size = 0.15
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    color = "black", linewidth = 0.5, width = 0.5
+  ) +
+  facet_wrap(~Pronoun, strip.position = "bottom") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_color_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0.02, 0.02)) +
+  guides(fill = guide_none(), color = guide_none()) +
+  theme_classic() +
+  dissertation_plot_theme +
+  grouped_strip_theme + # hack to group labels
+  theme(
+    axis.text.y = element_text(size = 8), # smaller text
+    plot.title  = element_text(size = 11),
+    strip.text  = element_text(face = "plain")
+  ) +
+  labs(
+    title = "Production Accuracy",
+    x     = element_blank(),
+    y     = "By-Participant Mean Accuracy"
+  )
+
+## Combine----
+exp1b_p_memory_acc +
+  exp1b_p_memory_dist +
+  guides(fill = guide_none()) +
+  exp1b_p_prod_acc +
+  exp1b_p_prod_dist +
+  plot_layout(guides = "collect") +
+  plot_annotation(
+    title = "Comparing Experiments 1A & 1B",
+    theme = patchwork_theme
+  )
+```
+
+<br>
+
+```{r}
+#| label: fig-exp1ab-panel2
+#| fig-cap: "Experiments 1A & 1B. Distribution of combined memory and production accuracy, then production accuracy split by memory accuracy, comparing between task orders. Error bars indicate 95% CIs calculated over trials."
+#| fig-asp: 1
+#| output: true
+#| cache: true
+
+## Memory & production----
+exp1b_p_compare <- exp1_d %>%
+  mutate(MP_Acc =
+    case_when(
+      M_Acc == 1 & P_Acc == 1 ~ "Both Right",
+      M_Acc == 1 & P_Acc == 0 ~ "Memory Only",
+      M_Acc == 0 & P_Acc == 1 ~ "Production Only",
+      M_Acc == 0 & P_Acc == 0 ~ "Both Wrong"
+    ) %>%
+    factor(levels = c(
+      "Memory Only", "Production Only", "Both Wrong", "Both Right"
+    ))
+  ) %>%
+  ggplot(aes(x = Experiment, fill = MP_Acc, alpha = Experiment)) +
+  geom_bar(position = "fill") +
+  facet_wrap(~Pronoun, strip.position = "bottom") +
+  scale_alpha_manual(
+    values = c(1, 1),
+    labels = c("1A:\nMemory First", "1B:\nProduction First")
+  ) +
+  scale_fill_manual(values = c("pink3", "#E6AB02", "tomato3", "#367ABF")) +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  grouped_strip_theme + # hack to group labels
+  theme(
+    axis.text.y = element_text(size = 8), # smaller text
+    plot.title  = element_text(size = 11),
+    strip.text  = element_text(face = "plain")
+  ) +
+  guides(
+    alpha = guide_legend( # to add Experiment as a legend
+      byrow = TRUE, label.position = "left", label.hjust = 0,
+      override.aes = theme(fill = NA)),
+    fill  = guide_legend(order = 1)) +
+  labs(
+    title = "Combined Accuracy",
+    x     = element_blank(),
+    y     = "Proportion of Characters",
+    alpha = "Experiment",
+    fill  = "Accuracy Pattern"
+  )
+
+## Production split by memory----
+exp1b_p_split <- exp1_d %>%
+  ggplot(aes(x = Experiment, y = P_Acc, fill = Pronoun, alpha = M_Acc_Factor)) +
+  stat_summary(fun.data = mean_cl_boot, geom = "bar", position = "dodge") +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    position = position_dodge(width = 0.9),
+    color = "black", linewidth = 0.5, width = 0.5) +
+  scale_alpha_discrete(
+    range = c(0.5, 1),
+    labels = c("Memory\nIncorrect", "Memory\nCorrect")
+  ) +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 1)) +
+  facet_wrap(~Pronoun, strip.position = "bottom") +
+  theme_classic() +
+  dissertation_plot_theme +
+  grouped_strip_theme + # hack to group labels
+  theme(
+    axis.text.y = element_text(size = 8), # smaller text
+    plot.title  = element_text(size = 11),
+    strip.text  = element_text(face = "plain")
+  ) +
+  guides(
+    alpha = guide_legend(override.aes = theme(color = NA)),
+    fill  = guide_none()
+  ) +
+  labs(
+    title = "Production Accuracy\nSplit By Memory Accuracy",
+    x     = element_blank(),
+    y     = "Production Accuracy",
+    alpha = "Memory Accuracy"
+  )
+
+## Combine----
+exp1b_p_compare / exp1b_p_split +
+  plot_layout(guides = "collect") +
+  plot_annotation(
+    title = "Comparing Experiments 1A & 1B",
+    theme = patchwork_theme
+  ) +
+  plot_annotation(theme = theme(  # then move legend over a bit
+    legend.box.margin = margin(l = 0.15, r = -0.15, unit = "in")
+  ))
+```
+
+<br>
+
+```{r}
+#| label: tbl-exp1-mem
+#| tbl-cap: "Experiments 1A & 1B: Model results for the effects of Pronoun and Task Order (Experiment 1A vs Experiment 1B) on Memory Accuracy."
+#| output: true
+
+exp1_tb_mem <- tab_model(
+  model = exp1_m_memory@model,
+  transform = NULL, # show log-odds not odds ratios
+  show.stat = TRUE, string.stat = "z", # show z
+  show.ci = FALSE, # show SE instead of CI
+  show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE, # don't make sense for logistic models
+  # shows intercept, p values, random effects, n group, n obs by default
+  digits = 3, digits.re = 3, # round to 3
+  dv.labels = "Memory Accuracy", # labels
+  pred.labels = exp1_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp1_tb_mem$knitr %<>%
+  tab_model_title_row(
+    "Comparing Experiments 1A (Memory First) & 1B (Production First): Memory"
+  ) %>%
+  drop_sigma()
+exp1_tb_mem
+```
+
+```{r}
+#| label: exp1-prod-table
+#| output: true
+#| results: asis
+
+exp1_tb_prod <- tab_model(
+  model = exp1_m_prod,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Production Accuracy",
+  pred.labels = c(
+    "Pronoun=They_HeShe:Experiment=A_B" = "<b>Pronoun (They vs He+She) * Order",
+    exp1_tb_fixed_labels
+  ),
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp1_tb_prod$knitr %<>%
+  tab_model_title_row(paste(
+    "Comparing Experiments 1A (Memory First) & 1B (Production First):<br>",
+    "Production"
+  )) %>%
+  drop_sigma()
+cat(exp1_tb_prod$knitr, "\n--------\n")
+```
+
+|     |     |
+|-----|-----|
+|     |     |
+
+: Experiments 1A & 1B: Model results for the effects of Pronoun and Task Order (Experiment 1A vs Experiment 1B) on Production Accuracy. {#tbl-exp1-prod}
+
+<br>
+
+```{r}
+#| label: exp1-mp-table
+#| output: true
+#| results: asis
+
+exp1_tb_mp <- tab_model(
+  model = exp1_m_mp,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Production Accuracy",
+  pred.labels = exp1_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp1_tb_mp$knitr %<>%
+  tab_model_title_row(paste(
+    "Comparing Experiments 1A (Memory First) & 1B (Production First):<br>",
+    "Memory Predicting Production"
+  )) %>%
+  drop_sigma()
+cat(exp1_tb_mp$knitr)
+```
+
+|     |     |
+|-----|-----|
+|     |     |
+
+: Experiments 1A & 1B: Model results for the effects of Pronoun, Memory Accuracy, and Task Order (Experiment 1A vs Experiment 1B) on Production Accuracy. {#tbl-exp1-both}
+
+<br>
+
+```{r}
+#| label: exp1-task-table
+#| include: true
+#| echo: false
+#| warning: false
+#| results: asis
+
+exp1_tb_diff <- tab_model(
+  model = exp1_m_diff,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Difference Score",
+  pred.labels = c(
+    "(Intercept)" = "(Intercept)",
+    exp1_tb_fixed_labels
+  ),
+  wrap.labels = 70,
+  CSS = table_css
+)
+exp1_tb_diff$knitr %<>%
+  tab_model_title_row(paste(
+    "Comparing Experiments 1A (Memory First) & 1B (Production First):<br>",
+    "By-Participant Differences Between Memory & Production"
+  )) %>%
+  drop_sigma()
+cat(exp1_tb_diff$knitr)
+```
+
+|     |     |
+|-----|-----|
+|     |     |
+
+: Experiments 1A & 1B: Model results for the effects of Pronoun and Task Order on the difference between memory accuracy and production accuracy for each participant. {#tbl-exp1-task}
+
+<br>
+
+```{r}
+#| label: fig-exp1-reliability
+#| fig-cap: "Experiments 1A & 1B: Correlations between by-participant random slopes for the effect of Pronoun in each half of the data, for the memory and production tasks."
+#| fig-asp: 1
+#| output: true
+#| cache: true
+
+exp1_d_reliability <- bind_rows(.id = "Task",
+  "Memory" = bind_rows(.id = "Experiment",
+    "1A" = exp1a_m_mem_reliability %>%
+      ranef() %>%
+      purrr::pluck(1) %>%
+      as_tibble() %>%
+      select(contains("Estimate.Pronoun")),
+    "1B" = exp1b_m_mem_reliability %>%
+      ranef() %>%
+      purrr::pluck(1) %>%
+      as_tibble() %>%
+      select(contains("Estimate.Pronoun"))
+  ),
+  "Production" = bind_rows(.id = "Experiment",
+     "1A" = exp1a_m_prod_reliability %>%
+       ranef() %>%
+       purrr::pluck(1) %>%
+       as_tibble() %>%
+       select(contains("Estimate.Pronoun")),
+     "1B" = exp1b_m_prod_reliability %>%
+       ranef() %>%
+       purrr::pluck(1) %>%
+       as_tibble() %>%
+       select(contains("Estimate.Pronoun"))
+  )) %>%
+  mutate(Correlation = case_when(
+    Experiment == "1A" & Task == "Memory" ~
+      str_c("<i>r = ", exp1_r_reliability["1A memory", "estimate"]),
+    Experiment == "1B" & Task == "Memory" ~
+      str_c("<i>r = ", exp1_r_reliability["1B memory", "estimate"]),
+    Experiment == "1A" & Task == "Production" ~
+      str_c("<i>r = ", exp1_r_reliability["1A production", "estimate"]),
+    Experiment == "1B" & Task == "Production" ~
+      str_c("<i>r = ", exp1_r_reliability["1B production", "estimate"])
+  ))
+
+(
+  ggplot() +
+    geom_point(
+      data = exp1_d_reliability %>% filter(Task == "Memory"),
+      aes(x = Estimate.Pronoun_Even, y = Estimate.Pronoun_Odd),
+      color = "#3288BD", size = 0.75
+    ) +
+    geom_richtext(
+      data = exp1_d_reliability %>%
+        filter(Task == "Memory") %>%
+        select(Experiment, Correlation) %>%
+        unique(),
+      aes(label = Correlation, x = 0.65, y = -1)
+    ) +
+    facet_wrap(~Experiment) +
+    theme_classic() +
+    dissertation_plot_theme +
+    gray_facet_theme +
+    labs(
+      title = "Memory",
+      x     = "Even Trials",
+      y     = "Odd Trials"
+    )
+  ) / (
+  ggplot() +
+    geom_point(
+      data = exp1_d_reliability %>% filter(Task == "Production"),
+      aes(x = Estimate.Pronoun_Even, y = Estimate.Pronoun_Odd),
+      color = "#3288BD", size = 0.75
+    ) +
+    geom_richtext(
+      data = exp1_d_reliability %>%
+        filter(Task == "Production") %>%
+        select(Experiment, Correlation) %>%
+        unique(),
+      aes(label = Correlation, x = 2.5, y = -5)
+    ) +
+    facet_wrap(~Experiment) +
+    theme_classic() +
+    dissertation_plot_theme +
+    gray_facet_theme +
+    labs(
+      title = "Production",
+      x     = "Even Trials",
+      y     = "Odd Trials"
+      )
+  ) +
+  plot_annotation(
+    title = "Experiments 1A & 1B: By-Participant Slope Estimates for Pronoun",
+    theme = patchwork_theme
+  )
+```
+
+## Experiment 2 {#supplementary-exp2}
+
+```{r}
+#| label: load-workspace-exp2
+
+load("r_data/exp2.RData")
+```
+
+### Pet & Job Questions {#supplementary-exp2-pet-job}
+
+As in Experiments 1A & 1B, memory for the characters' 12 jobs was analyzed in order to make sure the task did not show floor effects, and memory for the characters' 3 pets was analyzed as a less marked comparison to pronouns (@fig-exp2-job-pet). Averaged across conditions, accuracy for the jobs (*M* = `r exp2_r_job$mean`) was numerically higher than in Experiments 1A (*M* = `r exp1a_r_job$mean`) and 1B (*M* = `r exp1b_r_job$mean`). Accuracy for the pets was also higher in Experiment 2 (*M* = `r exp2_r_pet_means$mean`) than in Experiments 1A (*M* = `r exp1a_r_pet_means['all', 'mean']`) and 1B (*M* = `r exp1b_r_pet_means['all', 'mean']`). Job and pet accuracy did not vary based on the characters' pronouns or the PSA and Biography conditions.
+
+Pronoun and pet questions were compared in a model including the character's pronouns (contrast coded as in the main analyses), the question type (mean-center effects coded), and the PSA and Biography conditions as fixed effects. The initial model included interactions between Character Pronoun, PSA, and Biography as in the main analyses; the interaction between Character Pronoun and Question Type; by-participant and by-item intercepts; and by-participant and by-item slopes for Character Pronoun and Question Type. In addition to the subset of interactions between fixed effects listed above, the most complex model that converged included by-participant intercepts, by-item intercepts, and by-item slopes for Question Type (@tbl-exp2-pet). Participants were significantly more accurate for pronoun questions than pet questions (`r exp2_r_pet['M_Type=Pet_Pronoun', 'Text']`), and the interaction between Character Pronoun (they/them vs he/him + she/her) and Question Type was significant (`r exp2_r_pet['M_Type=Pet_Pronoun:CharPronoun=They_HeShe', 'Text']`). Probing this interaction indicated that there was no significant difference in accuracy between pronouns and pets for they/them characters (`r exp2_r_pet_they['M_Type=Pet_Pronoun', 'Text']`), only for he/him + she/her characters (`r exp2_r_pet_heshe['M_Type=Pet_Pronoun', 'Text']`). This resembles the pattern of results in Experiment 1.
+
+<br>
+
+```{r}
+#| label: fig-exp2-job-pet
+#| fig-cap: "Experiment 2: Mean accuracy in the multiple-choice memory task for pronoun, pet, and job, split by PSA and Biography conditions. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means."
+#| fig-asp: 0.6
+#| output: true
+#| cache: true
+
+exp2_d_all %>%
+  group_by(Participant, M_Type, Pronoun) %>%
+  summarise(M_Acc_Subj = mean(M_Acc)) %>% # by-subject means
+  ggplot(aes(x = M_Type, y = M_Acc_Subj, fill = Pronoun, color = Pronoun)) +
+  geom_point(
+    position = position_jitterdodge(
+      dodge.width = 0.9, jitter.width = 0.6, jitter.height = 0.01, seed = 1
+    ),
+    size = 0.25, key_glyph = "rect"  # make legend full saturation colors
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "bar",
+    position = position_dodge(width = 0.9),
+    alpha = 0.4, color = NA
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    position = position_dodge(width = 0.9),
+    color = "black", linewidth = 0.5, width = 0.5
+  ) +
+  scale_color_brewer(palette = "Dark2", guide = guide_none()) +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0.02, 0.02)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(
+    legend.margin = margin(l = -10),
+    plot.margin   = margin(t = 10, b = 5, l = 5, r = 5)
+  ) +
+  guides(fill = guide_legend(byrow = TRUE)) +
+  labs(
+    title = "Experiment 2: All Memory Questions",
+    x     = "Question Type",
+    y     = "By-Participant Mean Accuracy",
+    fill  = "Character\nPronouns"
+  )
+```
+
+<br>
+
+```{r}
+#| label: tbl-exp2-pet
+#| tbl-cap: "Experiment 2: Model results for the effects of Character Pronoun, PSA, Biography, and Question Type on accuracy in the pronoun and pet memory questions."
+#| output: true
+
+exp2_tb_pets <- tab_model(
+  model = exp1b_m_pet@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Memory Accuracy",
+  pred.labels = c(
+    "M_Type=Pet_Pronoun" =
+      "<b>Question Type: Pet</b> (-.5) <b>vs Pronoun</b> (+.5)",
+    exp1_tb_fixed_labels
+  ),
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp2_tb_pets$knitr %<>%
+  tab_model_title_row("Experiment 2: Memory for Pronouns vs Pets") %>%
+  exp2_tb_random_labels() %>%
+  drop_sigma()
+exp2_tb_pets
+```
+
+### Additional Figures {#supplementary-exp2-figures}
+
+<br>
+
+```{r}
+#| label: fig-exp2-dist
+#| fig-cap: "Experiment 2: Distribution of memory and production responses."
+#| fig-asp: 1.25
+#| output: true
+#| cache: true
+
+# memory
+exp2_p_memory_dist <- exp2_d %>%
+  ggplot(aes(x = Pronoun, fill = M_Response)) +
+  geom_bar(position = "fill") +
+  facet_grid(Biography ~ PSA, labeller = labeller(
+    PSA = c("GenLang" = "Gendered Language PSA", "Unrelated" = "Unrelated PSA"),
+    Biography = c("They" = "They Bios", "HeShe" = "He/She Bios")
+  )) +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  gray_facet_theme +
+  theme(legend.text = element_text(size = 11)) +
+  labs(
+    title = "Memory",
+    x     = "Correct Pronoun",
+    y     = "Proportion of Trials",
+    fill  = "Pronoun\nSelected"
+  )
+
+# production
+exp2_p_prod_dist <- exp2_d %>%
+  ggplot(aes(x = Pronoun, fill = P_Response)) +
+  geom_bar(position = "fill") +
+  facet_grid(Biography ~ PSA, labeller = labeller(
+    PSA = c("GenLang" = "Gendered Language PSA", "Unrelated" = "Unrelated PSA"),
+    Biography = c("They" = "They Bios", "HeShe" = "He/She Bios")
+  )) +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  gray_facet_theme +
+  theme(legend.text = element_text(size = 11)) +
+  labs(
+    title = "Production",
+    x     = "Correct Pronoun",
+    y     = "Proportion of Trials",
+    fill  = "Pronoun\nProduced"
+  )
+
+exp2_p_memory_dist / exp2_p_prod_dist +
+  plot_annotation(
+    title = "Experiment 2: Distribution of Responses",
+    tag_levels = "A",
+    theme = patchwork_theme
+  ) +
+  plot_annotation(theme = theme(
+    plot.margin = margin(t = 5, b = 0, l = 5, r = -5)
+  ))
+```
+
+### Additional Model Results {#supplementary-exp2-tables}
+
+<br>
+
+```{r}
+#| label: tbl-exp2-both
+#| tbl-cap: "Experiment 2: Model results for the effects of Pronoun, PSA, Biography, and Memory Accuracy on Production Accuracy."
+#| output: true
+
+exp2_tb_mp <- tab_model(
+  model = exp2_m_mp@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Production Accuracy",
+  pred.labels = exp2_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp2_tb_mp$knitr %<>%
+  tab_model_title_row("Experiment 2: Memory Predicting Production") %>%
+  drop_sigma()
+exp2_tb_mp
+```
+
+```{r}
+#| label: table-exp2-use-they
+#| output: true
+#| results: asis
+
+exp2_tb_use_they <- tab_model(
+  model = exp2_m_use_they,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Produce They/Them",
+  pred.labels = c(
+    "PSA=GenLang" =
+      "<b>PSA: Unrelated</b> (-.5) <b>vs PSA: Gendered Language</b> (+.5)",
+    exp2_tb_fixed_labels
+  ),
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp2_tb_use_they$knitr %<>%
+  tab_model_title_row(
+    "Experiment 2: Production of Singular <i>They</i>"
+  )
+cat(exp2_tb_use_they$knitr)
+```
+
+|     |     |
+|-----|-----|
+|     |     |
+
+: Experiment 2: Model results for the effects of PSA and Biography on whether each participant produced singular they at least once. Participants were coded with a 1 if they produced singular they at least once in the written sentence completion task, regardless of accuracy, and with a 0 if they did not. {#tbl-exp2-prod-they}
+
+## Experiment 3 {#supplementary-exp3}
+
+```{r}
+#| label: load-workspace-exp3
+
+rm(list = ls(pattern = "exp1"))  # clear 1 & 2 first
+rm(list = ls(pattern = "exp2"))
+
+load("r_data/exp3.RData")
+```
+
+### Norming Study {#supplementary-norming}
+
+```{r}
+#| label: tbl-norming
+#| tbl-cap: "Image Norming: Results. Counts and proportions of they/them, he/him, she/her, and no pronoun responses for each image in norming study."
+#| output: true
+
+exp3_d_norming %>%
+  count(Pronoun, Image) %>% # count instances of pronouns for each image
+  pivot_wider(
+    names_from  = Image, # pivot to have images as columns
+    values_from = n,     # and pronouns as rows
+    values_fill = 0
+  ) %>%
+  group_by(Pronoun) %>% # total for each pronoun across all images
+  mutate(Count = sum(across(starts_with("GS")))) %>%
+  ungroup() %>%
+  # proportion for each pronoun
+  mutate(Proportion = Count / sum(across(starts_with("GS")))) %>%
+  # rotate back to have images/total as rows
+  sjmisc::rotate_df(cn = TRUE, rn = "Image") %>%
+  mutate(.before = Image, Group = case_when( # sort into images used in study
+    str_detect(Image, "4|6|8|9|11|12") ~ "Images Included",
+    str_detect(Image, "01|02|3|5|7|10") ~ "Images Not Included",
+    str_detect(Image, "Count|Prop") ~ "Totals"
+  )) %>%
+  arrange(Group, `he/him`, desc(`she/her`)) %>% # order rows and cols for table
+  select(Group, Image, `they/them`, `he/him`, `she/her`, none) %>%
+  as_grouped_data(groups = "Group") %>%
+  flextable() %>% # table
+  set_header_labels(Group = "", Image = "Image Code") %>% # table labels
+  add_header_lines("Norming Study: Pronouns Produced") %>%
+  colformat_double(i = c(1:14, 17), digits = 0) %>% # rounding
+  colformat_double(i = 16, digits = 2) %>%
+  merge_h_range(i = c(1, 8, 15), j1 = 1, j2 = 6, part = "body") %>% # formatting
+  bold(i = 1, part = "header") %>%
+  italic(i = 2, part = "header") %>%
+  bold(i = c(1, 8, 15), part = "body") %>%
+  border_remove() %>%
+  hline(part = "header") %>%
+  hline(i = c(1, 7, 8, 14, 15), part = "body")
+```
+
+### Additional Survey Results {#supplementary-exp3-survey}
+
+<br>
+
+```{r}
+#| label: tbl-exp3-demographics2
+#| tbl-cap: "Experiment 3: Additional Demographics. Race/ethnicity has a higher total, as participants could select more than one option."
+#| output: true
+
+demographics_table(
+  exp3_d_demographics,
+  categories = c("Education", "English Experience", "Race/Ethnicity"),
+  title = "Experiment 3: Additional Participant Demographics"
+)
+```
+
+The difference in naturalness ratings between singular *they* co-referring with generics, *each*, and *every* [Indefinite] and with masculine, feminine, and gender-neutral names [Proper Name] was tested using a linear mixed-effects model, with Referent Type mean-center effects coded. The model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp3_r_ratings['Intercept', 'Text']`). The significant effect of Referent Type indicated that singular *they* was rated as more natural with indefinites than with proper names (`r exp3_r_ratings['Type=Name_Generic', 'Text']`) (@tbl-exp3-ratings).
+
+<br>
+
+```{r}
+#| label: tbl-exp3-ratings
+#| tbl-cap: "Experiment 3: Naturalness Ratings. Model results for the effect of Referent Type (generic, each, every vs masculine, feminine, gender-neutral names) on sentence naturalness ratings for singular *they*."
+#| output: true
+
+exp3_tb_ratings <- tab_model(
+  model = exp3_m_ratings,
+  show.stat = TRUE, string.stat = "t",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  digits = 3, digits.re = 3,
+  dv.labels = "Naturalness Ratings",
+  pred.labels = c(
+    "(Intercept)" = "<b>(Intercept)",
+    "Type=Name_Generic" =
+      "<b>Referent Type: Proper Name</b> (-.5) <b>vs Indefinite</b> (+.5)"
+  ),
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp3_tb_ratings$knitr %<>%
+  tab_model_title_row(
+    "Experiment 3: Naturalness Ratings for Singular <i>They"
+  ) %>%
+  exp3_tb_random_labels() %>%
+  drop_sigma()
+exp3_tb_ratings
+```
+
+```{r}
+#| label: tbl-exp3-gender-beliefs
+#| tbl-cap: "Experiment 3: Gender Beliefs. Question texts, distributions, means, and SDs for items in the gender beliefs scale [@nagoshi2008]."
+#| output: true
+
+# Make histograms of responses for each item
+exp3_p_gender_beliefs_dists <- exp3_d_survey %>%
+  filter(Category == "Transphobia Scale" & !is.na(Response_Num)) %>%
+  group_by(Item) %>%
+  nest() %>%
+  mutate(Distribution = map2(
+    data, Item, ~ggplot(
+      data = .x,
+      aes(x = (Response_Num - 1))) +
+      stat_count(geom = "bar", width = 0.9, fill = "#3288bd") +
+      expand_limits(x = c(0, 6), y = c(0, 100)) + # makes all axes the same
+      scale_x_continuous(breaks = c(0, 6), expand = c(0, 0)) +
+      scale_y_continuous(breaks = c(0, 54), expand = c(0, 0)) +
+      theme_classic() +
+      theme(
+        axis.ticks  = element_blank(),
+        axis.text.y = element_blank(),
+        plot.margin = margin(0, 0, 0, 0)
+      ) +
+      labs(x = element_blank(), y = element_blank()))) %>%
+  ungroup()
+
+# Participant totals
+exp3_d_gender_beliefs_totals <- exp3_d_survey %>%
+  filter(Category == "Transphobia Scale" & !is.na(Response_Num)) %>%
+  group_by(ParticipantID) %>%
+  summarise(Total = sum(Response_Num - 1))
+
+# Add histogram of total
+exp3_p_gender_beliefs_dists %<>% add_row(
+  Item = "Total",
+  data = NULL,
+  Distribution = list(ggplot(
+    data = exp3_d_gender_beliefs_totals,
+    aes(x = Total)) +
+    stat_count(geom = "bar", width = 0.9, fill = "#3288bd") +
+    scale_x_continuous(breaks = c(0, 50), expand = c(0, 0)) +
+    scale_y_continuous(expand = c(0, 0)) +
+    theme_classic() +
+    theme(
+      axis.ticks = element_blank(),
+      axis.text.y = element_blank(),
+      plot.margin = margin(0, 0, 0, 0)
+    ) +
+    labs(x = element_blank(), y = element_blank()))
+)
+
+# Table
+exp3_d_survey %>%
+  filter(Category == "Transphobia Scale") %>%
+  group_by(Item) %>%
+  summarise(
+    M  = mean(Response_Num - 1, na.rm = TRUE),
+    SD = sd(Response_Num, na.rm = TRUE)
+  ) %>%
+  add_row( # add totals
+    Item = "Total",
+    M    = mean(exp3_d_gender_beliefs_totals$Total),
+    SD   = sd(exp3_d_gender_beliefs_totals$Total)
+  ) %>%
+  left_join(exp3_p_gender_beliefs_dists, by = "Item") %>% # Add plots to df
+  select(-data) %>%
+  arrange(M) %>%
+  flextable() %>%
+  mk_par(
+    j = "Distribution", # Sets up plots
+    value = as_paragraph(
+      gg_chunk(value = Distribution, width = 1.5, height = 1)
+    )
+  ) %>%
+  add_header_lines(
+    "Experiment 3: Gender Binary & Gender Essentialism Beliefs"
+  ) %>%
+  add_footer_lines("0: Strongly Disagree – 6: Strongly Agree") %>%
+  colformat_double(digits = 2) %>%
+  padding(part = "all", padding.top = 5, padding.bottom = 5) %>%
+  width(j = 1, width = 3) %>%
+  bold(i = 1, part = "header") %>%
+  italic(i = 2, part = "header") %>%
+  italic(part = "footer") %>%
+  align(align = "right", part = "footer") %>%
+  border_remove() %>%
+  hline(part = "header") %>%
+  hline_top(part = "footer") %>%
+  hline(i = 9, part = "body")
+```
+
+### Additional Pronoun Accuracy Results {#supplementary-exp3-accuracy}
+
+<br>
+
+```{r}
+#| label: fig-exp3-by-character
+#| fig-cap: "Experiment 3: [A] Distribution of pronouns produced for each of the 6 character images. [B] Mean accuracy for each of the 18 name + image + pronoun combinations, summarized across Nametag & Introduction conditions. Error bars indicate 95% CIs calculated over the by-item means."
+#| fig-width: 6.5
+#| fig-height: 5
+#| output: true
+#| cache: true
+
+# Distribution----
+exp3_p_dist_image <- read.csv("data/exp3_pronouns.csv") %>%
+  mutate(
+    PronounGroup = ifelse(T_Pronoun == "they", "they", "he/she"),
+    Image = case_when(
+      T_ID == 1  | T_ID == 4  | T_ID == 9  ~ "HT1",
+      T_ID == 10 | T_ID == 13 | T_ID == 18 ~ "HT2",
+      T_ID == 3  | T_ID == 7  | T_ID == 16 ~ "HT3",
+      T_ID == 2  | T_ID == 11 | T_ID == 15 ~ "ST1",
+      T_ID == 5  | T_ID == 12 | T_ID == 14 ~ "ST2",
+      T_ID == 6  | T_ID == 8  | T_ID == 17 ~ "ST3"
+    )
+  ) %>%
+  group_by(Image, PronounGroup, PronounProduced) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  ggplot(aes(
+    x = PronounGroup,
+    y = n,
+    fill = factor(PronounProduced, levels = c("his", "their", "her", "none"))
+  )) +
+  geom_bar(stat = "identity", position = "fill") +
+  facet_wrap(~Image) +
+  scale_fill_manual(values = c("#1B9E77", "#7570B3", "#D95F02", "grey50")) +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  theme_classic() +
+  labs(
+    title = "Distribution",
+    x     = "Character Pronoun",
+    y     = "Proportion of Responses",
+    fill  = "Pronoun Produced"
+  ) +
+  theme(
+    axis.text.x     = element_text(size = 11),
+    axis.ticks.x    = element_blank(),
+    legend.position = c(1.3, 1.1),
+    legend.text     = element_text(size = 11),
+    plot.title      = element_text(size = 12, face = "bold"),
+    strip.text      = element_text(margin = margin(t = 22, b = 20))
+  ) +
+  guides(fill = guide_legend(title.position = "top", byrow = TRUE, nrow = 2)) +
+  inset_element(
+    p = readPNG("resources/character-images/HT1.png", native = TRUE),
+    left = 0.02, right = 0.30, top = 1.20, bottom = 1.005
+  ) +
+  inset_element(
+    p = readPNG("resources/character-images/HT2.png", native = TRUE),
+    left = 0.35, right = 0.65, top = 1.20, bottom = 1.005
+  ) +
+  inset_element(
+    p = readPNG("resources/character-images/HT3.png", native = TRUE),
+    left = 0.69, right = 0.99, top = 1.20, bottom = 1.005
+  ) +
+  inset_element(
+    p = readPNG("resources/character-images/ST1.png", native = TRUE),
+    left = 0.02, right = 0.30, top = 0.592, bottom = 0.3835
+  ) +
+  inset_element(
+    p = readPNG("resources/character-images/ST2.png", native = TRUE),
+    left = 0.35, right = 0.65, top = 0.592, bottom = 0.3835
+  ) +
+  inset_element(
+    p = readPNG("resources/character-images/ST3.png", native = TRUE),
+    left = 0.69, right = 0.99, top = 0.592, bottom = 0.3835
+  )
+
+# Accuracy----
+exp3_p_acc_image <- exp3_load_data_dist() %>%
+  group_by(T_Pronoun, Character) %>%
+  summarise(ItemMean = mean(Accuracy, na.rm = TRUE)) %>%
+  ggplot(aes(
+    x = T_Pronoun,
+    y = ItemMean,
+    fill = T_Pronoun, color = T_Pronoun
+  )) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "bar",
+    alpha = 0.4, color = "white"
+  ) +
+  geom_point(
+    position = position_jitter(height = 0.02, width = 0.5, seed = 3),
+    size = 1
+  ) +
+  stat_summary(
+    fun.data = mean_cl_boot, geom = "errorbar",
+    color = "black", linewidth = 0.5, width = 0.5
+  ) +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_color_brewer(palette = "Dark2") +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 1.03)) +
+  theme_classic() +
+  dissertation_plot_theme +
+  labs(
+    title = "Accuracy",
+    x     = "Character Pronoun",
+    y     = "By-Item Means"
+  ) +
+  guides(color = guide_none(), fill = guide_none())
+
+# Combine----
+exp3_p_dist_image + exp3_p_acc_image +
+  plot_layout(design = c(
+    area(t = 1, b = 3, l = 1, r = 3),
+    area(t = 2, b = 3, l = 4, r = 5)
+  )) +
+  plot_annotation(
+    title = "Experiment 3: Responses by Character",
+    theme = patchwork_theme
+  )
+```
+
+### Participant Covariate Analyses {#supplementary-exp3-covariates}
+
+<br>
+
+```{r}
+#| label: fig-exp3-cov-dist
+#| fig-cap: "Experiment 3: Distribution of mean-centered, rescaled participant covariates tested for model inclusion."
+#| fig-asp: 1.10
+#| output: true
+#| cache: true
+
+( # (not using facet_grid, to get different axis labels)
+  # Age
+  (exp3_load_data_subj() %>%
+     select(ParticipantID, Age_C) %>%
+     unique() %>%
+     ggplot(aes(x = Age_C)) +
+     geom_histogram(center = TRUE, bins = 50, fill = "#D53E4F") +  # Spectral
+     coord_cartesian(xlim = c(-0.5, 0.55)) +
+     labs(
+       title = "Age",
+       x     = "Younger – Older") +
+     subjCov_theme
+  ) + # nest in () to add to each plot, not just last in list
+  # Familiarity
+  (exp3_load_data_subj() %>%
+     select(ParticipantID, Familiarity_C) %>%
+     unique() %>%
+     ggplot(aes(x = Familiarity_C)) +
+     geom_histogram(center = TRUE, bins = 5, fill = "#FC8D59") +
+     labs(
+        title = "Familiarity Using They/Them",
+        x     = "Not Met – Not Close To – Close To/Self"
+      ) +
+      subjCov_theme
+  ) +
+  # Gender Beliefs
+  (exp3_load_data_subj() %>%
+     select(ParticipantID, GenderBeliefs_C) %>%
+     unique() %>%
+     ggplot(aes(x = GenderBeliefs_C)) +
+     geom_histogram(center = TRUE, bins = 50, fill = "#FEE08B") +
+     coord_cartesian(xlim = c(-0.5, 0.5)) +
+     labs(
+       title = "Gender Binary & Gender Essentialism",
+       x     = "Lower – Higher Endorsement"
+       ) +
+     subjCov_theme
+  ) +
+  # LGBTQ
+  (exp3_load_data_subj() %>%
+     select(ParticipantID, LGBTQ_C) %>%
+     unique() %>%
+     ggplot(aes(x = LGBTQ_C)) +
+     geom_histogram(center = TRUE, bins = 3, fill = "#E6F598") +
+     labs(
+       title = "LGBTQ+ Identity",
+       x     = "Not LGBTQ – LBGTQ"
+     ) +
+     subjCov_theme
+  ) +
+  # Pronoun Sharing
+  (exp3_load_data_subj() %>%
+     select(ParticipantID, Sharing_C) %>%
+     unique() %>%
+     ggplot(aes(x = Sharing_C)) +
+     geom_histogram(boundary = TRUE, bins = 20, fill = "#99D594") +
+     coord_cartesian(xlim = c(-0.5, 0.5)) +
+     labs(
+       title = "Pronoun Sharing",
+       x     = "Less Familiar – More Familiar"
+     ) +
+     subjCov_theme
+  ) +
+  # Sentence Ratings
+  (exp3_load_data_subj() %>%
+     select(ParticipantID, Rating_C) %>%
+     unique() %>%
+     ggplot(aes(x = Rating_C)) +
+     geom_histogram(center = TRUE, bins = 20, fill = "#3288BD") +
+     coord_cartesian(xlim = c(-0.6, 0.5)) +
+     labs(
+       title = "Singular <i>They</i> with Proper Names",
+       x     = "Less Natural – More Natural"
+     ) +
+     subjCov_theme +
+     theme(plot.title = element_markdown())
+   ) +
+  # Join
+  plot_layout(ncol = 2) +
+  plot_annotation(
+    title = paste(
+      "Experiment 3: Distribution of Rescaled and Centered",
+      "Participant Covariates"
+    ),
+    theme = patchwork_theme
+  )
+)
+```
+
+<br>
+
+```{r}
+#| label: tbl-exp3-cov
+#| tbl-cap: "Experiment 3: Model results for the effects of Pronoun, Nametag, Introduction, Gender Beliefs, and Familiarity with Pronoun Sharing on accuracy."
+#| output: true
+
+exp3_tb_subj_cov <- tab_model(
+  model = readRDS("r_data/exp3_subj-covariates.RDS")@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Production Accuracy",
+  pred.labels = exp3_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp3_tb_subj_cov$knitr %<>%
+  tab_model_title_row("Experiment 3: Participant Covariates") %>%
+  drop_sigma() %>%
+  exp3_tb_random_labels() %>%
+  str_replace_all("Introduction", "Intro")
+
+exp3_tb_subj_cov
+```
+
+## Experiment 4 {#supplementary-exp4}
+
+```{r}
+#| label: load-workspace-exp4
+
+rm(list = ls(pattern = "exp3"))  # clear 3 first
+
+source("resources/data-functions/exp4_load_data.R")
+load("r_data/exp4.RData")
+```
+
+### Additional Survey Results {#supplementary-exp4-survey}
+
+<br>
+
+```{r}
+#| label: tbl-exp4-gender-beliefs
+#| tbl-cap: "Experiment 4: Gender Beliefs. Question texts, distributions, means, and SDs for items in the gender beliefs scale [@nagoshi2008]."
+#| output: true
+
+# Make histograms of responses for each item
+exp4_p_gender_beliefs_dists <- exp4_d_survey %>%
+  filter(Category == "Gender Beliefs") %>%
+  group_by(Item) %>%
+  nest() %>%
+  mutate(Distribution = map2(data, Item, ~ ggplot(
+    data = .x,
+    aes(x = (Response_Num - 1))) +
+    stat_count(geom = "bar", width = 0.9, fill = "#3288bd") +
+    expand_limits(x = c(0, 6), y = c(0, 20)) + # makes all axes the same
+    scale_x_continuous(breaks = c(0, 6), expand = c(0, 0)) +
+    scale_y_continuous(expand = c(0, 0)) +
+    theme_classic() +
+    theme(
+      axis.ticks = element_blank(),
+      axis.text.y = element_blank()
+    ) +
+    labs(x = element_blank(), y = element_blank()))) %>%
+  ungroup()
+
+# Participant totals
+exp4_d_gender_beliefs_totals <- exp4_d_survey %>%
+  filter(Category == "Gender Beliefs") %>%
+  group_by(ParticipantID) %>%
+  summarise(Total = sum(Response_Num - 1))
+
+# Add histogram of total
+exp4_p_gender_beliefs_dists %<>% add_row(
+  Item = "Total",
+  data = NULL,
+  Distribution = list(ggplot(
+    data = exp4_d_gender_beliefs_totals,
+    aes(x = Total)) +
+    stat_count(geom = "bar", width = 0.9, fill = "#3288bd") +
+    expand_limits(x = c(0, 50)) +
+    scale_x_continuous(breaks = c(0, 50), expand = c(0, 0)) +
+    scale_y_continuous(expand = c(0, 0)) +
+    theme_classic() +
+    theme(
+      axis.ticks = element_blank(),
+      axis.text.y = element_blank(),
+      plot.margin = margin(0, 0, 0, 0)
+    ) +
+    labs(x = element_blank(), y = element_blank()))
+)
+
+# Table
+exp4_d_survey %>%
+  filter(Category == "Gender Beliefs") %>%
+  group_by(Item) %>% # Means and SDs for each question
+  summarise(
+    M  = mean(Response_Num - 1, na.rm = TRUE),
+    SD = sd(Response_Num, na.rm = TRUE)
+  ) %>%
+  add_row( # add totals
+    Item = "Total",
+    M    = mean(exp4_d_gender_beliefs_totals$Total),
+    SD   = sd(exp4_d_gender_beliefs_totals$Total)
+  ) %>%
+  left_join(exp4_p_gender_beliefs_dists, by = "Item") %>% # Add plots to df
+  select(-data) %>%
+  arrange(M) %>%
+  flextable() %>%
+  mk_par(
+    j = "Distribution", # Sets up plots
+    value = as_paragraph(gg_chunk(
+      value = Distribution,
+      width = 1.5, height = 1
+    ))
+  ) %>%
+  add_header_lines(
+    "Experiment 4: Gender Binary & Gender Essentialism Beliefs"
+  ) %>%
+  add_footer_lines("0: Strongly Disagree – 6: Strongly Agree") %>%
+  colformat_double(digits = 2) %>% # Table formatting
+  padding(part = "all", padding.top = 5, padding.bottom = 5) %>%
+  width(j = 1, width = 4) %>%
+  bold(i = 1, part = "header") %>%
+  italic(i = 2, part = "header") %>%
+  italic(part = "footer") %>%
+  align(align = "right", part = "footer") %>%
+  border_remove() %>%
+  hline(part = "header") %>%
+  hline_top(part = "footer") %>%
+  hline(i = 9, part = "body")
+```
+
+As in Experiment 3, the difference in naturalness ratings between singular *they* co-referring with generics, *each*, and *every* [Indefinite] and with masculine, feminine, and gender-neutral* names [Proper Name] was tested using a linear mixed-effects model (@tbl-exp4-ratings). Referent Type was mean-center effects coded, and the model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp4_r_ratings['Intercept', 'Text']`). There was no significant difference between proper name and indefinite referents (`r exp4_r_ratings['Type=Name_Generic', 'Text']`).
+
+<br>
+
+```{r}
+#| label: tbl-exp4-ratings
+#| tbl-cap: "Experiment 4: Model results for the effect of Referent Type (generics, each, every vs masculine, feminine, gender-neutral names) on sentence naturalness ratings for singular *they.*"
+#| output: asis
+
+exp4_tb_ratings <- tab_model(
+  model = exp4_m_ratings,
+  show.stat = TRUE, string.stat = "t",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  digits = 3, digits.re = 3,
+  dv.labels = "Naturalness Ratings",
+  pred.labels = c(
+    "(Intercept)" = "<b>(Intercept)",
+    "Type=Name_Generic" =
+      "Referent Type: Proper Name (-.5) vs Indefinite (+.5)"),
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp4_tb_ratings$knitr %<>%
+  exp4_tb_random_effects() %>%
+  tab_model_title_row(
+    "Experiment 4: Naturalness Ratings for Singular <i>They</i>"
+  )
+exp4_tb_ratings
+```
+
+### Match Judgments {#supplementary-exp4-match}
+
+<br>
+```{r}
+#| label: tbl-exp4-match-CR
+#| tbl-cap: "Experiment 4: Test Trial Match Rates. Model results for the effect of Pronoun Pair on the likelihood of judging the story to match the scene in test trials."
+#| output: asis
+
+exp4_tb_match_CR <- tab_model(
+  model = exp4_m_match_CR@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Match",
+  pred.labels = c(
+    "(Intercept)" = "<b>(Intercept)",
+    "Pronoun_Pair=TheyTarget" = paste(
+      "Pronoun Pair: They|HeShe (-.66) vs HeShe|They ",
+      "(+.33) + HeShe|SheHe (+.33)"),
+    "Pronoun_Pair=TheyComp" =
+      "Pronoun Pair: HeShe|They (-.5) vs HeShe|SheHe (+.5)"
+  ),
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp4_tb_match_CR$knitr %<>%
+  tab_model_title_row("Experiment 4: Match Judgment Rates in Test Trials") %>%
+  exp4_tb_random_effects() %>%
+  str_replace_all(  # bug in tab_model that drops rho labels
+    "&rho;<sub>01</sub>",
+    "&rho;<sub>01 Pronoun Pair (T|HS vs HS|T + HS|SH) | Participant</sub>"
+  ) %>%
+  str_replace_all(
+    str_c(blank_row4, "-0.637"),
+    str_c(
+      blank_row1,
+      "&rho;<sub>01 Pronoun Pair (HS|T vs HS|SH) | Participant</sub></td>\n",
+      blank_row4, "-0.637"
+  )) %>%
+  drop_sigma()
+
+exp4_tb_match_CR
+```
+
+```{r}
+#| label: tbl-exp4-match-FP
+#| tbl-cap: "Experiment 4: Wrong Pronoun Trial Match Rates. Model results for the effect of Pronoun on judging the story to match the scene in wrong pronoun trials. There were no wrong pronoun trials for the HeShe|They condition, so They|HeShe (they/them character referred to with he/him or she/her, whichever the competitor did not use) and HeShe|SheHe (he/him and she/her characters referred to with they/them) were mean-center effects coded."
+#| output: asis
+
+exp4_tb_match_FP <- tab_model(
+  model = exp4_m_match_FP@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Match",
+  pred.labels = c(
+    "(Intercept)" = "(Intercept)",
+    exp4_tb_fixed_labels
+  ),
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp4_tb_match_FP$knitr %<>%
+  tab_model_title_row(
+    "Experiment 4: Match Judgment Rates in Wrong Pronoun Trials"
+  ) %>%
+  exp4_tb_random_effects() %>%
+  str_replace_all(  # bug in tab_model that drops rho labels
+    "&rho;<sub>01</sub> <sub>Story</sub></td>",
+    "&rho;<sub>01</sub> <sub>Pronoun | Story</sub></td>"
+  ) %>%
+  drop_sigma()
+
+exp4_tb_match_FP
+```
+
+```{r}
+#| label: tbl-exp4-match-RT
+#| tbl-cap: "Experiment 4: Test Trial Match RT. Model results for the effect of Pronoun Pair on reaction times for test trial match judgments."
+#| output: asis
+
+exp4_tb_match_RT <- tab_model(
+  model = exp4_m_match_RT@model,
+  show.stat = TRUE, string.stat = "t",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "RT (ms)",
+  pred.labels = c(
+    "Pronoun_Pair=TheyComp" =
+      "Pronoun Pair: HeShe|They (-.5) vs HeShe|SheHe (+.5)",
+    exp4_tb_fixed_labels
+  ),
+  title = "Experiment 4: Match Judgment RT in Test Trials",
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp4_tb_match_RT$knitr %<>%
+  exp4_tb_random_effects() %>%
+  str_replace("125.924", "126") %>%  # round these but not RE correlations
+  str_replace("305040.779", "305041") %>%
+  str_replace("397847.586", "397848") %>%
+  str_replace("592385.497", "592385") %>%
+  str_replace("114828.698", "114829") %>%
+  str_replace("151198.855", "151199") %>%
+  str_replace_all(   # bug in tab_model that drops rho labels
+    "&rho;<sub>01</sub>",
+    "&rho;<sub>01 Pronoun Pair (T|HS vs HS|T + HS|SH) | Story</sub>"
+  ) %>%
+  str_replace_all(
+    str_c(blank_row4, "-0.961"),
+    str_c(
+      blank_row1,
+      "&rho;<sub>01 Pronoun Pair (HS|T vs HS|SH) | Story</sub></td>",
+      blank_row4, "-0.961"
+  )) %>%
+  str_replace_all(
+    str_c(blank_row4, "-0.833"),
+    str_c(
+      blank_row1,
+      "&rho;<sub>01 Pronoun Pair (T|HS vs HS|T + HS|SH) | Participant</sub></td>",
+      blank_row4, "-0.833"
+  )) %>%
+  str_replace_all(
+    str_c(blank_row4, "0.092"),
+    str_c(
+      blank_row1,
+      "&rho;<sub>01 Pronoun Pair (HS|T vs HS|SH) | Participant</sub></td>",
+      blank_row4, "0.092"
+  )) %>%
+  tab_model_title_row("Experiment 4: Match Judgment RT in Test Trials")
+
+exp4_tb_match_RT
+```
+
+### Additional Figures {#supplementary-exp4-figures}
+
+<br>
+
+```{r}
+#| label: fig-exp4-names
+#| fig-cap: ": Experiment 4: Name Window. Looks to the named characters at the beginning of the story, with the first name beginning at 0ms and the second name beginning ~1000ms later."
+#| fig-asp: 0.6
+#| output: true
+#| cache: true
+
+exp4_load_data_plots_names() %>%
+  ggplot(aes(x = Timestep_Start, y = Prop, color = Pronoun_Color)) +
+  geom_line(key_glyph = "rect", linewidth = 0.75) +
+  facet_wrap(~Name) +
+  geom_vline(xintercept = -500, linewidth = 1) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_x_continuous(
+    expand = c(0, 0),
+    breaks = c(-500, 0, 500, 1000, 1500, 2000, 2500)
+  ) +
+  scale_y_continuous(limits = c(0, 0.4), expand = c(0, 0)) +
+  theme_classic() +
+  eyetracking_theme +
+  theme(
+    axis.line.y = element_blank(),
+    legend.key.size   = unit(0.2, "in"),
+    legend.background = element_rect(fill = NA),
+    legend.position   = c(0.92, 0.23),
+  ) +
+  guides(color = guide_legend(byrow = TRUE)) +
+  labs(
+    title = "Experiment 4: Looks to the Named Characters",
+    x     = "Time Relative to Audio Onset (ms)",
+    y     = "Proportion of Looks",
+    color = "Character\nPronouns"
+  )
+```
+
+<br>
+
+```{r}
+#| label: fig-exp4-preview
+#| fig-cap: "Experiment 4: Preview Window. Looks to each character during the 1000ms preview time before audio started, split by the character's pronouns."
+#| fig-asp: 0.6
+#| output: true
+#| cache: true
+
+exp4_load_data_plots_preview() %>%
+  ggplot(aes(x = Timestep_Start, y = Prop, color = Pronoun)) +
+  geom_line(key_glyph = "rect", linewidth = 0.75) +
+  scale_color_manual(values = c(brewer.pal(3, "Dark2"), "grey60")) +
+  scale_x_continuous(
+    expand = c(0.02, 0.02),
+    breaks = c(0, 250, 500, 750, 1000),
+    labels = c(
+      "0\nScreen\nDisplayed",
+      "250", "500", "750",
+      "1000\nAudio\nOnset"
+    )
+  ) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    limits = c(0, 0.5)
+  ) +
+  theme_classic() +
+  dissertation_plot_theme +
+  theme(
+    axis.ticks        = element_line(),
+    legend.background = element_rect(fill = NA),
+    legend.key.size   = unit(0.2, "in"),
+    legend.position   = c(0.8, 0.9),
+    plot.margin       = margin(t = 5, b = 5, l = 5, r = 20)
+  ) +
+  guides(color = guide_legend(byrow = TRUE, nrow = 2)) +
+  labs(
+    title = "Experiment 4: Looks During Preview Window",
+    x     = "Time Relative to Trial Start (ms)",
+    y     = "Proportion of Looks",
+    color = "Character Pronouns"
+  )
+```
+
+### Additional Eyetracking Results {#supplementary-exp4-tables}
+
+The Order of Mention effect was estimated separately for each Pronoun Pair condition by running three models, each with one Pronoun Pair condition coded as 0 and the other two Pronoun Pair conditions coded as 1. The maximal random effects structures that converged [@bates2015; @rcoreteam2023; @voeten2023] only included a subset of those in the main model (@tbl-exp4-pronoun-pair). For the by-participant effects, each kept all 3 slopes (AR(1), Order, and Trial Number). For the by-item effects, the HeShe\|They reference model included both slopes (Order, Trend), the HeShe\|SheHe reference model only included slopes for Trend, and the They\|HeShe reference model only included intercepts.
+
+In HeShe\|SheHe trials (@tbl-exp4-HS-SH), neither the main effect of Order (`r exp4_r_HS.SH['Order=First', 'Text']`) nor its interaction with Pronoun Pair (`r exp4_r_HS.SH['Pronoun_Pair_HS.SH:Order=First', 'Text']`) were significant. In HeShe\|They trials (@tbl-exp4-HS-T), the main effect of Order was significant as anticipated, with participants more likely to be looking at target characters who had been named first in the story than target characters who had been named second (`r exp4_r_HS.T['Order=First', 'Text']`). The interaction between Order and Pronoun Pair was also significant (`r exp4_r_HS.T['Pronoun_Pair_HS.T:Order=First', 'Text']`). Probing this interaction indicated that listeners were less likely to be looking at the target in HeShe\|They trials than in HeShe\|SheHe and They\|HeShe trials when the target was mentioned second (`r exp4_r_HS.T_Second0['Pronoun_Pair_HS.T', 'Text']`), but not when the target was mentioned first (`r exp4_r_HS.T_First0['Pronoun_Pair_HS.T', 'Text']`). In They\|HeShe trials (@tbl-exp4-T-HS), neither the main effect of Order (`r exp4_r_T.HS['Order=First', 'Text']`) nor its interaction with Pronoun Pair (`r exp4_r_T.HS['Pronoun_Pair_T.HS:Order=First', 'Text']`) were significant.
+
+<br>
+
+```{r}
+#| label: tbl-exp4-HS-SH
+#| tbl-cap: "Experiment 4: Model results for the effects of Pronoun and Order on the likelihood of looking at the target character (1) or not (0). The HeShe|SheHe condition is coded as 0, and the HeShe|They and They|HeShe conditions are coded as 1."
+#| output: true
+#| results: asis
+
+exp4_tb_HS.SH <- tab_model(
+  model = exp4_m_HS.SH,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Looks to Target",
+  pred.labels = exp4_tb_fixed_labels,
+  order.terms = c(1, 2, 4, 5, 3, 6),
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp4_tb_HS.SH$knitr %<>%
+  tab_model_title_row(paste(
+    "Experiment 4: Looks to the Target Character<br>",
+    "(HeShe|SheHe as Reference Group)"
+  )) %>%
+  exp4_tb_random_effects() %>%
+  str_replace_all(  # bug in tab_model that drops rho labels
+    "&rho;<sub>01</sub> <sub>Story</sub>",
+    "&rho;<sub>01</sub> <sub>Trend | Story</sub>"
+  ) %>%
+  drop_sigma()
+  
+exp4_tb_HS.SH
+```
+
+```{r}
+#| label: tbl-exp4-HS-T
+#| tbl-cap: "Experiment 4: Model results for the effects of Pronoun and Order on the likelihood of looking at the target character (1) or not (0). The HeShe|They condition is coded as 0, and the HeShe|SheHe and They|HeShe conditions are coded as 1."
+#| output: true
+#| results: asis
+
+exp4_tb_HS.T <- tab_model(
+  model = exp4_m_HS.T,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Looks to Target",
+  pred.labels = exp4_tb_fixed_labels,
+  order.terms = c(1, 2, 4, 5, 3, 6),
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp4_tb_HS.T$knitr %<>%
+  tab_model_title_row(paste(
+    "Experiment 4: Looks to the Target Character<br>",
+    "(HeShe|They as Reference Group)"
+  )) %>%
+  exp4_tb_random_effects() %>%
+  drop_sigma()
+
+exp4_tb_HS.T
+```
+
+```{r}
+#| label: tbl-exp4-T-HS
+#| tbl-cap: "Experiment 4: Model results for the effects of Pronoun and Order on the likelihood of looking at the target character (1) or not (0). The They|HeShe condition is coded as 0, and the HeShe|They and HeShe|SheHe conditions are coded as 1."
+#| output: true
+#| results: asis
+
+exp4_tb_T.HS <- tab_model(
+  model = readRDS("r_data/exp4_pronoun-pair_T-HS.RDS"),
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Looks to Target",
+  pred.labels = c(
+    "(Intercept)" = "(Intercept)",
+    exp4_tb_fixed_labels
+  ),
+  order.terms = c(1, 2, 4, 5, 3, 6),
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp4_tb_T.HS$knitr %<>% drop_sigma() %>%
+  exp4_tb_random_effects() %>%
+  tab_model_title_row(paste(
+    "Experiment 4: Looks to the Target Character<br>",
+    "(They|HeShe as Reference Group)"
+  ))
+exp4_tb_T.HS
+```
+
+```{r}
+#| label: tbl-exp4-target-pronoun
+#| tbl-cap: "Experiment 4: Model results for the effects of Target Pronoun and Order on the likelihood of looks to the target character, during the window starting 200ms after pronoun onset and ending at 1210ms, the earliest shape word onset."
+#| output: true
+#| results: asis
+
+exp4_tb_target_pronoun <- tab_model(
+  model = readRDS("r_data/exp4_target-pronoun.RDS")@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Looks to Target",
+  pred.labels = exp4_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp4_tb_target_pronoun$knitr %<>% 
+  tab_model_title_row("Experiment 4: Target Pronoun") %>%
+  exp4_tb_random_effects() %>%
+  drop_sigma()
+  
+exp4_tb_target_pronoun
+```
+
+```{r}
+#| label: tbl-exp4-trend
+#| tbl-cap: "Experiment 4: Trend Interactions. Model results for the interactions between Trend and Pronoun Pair and Order on the likelihood of looking at the target character."
+#| output: true
+#| results: asis
+
+exp4_tb_trend <- tab_model(
+  model = exp4_m_trend@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Looks to Target",
+  pred.labels = exp4_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp4_tb_trend$knitr %<>%
+  tab_model_title_row("Experiment 4: Interactions with Trend") %>%
+  exp4_tb_random_effects() %>%
+  str_replace_all(  # bug in tab_model that drops rho labels
+    "&rho;<sub>01</sub>",
+    "&rho;<sub>01 AR(1) | Participant</sub>"
+  ) %>%
+  str_replace_all(
+    str_c(blank_row4, "0.063"),
+    str_c(
+      blank_row1, "&rho;<sub>01 Order | Participant</sub></td>",
+      blank_row4, "0.063"
+  )) %>%
+  str_replace_all(
+    str_c(blank_row4, "0.463"),
+    str_c(
+      blank_row1, "&rho;<sub>01 Trial Number | Participant</sub></td>",
+      blank_row4, "0.463"
+  )) %>%
+  str_replace_all(
+    str_c(blank_row4, "0.441"),
+    str_c(
+      blank_row1,
+      "&rho;<sub>01 Pronoun Pair (T|HS vs HS|T + HS|SH) | Participant </sub></td>",
+      blank_row4, "0.441"
+  )) %>%
+  str_replace_all(
+    str_c(blank_row4, "0.272"),
+    str_c(
+      blank_row1,
+      "&rho;<sub>01 Pronoun Pair (HS|T vs HS|SH) | Participant</sub></td>",
+      blank_row4, "0.272"
+  )) %>%
+  drop_sigma()
+  
+exp4_tb_trend
+```
+
+```{r}
+#| label: tbl-exp4-AR
+#| tbl-cap: "Experiment 4: AR(1) Interactions. Model results for the interactions between AR(1) and Pronoun Pair and Order on the likelihood of looking at the target character."
+#| output: true
+#| results: asis
+
+exp4_tb_AR <- tab_model(
+  model = exp4_m_AR@model,
+  transform = NULL,
+  show.stat = TRUE, string.stat = "z",
+  show.ci = FALSE, show.se = TRUE, string.se = "SE",
+  show.r2 = FALSE, show.icc = FALSE,
+  digits = 3, digits.re = 3,
+  dv.labels = "Looks to Target",
+  pred.labels = exp4_tb_fixed_labels,
+  wrap.labels = 80,
+  CSS = table_css
+)
+exp4_tb_AR$knitr %<>%
+  tab_model_title_row("Experiment 4: Interactions with AR(1)") %>%
+  exp4_tb_random_effects() %>%
+  str_replace_all(  # bug in tab_model that drops rho labels
+    "&rho;<sub>01</sub> <sub>Story",
+    "&rho;<sub>01 Trial Number | Story</sub>"
+  ) %>%
+  drop_sigma()
+  
+exp4_tb_AR
+```
