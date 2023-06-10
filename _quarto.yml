@@ -1,0 +1,79 @@
+project:
+  type: book
+  execute-dir: project
+  output-dir: docs
+
+book:
+  # Metadata
+  title: "Learning to comprehend and produce singular <i>they</i><br>"
+  date: today
+  author:
+    - name: Bethany Gardner
+      orcid: 0000-0002-5154-2040
+  doi: "placeholder"
+
+  # Structure
+  chapters:
+    - index.qmd
+    # - intro.qmd
+    - exp1.qmd
+    - exp2.qmd
+    - exp3.qmd
+    - exp4.qmd
+    # - discussion.qmd
+  appendices:
+    - references.qmd
+    - supplementary_analyses.qmd
+
+  # Links/tools
+  repo-url: https://github.com/bethanyhgardner/dissertation
+  sidebar:
+    tools:
+      - icon: person-circle
+        text: "Contact"
+        href: "mailto: bethany.gardner@vanderbilt.edu"
+      - icon: filetype-pdf
+        text: "Download"
+        href: https://placeholder-to-proquest
+    search: true
+    style: docked
+    foreground: "#7570B3"
+    background: "#ededed"
+
+# References
+bibliography: resources/references.bib
+csl: resources/formatting/apa.csl
+link-citations: true
+link-bibliography: true
+
+# Other citation info
+citation:
+  title: Learning to comprehend and produce singular they
+  author:
+    - name: Bethany Gardner
+      orcid: 0000-0002-5154-2040
+      affiliation:
+      - name: Vanderbilt University
+        department: Department of Psychology & Human Development
+  type: thesis
+  genre: Doctoral dissertation
+  publisher: Vanderbilt University
+google-scholar: true
+
+# HTML
+format:
+  html:
+    execute:
+      echo: false
+      output: false
+    theme: pulse
+    css: resources/formatting/pulse_modified.css
+    self-contained: true
+    embed-resources: true
+    toc-title: "On This Page"
+    number-depth: 3
+    toc-expand: 2
+    toc-depth: 4
+    fig-align: left
+    fig-dpi: 300
+
