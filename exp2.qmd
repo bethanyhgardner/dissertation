@@ -801,6 +801,7 @@ exp2_p_mp_split / exp2_p_mp_compare +
 
 ```{r}
 #| label: exp2-save-workspace
+#| cache: true
 
 save.image("r_data/exp2.RData")
 ```

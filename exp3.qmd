@@ -1003,6 +1003,7 @@ exp3_r_means
 ```{r}
 #| label: exp3-model-buildmer
 #| cache: true
+
 exp3_m_buildmer <- buildmer(
   formula = Accuracy ~ Pronoun * Nametag * Intro +
     (Pronoun | ParticipantID) + (1 | Character),
@@ -1485,6 +1486,7 @@ Collecting speech production data online came with both advantages and drawbacks
 
 ```{r}
 #| label: exp3-save-workspace
+#| cache: true
 
 rm(list = ls(pattern = "exp1"))
 rm(list = ls(pattern = "exp2"))

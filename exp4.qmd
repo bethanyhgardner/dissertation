@@ -1227,6 +1227,7 @@ exp4_tb_pronoun_pair
 
 ```{r}
 #| label: exp4-save-workspace
+#| cache: true
 
 save.image("r_data/exp4.RData")
 ```

@@ -1483,6 +1483,7 @@ If a measure shows low internal reliability---where each participants' responses
 
 ```{r}
 #| label: exp1-save-workspace
+#| cache: true
 
 save.image("r_data/exp1.RData")
 ```
