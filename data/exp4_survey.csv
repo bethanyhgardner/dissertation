@@ -1,0 +1,631 @@
+ParticipantID,Category,Item,Response_Num,Response_Bool,Response_Cat
+4_490,Age,Age,19,NA,18-24
+4_788,Age,Age,18,NA,18-24
+4_199,Age,Age,20,NA,18-24
+4_469,Age,Age,18,NA,18-24
+4_755,Age,Age,19,NA,18-24
+4_450,Age,Age,21,NA,18-24
+4_197,Age,Age,20,NA,18-24
+4_112,Age,Age,18,NA,18-24
+4_629,Age,Age,18,NA,18-24
+4_528,Age,Age,21,NA,18-24
+4_646,Age,Age,25,NA,25-34
+4_262,Age,Age,18,NA,18-24
+4_605,Age,Age,20,NA,18-24
+4_385,Age,Age,27,NA,25-34
+4_300,Age,Age,21,NA,18-24
+4_770,Age,Age,18,NA,18-24
+4_643,Age,Age,19,NA,18-24
+4_614,Age,Age,21,NA,18-24
+4_995,Age,Age,26,NA,25-34
+4_699,Age,Age,18,NA,18-24
+4_613,Age,Age,21,NA,18-24
+4_117,Age,Age,20,NA,18-24
+4_407,Age,Age,19,NA,18-24
+4_830,Age,Age,26,NA,25-34
+4_506,Age,Age,18,NA,18-24
+4_871,Age,Age,19,NA,18-24
+4_178,Age,Age,18,NA,18-24
+4_735,Age,Age,21,NA,18-24
+4_529,Age,Age,19,NA,18-24
+4_250,Age,Age,18,NA,18-24
+4_292,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_292,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_292,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_292,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_292,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_854,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_854,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_854,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_854,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_854,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_543,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_543,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_543,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_543,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_543,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_343,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_343,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_343,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_343,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_343,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_198,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_198,Familiarity With They/Them Pronouns,Close To,NA,TRUE,NA
+4_198,Familiarity With They/Them Pronouns,Have Met,NA,FALSE,NA
+4_198,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_198,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_802,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_802,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_802,Familiarity With They/Them Pronouns,Have Met,NA,FALSE,NA
+4_802,Familiarity With They/Them Pronouns,Heard About,NA,TRUE,NA
+4_802,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_637,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_637,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_637,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_637,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_637,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_944,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_944,Familiarity With They/Them Pronouns,Close To,NA,TRUE,NA
+4_944,Familiarity With They/Them Pronouns,Have Met,NA,FALSE,NA
+4_944,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_944,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_957,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_957,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_957,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_957,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_957,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_732,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_732,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_732,Familiarity With They/Them Pronouns,Have Met,NA,FALSE,NA
+4_732,Familiarity With They/Them Pronouns,Heard About,NA,TRUE,NA
+4_732,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_648,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_648,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_648,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_648,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_648,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_694,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_694,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_694,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_694,Familiarity With They/Them Pronouns,Heard About,NA,TRUE,NA
+4_694,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_354,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_354,Familiarity With They/Them Pronouns,Close To,NA,TRUE,NA
+4_354,Familiarity With They/Them Pronouns,Have Met,NA,FALSE,NA
+4_354,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_354,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_958,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_958,Familiarity With They/Them Pronouns,Close To,NA,TRUE,NA
+4_958,Familiarity With They/Them Pronouns,Have Met,NA,FALSE,NA
+4_958,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_958,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_923,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_923,Familiarity With They/Them Pronouns,Close To,NA,TRUE,NA
+4_923,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_923,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_923,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_232,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_232,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_232,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_232,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_232,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_287,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_287,Familiarity With They/Them Pronouns,Close To,NA,TRUE,NA
+4_287,Familiarity With They/Them Pronouns,Have Met,NA,FALSE,NA
+4_287,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_287,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_833,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_833,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_833,Familiarity With They/Them Pronouns,Have Met,NA,FALSE,NA
+4_833,Familiarity With They/Them Pronouns,Heard About,NA,TRUE,NA
+4_833,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_912,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_912,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_912,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_912,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_912,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_583,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_583,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_583,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_583,Familiarity With They/Them Pronouns,Heard About,NA,TRUE,NA
+4_583,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_758,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_758,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_758,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_758,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_758,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_236,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_236,Familiarity With They/Them Pronouns,Close To,NA,TRUE,NA
+4_236,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_236,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_236,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_358,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_358,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_358,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_358,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_358,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_969,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_969,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_969,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_969,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_969,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_339,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_339,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_339,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_339,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_339,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_500,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_500,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_500,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_500,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_500,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_179,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_179,Familiarity With They/Them Pronouns,Close To,NA,TRUE,NA
+4_179,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_179,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_179,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_517,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_517,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_517,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_517,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_517,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_114,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_114,Familiarity With They/Them Pronouns,Close To,NA,FALSE,NA
+4_114,Familiarity With They/Them Pronouns,Have Met,NA,TRUE,NA
+4_114,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_114,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_596,Familiarity With They/Them Pronouns,Myself,NA,FALSE,NA
+4_596,Familiarity With They/Them Pronouns,Close To,NA,TRUE,NA
+4_596,Familiarity With They/Them Pronouns,Have Met,NA,FALSE,NA
+4_596,Familiarity With They/Them Pronouns,Heard About,NA,FALSE,NA
+4_596,Familiarity With They/Them Pronouns,Not Heard About,NA,FALSE,NA
+4_842,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",1,NA,NA
+4_842,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_842,Gender Beliefs,I believe that the male/female dichotomy is natural.,4,NA,NA
+4_842,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_842,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",1,NA,NA
+4_842,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_842,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_842,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",1,NA,NA
+4_842,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_314,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,2,NA,NA
+4_314,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_314,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,2,NA,NA
+4_314,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",2,NA,NA
+4_314,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",7,NA,NA
+4_314,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",4,NA,NA
+4_314,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_314,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",2,NA,NA
+4_314,Gender Beliefs,I believe that the male/female dichotomy is natural.,4,NA,NA
+4_587,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",5,NA,NA
+4_587,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_587,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",3,NA,NA
+4_587,Gender Beliefs,I believe that the male/female dichotomy is natural.,3,NA,NA
+4_587,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_587,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_587,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_587,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",2,NA,NA
+4_587,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_405,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",7,NA,NA
+4_405,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_405,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,2,NA,NA
+4_405,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_405,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",2,NA,NA
+4_405,Gender Beliefs,I believe that the male/female dichotomy is natural.,2,NA,NA
+4_405,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_405,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",1,NA,NA
+4_405,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",2,NA,NA
+4_115,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",2,NA,NA
+4_115,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_115,Gender Beliefs,I believe that the male/female dichotomy is natural.,1,NA,NA
+4_115,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",2,NA,NA
+4_115,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_115,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_115,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",2,NA,NA
+4_115,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",1,NA,NA
+4_115,Gender Beliefs,I believe that a person can never change their gender.,2,NA,NA
+4_894,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",1,NA,NA
+4_894,Gender Beliefs,I believe that a person can never change their gender.,4,NA,NA
+4_894,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,4,NA,NA
+4_894,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,7,NA,NA
+4_894,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_894,Gender Beliefs,I believe that the male/female dichotomy is natural.,7,NA,NA
+4_894,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",5,NA,NA
+4_894,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",3,NA,NA
+4_894,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",7,NA,NA
+4_144,Gender Beliefs,I believe that the male/female dichotomy is natural.,3,NA,NA
+4_144,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",1,NA,NA
+4_144,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_144,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",3,NA,NA
+4_144,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",3,NA,NA
+4_144,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_144,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_144,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_144,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_674,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",2,NA,NA
+4_674,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,2,NA,NA
+4_674,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",1,NA,NA
+4_674,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",4,NA,NA
+4_674,Gender Beliefs,I believe that the male/female dichotomy is natural.,3,NA,NA
+4_674,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",3,NA,NA
+4_674,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_674,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,2,NA,NA
+4_674,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_205,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_205,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_205,Gender Beliefs,I believe that the male/female dichotomy is natural.,1,NA,NA
+4_205,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_205,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_205,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",3,NA,NA
+4_205,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",2,NA,NA
+4_205,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",3,NA,NA
+4_205,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_742,Gender Beliefs,I believe that the male/female dichotomy is natural.,7,NA,NA
+4_742,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_742,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_742,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",5,NA,NA
+4_742,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",1,NA,NA
+4_742,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_742,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",1,NA,NA
+4_742,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_742,Gender Beliefs,I believe that a person can never change their gender.,4,NA,NA
+4_855,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_855,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_855,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",1,NA,NA
+4_855,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",3,NA,NA
+4_855,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_855,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_855,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",1,NA,NA
+4_855,Gender Beliefs,I believe that the male/female dichotomy is natural.,4,NA,NA
+4_855,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_355,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,6,NA,NA
+4_355,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,5,NA,NA
+4_355,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",6,NA,NA
+4_355,Gender Beliefs,I believe that the male/female dichotomy is natural.,7,NA,NA
+4_355,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,3,NA,NA
+4_355,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",7,NA,NA
+4_355,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",2,NA,NA
+4_355,Gender Beliefs,I believe that a person can never change their gender.,6,NA,NA
+4_355,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",6,NA,NA
+4_771,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_771,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_771,Gender Beliefs,I believe that the male/female dichotomy is natural.,4,NA,NA
+4_771,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_771,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",2,NA,NA
+4_771,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_771,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_771,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",5,NA,NA
+4_771,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",4,NA,NA
+4_211,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_211,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",4,NA,NA
+4_211,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_211,Gender Beliefs,I believe that the male/female dichotomy is natural.,5,NA,NA
+4_211,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_211,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,2,NA,NA
+4_211,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",1,NA,NA
+4_211,Gender Beliefs,I believe that a person can never change their gender.,2,NA,NA
+4_211,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",1,NA,NA
+4_710,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",5,NA,NA
+4_710,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_710,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_710,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",2,NA,NA
+4_710,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",1,NA,NA
+4_710,Gender Beliefs,I believe that the male/female dichotomy is natural.,4,NA,NA
+4_710,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_710,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_710,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_297,Gender Beliefs,I believe that the male/female dichotomy is natural.,7,NA,NA
+4_297,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_297,Gender Beliefs,I believe that a person can never change their gender.,2,NA,NA
+4_297,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",6,NA,NA
+4_297,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,2,NA,NA
+4_297,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",5,NA,NA
+4_297,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_297,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",7,NA,NA
+4_297,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,4,NA,NA
+4_636,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_636,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",2,NA,NA
+4_636,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",1,NA,NA
+4_636,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_636,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",1,NA,NA
+4_636,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_636,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_636,Gender Beliefs,I believe that the male/female dichotomy is natural.,1,NA,NA
+4_636,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_453,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,7,NA,NA
+4_453,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",7,NA,NA
+4_453,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,6,NA,NA
+4_453,Gender Beliefs,I believe that a person can never change their gender.,7,NA,NA
+4_453,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",7,NA,NA
+4_453,Gender Beliefs,I believe that the male/female dichotomy is natural.,7,NA,NA
+4_453,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",7,NA,NA
+4_453,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",7,NA,NA
+4_453,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,7,NA,NA
+4_875,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,2,NA,NA
+4_875,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",2,NA,NA
+4_875,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",2,NA,NA
+4_875,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",2,NA,NA
+4_875,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",4,NA,NA
+4_875,Gender Beliefs,I believe that a person can never change their gender.,2,NA,NA
+4_875,Gender Beliefs,I believe that the male/female dichotomy is natural.,4,NA,NA
+4_875,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_875,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_348,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",3,NA,NA
+4_348,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,5,NA,NA
+4_348,Gender Beliefs,I believe that a person can never change their gender.,2,NA,NA
+4_348,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,3,NA,NA
+4_348,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",3,NA,NA
+4_348,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,3,NA,NA
+4_348,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",3,NA,NA
+4_348,Gender Beliefs,I believe that the male/female dichotomy is natural.,4,NA,NA
+4_348,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",3,NA,NA
+4_892,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",1,NA,NA
+4_892,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_892,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_892,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_892,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_892,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_892,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",1,NA,NA
+4_892,Gender Beliefs,I believe that the male/female dichotomy is natural.,1,NA,NA
+4_892,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",2,NA,NA
+4_747,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,2,NA,NA
+4_747,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",1,NA,NA
+4_747,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_747,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_747,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",1,NA,NA
+4_747,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",1,NA,NA
+4_747,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_747,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_747,Gender Beliefs,I believe that the male/female dichotomy is natural.,7,NA,NA
+4_475,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,3,NA,NA
+4_475,Gender Beliefs,I believe that a person can never change their gender.,7,NA,NA
+4_475,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,3,NA,NA
+4_475,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",2,NA,NA
+4_475,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,4,NA,NA
+4_475,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",4,NA,NA
+4_475,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",3,NA,NA
+4_475,Gender Beliefs,I believe that the male/female dichotomy is natural.,6,NA,NA
+4_475,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",5,NA,NA
+4_177,Gender Beliefs,I believe that the male/female dichotomy is natural.,6,NA,NA
+4_177,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",3,NA,NA
+4_177,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",6,NA,NA
+4_177,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_177,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_177,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",3,NA,NA
+4_177,Gender Beliefs,I believe that a person can never change their gender.,2,NA,NA
+4_177,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",2,NA,NA
+4_177,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,2,NA,NA
+4_387,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_387,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",5,NA,NA
+4_387,Gender Beliefs,I believe that the male/female dichotomy is natural.,2,NA,NA
+4_387,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",4,NA,NA
+4_387,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_387,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_387,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_387,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",2,NA,NA
+4_387,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_887,Gender Beliefs,I believe that the male/female dichotomy is natural.,3,NA,NA
+4_887,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",4,NA,NA
+4_887,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,6,NA,NA
+4_887,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_887,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_887,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_887,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_887,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",4,NA,NA
+4_887,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",2,NA,NA
+4_504,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",2,NA,NA
+4_504,Gender Beliefs,I believe that the male/female dichotomy is natural.,4,NA,NA
+4_504,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_504,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_504,Gender Beliefs,I believe that a person can never change their gender.,2,NA,NA
+4_504,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",4,NA,NA
+4_504,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,2,NA,NA
+4_504,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",2,NA,NA
+4_504,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_806,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,2,NA,NA
+4_806,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",5,NA,NA
+4_806,Gender Beliefs,I believe that the male/female dichotomy is natural.,5,NA,NA
+4_806,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",6,NA,NA
+4_806,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,5,NA,NA
+4_806,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,7,NA,NA
+4_806,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",7,NA,NA
+4_806,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",7,NA,NA
+4_806,Gender Beliefs,I believe that a person can never change their gender.,2,NA,NA
+4_843,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_843,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",2,NA,NA
+4_843,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_843,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_843,Gender Beliefs,I believe that the male/female dichotomy is natural.,2,NA,NA
+4_843,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_843,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_843,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",1,NA,NA
+4_843,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",2,NA,NA
+4_187,Gender Beliefs,"I am uncomfortable around people who don't conform to traditional gender roles, e.g., aggressive women or emotional men.",1,NA,NA
+4_187,Gender Beliefs,I believe that the male/female dichotomy is natural.,4,NA,NA
+4_187,Gender Beliefs,I avoid people on the street whose gender is unclear to me.,1,NA,NA
+4_187,Gender Beliefs,"I don't like it when someone is flirting with me, and I can't tell if they are a man or a woman.",1,NA,NA
+4_187,Gender Beliefs,"A person's genitalia define what gender they are, e.g., a penis defines a person as being a man, a vagina defines a person as being a woman.",1,NA,NA
+4_187,Gender Beliefs,"When I meet someone, it is important for me to be able to identify them as a man or a woman.",1,NA,NA
+4_187,Gender Beliefs,I think there is something wrong with a person who says that they are neither a man nor a woman.,1,NA,NA
+4_187,Gender Beliefs,I believe that a person can never change their gender.,1,NA,NA
+4_187,Gender Beliefs,I would be upset if someone I'd known a long time revealed to me that they used to be another gender.,1,NA,NA
+4_774,Sentence Naturalness Ratings,Generic,6,NA,NA
+4_774,Sentence Naturalness Ratings,Masc Name,6,NA,NA
+4_774,Sentence Naturalness Ratings,Fem Name,5,NA,NA
+4_774,Sentence Naturalness Ratings,Neutral Name,6,NA,NA
+4_774,Sentence Naturalness Ratings,Each,6,NA,NA
+4_774,Sentence Naturalness Ratings,Every,6,NA,NA
+4_433,Sentence Naturalness Ratings,Generic,5,NA,NA
+4_433,Sentence Naturalness Ratings,Masc Name,5,NA,NA
+4_433,Sentence Naturalness Ratings,Fem Name,4,NA,NA
+4_433,Sentence Naturalness Ratings,Each,2,NA,NA
+4_433,Sentence Naturalness Ratings,Every,1,NA,NA
+4_433,Sentence Naturalness Ratings,Neutral Name,3,NA,NA
+4_593,Sentence Naturalness Ratings,Each,6,NA,NA
+4_593,Sentence Naturalness Ratings,Fem Name,6,NA,NA
+4_593,Sentence Naturalness Ratings,Generic,6,NA,NA
+4_593,Sentence Naturalness Ratings,Neutral Name,6,NA,NA
+4_593,Sentence Naturalness Ratings,Masc Name,6,NA,NA
+4_593,Sentence Naturalness Ratings,Every,1,NA,NA
+4_406,Sentence Naturalness Ratings,Each,7,NA,NA
+4_406,Sentence Naturalness Ratings,Masc Name,6,NA,NA
+4_406,Sentence Naturalness Ratings,Neutral Name,6,NA,NA
+4_406,Sentence Naturalness Ratings,Every,7,NA,NA
+4_406,Sentence Naturalness Ratings,Fem Name,6,NA,NA
+4_406,Sentence Naturalness Ratings,Generic,7,NA,NA
+4_867,Sentence Naturalness Ratings,Generic,5,NA,NA
+4_867,Sentence Naturalness Ratings,Every,4,NA,NA
+4_867,Sentence Naturalness Ratings,Fem Name,7,NA,NA
+4_867,Sentence Naturalness Ratings,Each,7,NA,NA
+4_867,Sentence Naturalness Ratings,Masc Name,7,NA,NA
+4_867,Sentence Naturalness Ratings,Neutral Name,7,NA,NA
+4_797,Sentence Naturalness Ratings,Fem Name,5,NA,NA
+4_797,Sentence Naturalness Ratings,Masc Name,5,NA,NA
+4_797,Sentence Naturalness Ratings,Generic,3,NA,NA
+4_797,Sentence Naturalness Ratings,Each,4,NA,NA
+4_797,Sentence Naturalness Ratings,Neutral Name,5,NA,NA
+4_797,Sentence Naturalness Ratings,Every,7,NA,NA
+4_856,Sentence Naturalness Ratings,Each,5,NA,NA
+4_856,Sentence Naturalness Ratings,Masc Name,3,NA,NA
+4_856,Sentence Naturalness Ratings,Neutral Name,3,NA,NA
+4_856,Sentence Naturalness Ratings,Every,5,NA,NA
+4_856,Sentence Naturalness Ratings,Fem Name,3,NA,NA
+4_856,Sentence Naturalness Ratings,Generic,6,NA,NA
+4_822,Sentence Naturalness Ratings,Generic,6,NA,NA
+4_822,Sentence Naturalness Ratings,Neutral Name,6,NA,NA
+4_822,Sentence Naturalness Ratings,Every,7,NA,NA
+4_822,Sentence Naturalness Ratings,Fem Name,4,NA,NA
+4_822,Sentence Naturalness Ratings,Each,6,NA,NA
+4_822,Sentence Naturalness Ratings,Masc Name,5,NA,NA
+4_400,Sentence Naturalness Ratings,Generic,4,NA,NA
+4_400,Sentence Naturalness Ratings,Fem Name,5,NA,NA
+4_400,Sentence Naturalness Ratings,Neutral Name,3,NA,NA
+4_400,Sentence Naturalness Ratings,Masc Name,5,NA,NA
+4_400,Sentence Naturalness Ratings,Every,2,NA,NA
+4_400,Sentence Naturalness Ratings,Each,6,NA,NA
+4_561,Sentence Naturalness Ratings,Fem Name,7,NA,NA
+4_561,Sentence Naturalness Ratings,Masc Name,7,NA,NA
+4_561,Sentence Naturalness Ratings,Generic,7,NA,NA
+4_561,Sentence Naturalness Ratings,Neutral Name,7,NA,NA
+4_561,Sentence Naturalness Ratings,Every,7,NA,NA
+4_561,Sentence Naturalness Ratings,Each,5,NA,NA
+4_333,Sentence Naturalness Ratings,Neutral Name,5,NA,NA
+4_333,Sentence Naturalness Ratings,Each,4,NA,NA
+4_333,Sentence Naturalness Ratings,Generic,7,NA,NA
+4_333,Sentence Naturalness Ratings,Fem Name,5,NA,NA
+4_333,Sentence Naturalness Ratings,Every,3,NA,NA
+4_333,Sentence Naturalness Ratings,Masc Name,5,NA,NA
+4_408,Sentence Naturalness Ratings,Generic,7,NA,NA
+4_408,Sentence Naturalness Ratings,Neutral Name,4,NA,NA
+4_408,Sentence Naturalness Ratings,Every,5,NA,NA
+4_408,Sentence Naturalness Ratings,Fem Name,1,NA,NA
+4_408,Sentence Naturalness Ratings,Each,6,NA,NA
+4_408,Sentence Naturalness Ratings,Masc Name,4,NA,NA
+4_820,Sentence Naturalness Ratings,Fem Name,4,NA,NA
+4_820,Sentence Naturalness Ratings,Each,6,NA,NA
+4_820,Sentence Naturalness Ratings,Generic,6,NA,NA
+4_820,Sentence Naturalness Ratings,Masc Name,7,NA,NA
+4_820,Sentence Naturalness Ratings,Every,3,NA,NA
+4_820,Sentence Naturalness Ratings,Neutral Name,5,NA,NA
+4_384,Sentence Naturalness Ratings,Masc Name,7,NA,NA
+4_384,Sentence Naturalness Ratings,Fem Name,7,NA,NA
+4_384,Sentence Naturalness Ratings,Generic,7,NA,NA
+4_384,Sentence Naturalness Ratings,Each,7,NA,NA
+4_384,Sentence Naturalness Ratings,Neutral Name,7,NA,NA
+4_384,Sentence Naturalness Ratings,Every,1,NA,NA
+4_547,Sentence Naturalness Ratings,Every,5,NA,NA
+4_547,Sentence Naturalness Ratings,Neutral Name,2,NA,NA
+4_547,Sentence Naturalness Ratings,Fem Name,6,NA,NA
+4_547,Sentence Naturalness Ratings,Generic,7,NA,NA
+4_547,Sentence Naturalness Ratings,Masc Name,5,NA,NA
+4_547,Sentence Naturalness Ratings,Each,6,NA,NA
+4_542,Sentence Naturalness Ratings,Generic,6,NA,NA
+4_542,Sentence Naturalness Ratings,Every,2,NA,NA
+4_542,Sentence Naturalness Ratings,Neutral Name,3,NA,NA
+4_542,Sentence Naturalness Ratings,Masc Name,3,NA,NA
+4_542,Sentence Naturalness Ratings,Fem Name,3,NA,NA
+4_542,Sentence Naturalness Ratings,Each,7,NA,NA
+4_931,Sentence Naturalness Ratings,Neutral Name,6,NA,NA
+4_931,Sentence Naturalness Ratings,Every,7,NA,NA
+4_931,Sentence Naturalness Ratings,Each,7,NA,NA
+4_931,Sentence Naturalness Ratings,Fem Name,6,NA,NA
+4_931,Sentence Naturalness Ratings,Masc Name,6,NA,NA
+4_931,Sentence Naturalness Ratings,Generic,7,NA,NA
+4_888,Sentence Naturalness Ratings,Masc Name,5,NA,NA
+4_888,Sentence Naturalness Ratings,Every,2,NA,NA
+4_888,Sentence Naturalness Ratings,Fem Name,2,NA,NA
+4_888,Sentence Naturalness Ratings,Each,4,NA,NA
+4_888,Sentence Naturalness Ratings,Neutral Name,4,NA,NA
+4_888,Sentence Naturalness Ratings,Generic,4,NA,NA
+4_261,Sentence Naturalness Ratings,Each,6,NA,NA
+4_261,Sentence Naturalness Ratings,Every,6,NA,NA
+4_261,Sentence Naturalness Ratings,Generic,6,NA,NA
+4_261,Sentence Naturalness Ratings,Neutral Name,4,NA,NA
+4_261,Sentence Naturalness Ratings,Masc Name,5,NA,NA
+4_261,Sentence Naturalness Ratings,Fem Name,4,NA,NA
+4_195,Sentence Naturalness Ratings,Neutral Name,3,NA,NA
+4_195,Sentence Naturalness Ratings,Generic,5,NA,NA
+4_195,Sentence Naturalness Ratings,Each,6,NA,NA
+4_195,Sentence Naturalness Ratings,Every,6,NA,NA
+4_195,Sentence Naturalness Ratings,Fem Name,2,NA,NA
+4_195,Sentence Naturalness Ratings,Masc Name,6,NA,NA
+4_441,Sentence Naturalness Ratings,Masc Name,7,NA,NA
+4_441,Sentence Naturalness Ratings,Fem Name,7,NA,NA
+4_441,Sentence Naturalness Ratings,Generic,7,NA,NA
+4_441,Sentence Naturalness Ratings,Each,6,NA,NA
+4_441,Sentence Naturalness Ratings,Every,7,NA,NA
+4_441,Sentence Naturalness Ratings,Neutral Name,7,NA,NA
+4_283,Sentence Naturalness Ratings,Generic,7,NA,NA
+4_283,Sentence Naturalness Ratings,Every,5,NA,NA
+4_283,Sentence Naturalness Ratings,Each,5,NA,NA
+4_283,Sentence Naturalness Ratings,Masc Name,5,NA,NA
+4_283,Sentence Naturalness Ratings,Neutral Name,5,NA,NA
+4_283,Sentence Naturalness Ratings,Fem Name,4,NA,NA
+4_271,Sentence Naturalness Ratings,Generic,7,NA,NA
+4_271,Sentence Naturalness Ratings,Masc Name,6,NA,NA
+4_271,Sentence Naturalness Ratings,Fem Name,7,NA,NA
+4_271,Sentence Naturalness Ratings,Each,3,NA,NA
+4_271,Sentence Naturalness Ratings,Neutral Name,6,NA,NA
+4_271,Sentence Naturalness Ratings,Every,5,NA,NA
+4_249,Sentence Naturalness Ratings,Every,4,NA,NA
+4_249,Sentence Naturalness Ratings,Generic,5,NA,NA
+4_249,Sentence Naturalness Ratings,Fem Name,1,NA,NA
+4_249,Sentence Naturalness Ratings,Each,6,NA,NA
+4_249,Sentence Naturalness Ratings,Neutral Name,1,NA,NA
+4_249,Sentence Naturalness Ratings,Masc Name,1,NA,NA
+4_437,Sentence Naturalness Ratings,Neutral Name,5,NA,NA
+4_437,Sentence Naturalness Ratings,Masc Name,5,NA,NA
+4_437,Sentence Naturalness Ratings,Every,2,NA,NA
+4_437,Sentence Naturalness Ratings,Each,2,NA,NA
+4_437,Sentence Naturalness Ratings,Generic,6,NA,NA
+4_437,Sentence Naturalness Ratings,Fem Name,7,NA,NA
+4_269,Sentence Naturalness Ratings,Each,3,NA,NA
+4_269,Sentence Naturalness Ratings,Neutral Name,6,NA,NA
+4_269,Sentence Naturalness Ratings,Fem Name,6,NA,NA
+4_269,Sentence Naturalness Ratings,Masc Name,6,NA,NA
+4_269,Sentence Naturalness Ratings,Every,2,NA,NA
+4_269,Sentence Naturalness Ratings,Generic,3,NA,NA
+4_448,Sentence Naturalness Ratings,Neutral Name,4,NA,NA
+4_448,Sentence Naturalness Ratings,Every,4,NA,NA
+4_448,Sentence Naturalness Ratings,Each,6,NA,NA
+4_448,Sentence Naturalness Ratings,Generic,7,NA,NA
+4_448,Sentence Naturalness Ratings,Fem Name,3,NA,NA
+4_448,Sentence Naturalness Ratings,Masc Name,4,NA,NA
+4_846,Sentence Naturalness Ratings,Every,6,NA,NA
+4_846,Sentence Naturalness Ratings,Fem Name,3,NA,NA
+4_846,Sentence Naturalness Ratings,Neutral Name,5,NA,NA
+4_846,Sentence Naturalness Ratings,Masc Name,3,NA,NA
+4_846,Sentence Naturalness Ratings,Generic,4,NA,NA
+4_846,Sentence Naturalness Ratings,Each,6,NA,NA
+4_992,Sentence Naturalness Ratings,Each,2,NA,NA
+4_992,Sentence Naturalness Ratings,Masc Name,6,NA,NA
+4_992,Sentence Naturalness Ratings,Fem Name,6,NA,NA
+4_992,Sentence Naturalness Ratings,Generic,6,NA,NA
+4_992,Sentence Naturalness Ratings,Neutral Name,6,NA,NA
+4_992,Sentence Naturalness Ratings,Every,3,NA,NA
+4_974,Sentence Naturalness Ratings,Masc Name,7,NA,NA
+4_974,Sentence Naturalness Ratings,Every,7,NA,NA
+4_974,Sentence Naturalness Ratings,Fem Name,7,NA,NA
+4_974,Sentence Naturalness Ratings,Neutral Name,7,NA,NA
+4_974,Sentence Naturalness Ratings,Generic,6,NA,NA
+4_974,Sentence Naturalness Ratings,Each,6,NA,NA

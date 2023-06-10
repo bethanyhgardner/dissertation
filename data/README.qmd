@@ -1,0 +1,1417 @@
+---
+format:
+  gfm:
+    toc: true
+    toc-depth: 5
+---
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(magrittr)
+library(kableExtra)
+```
+
+```{r}
+list.files(getwd(), pattern = "*.csv") %>% kable(col.names = "Files")
+```
+
+# Experiment 1A `exp1a_data.csv`
+
+```{r}
+exp1a <- read.csv("exp1a_data.csv", stringsAsFactors = TRUE)
+
+str(exp1a)
+```
+
+### Participant-Level Variables: `SubjID`, `SubjAge`, `SubjGender`, `SubjEnglish`, `List`
+
+```{r}
+exp1a_subj <- exp1a %>%
+  select(starts_with("Subj"), List) %>%
+  unique()
+```
+
+102 **participants**, each with 51 trials:
+
+```{r}
+str(exp1a$SubjID)
+
+exp1a %>%
+  group_by(SubjID) %>%
+  summarise(n_trials = n()) %>%
+  group_by(n_trials) %>%
+  summarise(n_subj = n()) %>%
+  kable()
+```
+
+**Ages:**
+
+```{r}
+summary(exp1a$SubjAge)
+
+exp1a_subj$SubjAge %>% as.factor() %>% summary() %>% kable()
+```
+
+**Gender** entered in a free response box, with spelling/capitalization standardized:
+
+```{r}
+exp1a_subj$SubjGender %>% summary() %>% kable()
+```
+
+**English Experience:**
+
+```{r}
+exp1a_subj$SubjEnglish %>% summary() %>% kable()
+```
+
+**Lists** counterbalancing which names have they/them pronouns:
+
+```{r}
+exp1a_subj$List %>% as.factor() %>% summary() %>% kable(row.names = TRUE)
+```
+
+### Trial-Level Variables: `Task`, `Name`, `Job`, `Pet`, `Pronoun`
+
+**Task** this observation comes from. There is one row per observation, with columns belonging to different tasks left blank. See analysis script for a dataframe structured with one row per item, to directly compare memory and production responses for the same item.
+
+```{r}
+exp1a$Task %>% summary() %>% kable()
+```
+
+Character's correct **name**, **job**, **pet**, and **pronouns**:
+
+Uneven numbers because only 3 characters appeared again in introduction task.
+
+```{r}
+exp1a$Name %>% summary() %>% kable()
+```
+
+```{r}
+exp1a$Pronoun %>% summary() %>% kable()
+```
+
+```{r}
+exp1a$Pet %>% summary() %>% kable()
+```
+
+### Memory Task: `M_Type`, `M_Response`, `M_Acc`
+
+12 per participant. NA rows are different tasks.
+
+**Question type:**
+
+```{r}
+exp1a$M_Type %>% na.omit() %>% summary() %>% kable()
+```
+
+**Response:**
+
+```{r}
+str(exp1a$M_Response)
+
+exp1a %>% filter(!is.na(M_Acc)) %>% count(M_Type, M_Response) %>% kable()
+```
+
+**Accuracy**, if Pronoun/Pet/Job matches M_Response:
+
+```{r}
+summary(exp1a$M_Acc)
+```
+
+### Production Task: `P_Response`, `P_Pronoun`, `P_Acc`
+
+12 per participant
+
+Full **response** for sentence completion task:
+
+```{r}
+str(exp1a$P_Response)
+```
+
+**Pronoun** used (he/him, she/her, they/them, none), parsed in Qualtrics pre-processing script:
+
+```{r}
+str(exp1a$P_Pronoun)
+
+exp1a %>% filter(!is.na(P_Acc)) %>% count(Pronoun, P_Pronoun) %>% kable()
+```
+
+**Accuracy**, if Pronoun matches P_Pronoun:
+
+```{r}
+summary(exp1a$P_Acc)
+```
+
+### Introduction Task: `I_Response`
+
+3 per participant.
+
+Full **response** text:
+
+```{r}
+str(exp1a$I_Response)
+```
+
+# Experiment 1B `exp1b_data.csv`
+
+Same structure as Experiment 1A.
+
+```{r}
+exp1b <- read.csv("exp1b_data.csv", stringsAsFactors = TRUE)
+
+str(exp1b)
+```
+
+### Participant-Level Variables: `SubjID`, `SubjAge`, `SubjGender`, `SubjEnglish`, `List`
+
+```{r}
+exp1b_subj <- exp1b %>%
+  select(starts_with("Subj"), List) %>%
+  unique()
+```
+
+101 **participants**, each with 51 trials:
+
+```{r}
+str(exp1b$SubjID)
+
+exp1b %>%
+  group_by(SubjID) %>%
+  summarise(n_trials = n()) %>%
+  group_by(n_trials) %>%
+  summarise(n_subj = n()) %>%
+  kable()
+```
+
+**Ages:**
+
+```{r}
+summary(exp1b$SubjAge)
+
+exp1b_subj$SubjAge %>% as.factor() %>% summary() %>% kable()
+```
+
+**Gender** entered in a free response box, with spelling/capitalization standardized:
+
+```{r}
+exp1b_subj$SubjGender %>% summary() %>% kable()
+```
+
+**English Experience:**
+
+```{r}
+exp1b_subj$SubjEnglish %>% summary() %>% kable()
+```
+
+**Lists** counterbalancing which names have they/them pronouns:
+
+```{r}
+exp1b_subj$List %>% as.factor() %>% summary() %>% kable(row.names = TRUE)
+```
+
+### Trial-Level Variables: `Task`, `Name`, `Job`, `Pet`, `Pronoun`
+
+**Task** this observation comes from. There is one row per observation, with columns belonging to different tasks left blank. See analysis script for a dataframe structured with one row per item, to directly compare memory and production responses for the same item.
+
+```{r}
+exp1b$Task %>% summary() %>% kable()
+```
+
+Character's correct **name**, **job**, **pet**, and **pronouns**:
+
+Uneven numbers because only 3 characters appeared again in introduction task.
+
+```{r}
+exp1b$Name %>% summary() %>% kable()
+```
+
+```{r}
+exp1b$Pronoun %>% summary() %>% kable()
+```
+
+```{r}
+exp1b$Pet %>% summary() %>% kable()
+```
+
+### Memory Task: `M_Type`, `M_Response`, `M_Acc`
+
+12 per participant. NA rows are different tasks.
+
+**Question type:**
+
+```{r}
+exp1b$M_Type %>% na.omit() %>% summary() %>% kable()
+```
+
+**Response:**
+
+```{r}
+str(exp1b$M_Response)
+
+exp1b %>% filter(!is.na(M_Acc)) %>% count(M_Type, M_Response) %>% kable()
+```
+
+**Accuracy**, if Pronoun/Pet/Job matches M_Response:
+
+```{r}
+summary(exp1b$M_Acc)
+```
+
+### Production Task: `P_Response`, `P_Pronoun`, `P_Acc`
+
+12 per participant
+
+Full **response** for sentence completion task:
+
+```{r}
+str(exp1b$P_Response)
+```
+
+**Pronoun** used (he/him, she/her, they/them, none), parsed in Qualtrics pre-processing script:
+
+```{r}
+str(exp1b$P_Pronoun)
+
+exp1b %>% filter(!is.na(P_Acc)) %>% count(Pronoun, P_Pronoun) %>% kable()
+```
+
+**Accuracy**, if Pronoun matches P_Pronoun:
+
+```{r}
+summary(exp1b$P_Acc)
+```
+
+### Introduction Task: `I_Response`
+
+3 per participant.
+
+Full **response** text:
+
+```{r}
+str(exp1b$I_Response)
+```
+
+# Experiment 2 `exp2_data.csv`
+
+This has 1 row per character for pronoun questions, so memory and production responses are in the same row. But job and pet memory questions have their own rows, meaning that the production columns are NA for those.
+
+```{r}
+exp2 <- read.csv("exp2_data.csv", stringsAsFactors = TRUE)
+str(exp2)
+```
+
+### Participant-Level Variables: `Participant`, `Age`, `English`, `Gender`
+
+```{r}
+exp2_subj <- exp2 %>%
+  select(Participant, Age, English, Gender,
+         Condition, List, PSA, Biography) %>%
+  unique()
+```
+
+320 **participants**, each doing 36 trials:
+
+```{r}
+str(exp2$Participant)
+
+exp2 %>%
+  group_by(Participant) %>%
+  summarise(n_trials = n()) %>%
+  group_by(n_trials) %>%
+  summarise(n_subj = n()) %>%
+  kable()
+```
+
+**Age:**
+
+```{r}
+summary(exp2_subj$Age)
+
+exp2_subj$Age %>% as.factor() %>% summary() %>% kable()
+```
+
+**English Experience:**
+
+```{r}
+exp2_subj$English %>% summary() %>% kable()
+```
+
+**Gender**, entered in a free response box, with spelling/capitalization standardized:
+
+```{r}
+exp2_subj$Gender %>% summary() %>% kable()
+```
+
+### Condition Variables: `Condition`, `List`, `PSA`, `Biography`
+
+Original **condition** labels:
+
+-   `Both` = Gendered Language PSA + They Bios
+-   `Neither` = Unrelated PSA + He/She Bios
+-   `PSA` = Gendered Language PSA + He/She Bios
+-   `Story` = Unrelated PSA + They Bios
+
+```{r}
+exp2_subj$Condition %>% summary() %>% kable()
+```
+
+12 **lists**: 4 conditions x 3 sets of characters (name/pronoun combinations).
+
+```{r}
+exp2$List %>% summary() %>% kable()
+```
+
+**PSA Condition**: 0 = Unrelated, 1 = Gendered Language.
+
+```{r}
+exp2_subj$PSA %>% as.factor() %>% summary() %>% kable()
+```
+
+**Biography Condition**: 0 = He/She, 1 = They.
+
+```{r}
+exp2_subj$Biography %>% as.factor() %>% summary() %>% kable()
+```
+
+### Trial-Level Variables: `Name`, `Job`, `Pet`, `Pronoun`
+
+```{r}
+exp2$Name %>% summary() %>% kable()
+```
+
+```{r}
+exp2$Pronoun %>% summary() %>% kable()
+```
+
+```{r}
+exp2$Pet %>% summary() %>% kable()
+```
+
+### Memory Task: `M_Type`, `M_Response`, `M_Acc`
+
+**Question type:**
+
+```{r}
+exp2$M_Type %>% na.omit() %>% summary() %>% kable()
+```
+
+**Response:**
+
+```{r}
+str(exp2$M_Response)
+
+exp2 %>% count(M_Type, M_Response) %>% kable()
+```
+
+**Accuracy,** if Pronoun/Pet/Job matches M_Response:
+
+```{r}
+summary(exp2$M_Acc)
+```
+
+### Production Task: `P_Text`, `P_Response`, `P_Acc`
+
+Full **response** text:
+
+```{r}
+str(exp2$P_Response)
+```
+
+**Pronoun** used. This is calculated in a prior script that reads the PCIbex output into a format R can deal with.
+
+```{r}
+str(exp2$P_Response)
+
+exp2 %>% filter(!is.na(P_Acc)) %>% count(Pronoun, P_Response) %>% kable()
+```
+
+**Accuracy,** if Pronoun matches P_Pronoun:
+
+```{r}
+summary(exp2$M_Acc)
+```
+
+# Experiment 3
+
+## Image Norming `exp3_image-norming.csv`
+
+```{r}
+exp3_norming <- read.csv("exp3_image-norming.csv",
+                         stringsAsFactors = TRUE) %>%
+  select(ParticipantID, SubjAge, SubjEnglish, SubjGender, List,
+         Image, Image_Title, Prompt,
+         Response, Pronoun)
+
+str(exp3_norming)
+```
+
+### Participant-Level Variables: `SubjID`, `SubjAge`, `SubjGender`, `SubjEnglish`, `List`
+
+```{r}
+exp3_norming_subj <- exp3_norming %>%
+  select(ParticipantID, starts_with("Subj"), List) %>%
+  unique()
+```
+
+30 **participants**, each with 12 trials:
+
+```{r}
+str(exp3_norming$ParticipantID)
+
+exp3_norming %>%
+  group_by(ParticipantID) %>%
+  summarise(n_trials = n()) %>%
+  group_by(n_trials) %>%
+  summarise(n_subj = n()) %>%
+  kable()
+```
+
+**Ages:**
+
+```{r}
+summary(exp3_norming_subj$SubjAge)
+
+exp3_norming_subj$SubjAge %>% as.factor() %>% summary() %>% kable()
+```
+
+**Gender** entered in a free response box, with spelling/capitalization standardized:
+
+```{r}
+exp3_norming_subj$SubjGender %>% summary() %>% kable()
+```
+
+**English Experience:**
+
+```{r}
+exp3_norming_subj$SubjEnglish %>% summary() %>% kable()
+```
+
+**Lists** counterbalancing which the images and prompts:
+
+```{r}
+exp3_norming_subj$List %>% as.factor() %>% summary() %>% kable(row.names = TRUE)
+```
+
+### Trial-Level Variables: `Image`, `Image_Title`, `Prompt`
+
+**Image code:**
+
+```{r}
+exp3_norming$Image %>% summary() %>% kable()
+```
+
+Image **title** in *The Gender Spectrum Collection* database:
+
+```{r}
+exp3_norming$Image_Title %>% summary() %>% kable()
+```
+
+Sentence completion **prompt:**
+
+```{r}
+exp3_norming$Prompt %>% summary() %>% kable()
+```
+
+### Response: `Response`, `Pronoun`
+
+Full **response** text:
+
+```{r}
+str(exp3_norming$Response)
+```
+
+**Pronoun** used (he/him, she/her, they/them, none), parsed in pre-processing script:
+
+```{r}
+summary(exp3_norming$Pronoun) %>% kable()
+```
+
+## Pronouns `exp3_pronouns.csv`
+
+```{r}
+exp3_pronouns <- read.csv("exp3_pronouns.csv", stringsAsFactors = TRUE)
+str(exp3_pronouns)
+```
+
+### Participant/Condition-Level Variables: `ParticipantID`, `Condition`, `Nametag`, `Intro`
+
+```{r}
+exp3_pronouns_subj <- exp3_pronouns %>%
+  select(ParticipantID, Condition, Nametag, Intro) %>%
+  unique()
+```
+
+162 **participants**, each completing up to 30 trials. Missing trials are not included here.
+
+Participant covariates (e.g., age, gender) are in separate file, linked by these Participant IDs.
+
+```{r}
+str(exp3_pronouns$ParticipantID)
+
+exp3_pronouns %>%
+  group_by(ParticipantID) %>%
+  summarise(n_trials = n()) %>%
+  group_by(n_trials) %>%
+  summarise(n_subj = n()) %>%
+  kable()
+```
+
+Original **condition** labels:
+
+-   `Both` = +Nametag +Intro
+-   `Intro` = -Nametag +Intro
+-   `Nametag` = +Nametag -Intro
+-   `Neither` = -Nametag -Intro
+
+```{r}
+exp3_pronouns_subj$Condition %>% summary() %>% kable()
+```
+
+```{r}
+exp3_pronouns_subj$Nametag %>% as.factor() %>% summary() %>% kable()
+```
+
+```{r}
+exp3_pronouns_subj$Intro %>% as.factor() %>% summary() %>% kable()
+```
+
+### Trial-Level Variables: `Pronoun_Pair`, `T_Pronoun`, `C_Pronoun`, `T_ID`, `TrialID`
+
+(All slightly uneven due to trials with no data.)
+
+Pronouns of two pictured characters:
+
+-   `HS_HS`: target character uses he/him and distractor character uses she/her, or target character uses she/her and distractor character uses he/him
+-   `HS_T`: target character uses he/him or she/her and distractor character uses they/them
+-   `T_HS`: target character uses they/them and distractor character uses he/him or she/her
+
+```{r}
+exp3_pronouns$Pronoun_Pair %>% summary() %>% kable()
+```
+
+**Target character pronouns:**
+
+```{r}
+exp3_pronouns$T_Pronoun %>% summary() %>% kable()
+```
+
+**Other pictured character pronouns:**
+
+```{r}
+exp3_pronouns$C_Pronoun %>% summary() %>% kable()
+```
+
+**Target character ID**. 6 lists varying name-image-pronoun combinations, with a trio of he/him, she/her, and they/them in each list, for a total of 18 characters.
+
+```{r}
+exp3_pronouns$T_ID %>% as.factor() %>% summary() %>% kable(row.names = TRUE)
+```
+
+Unique **trial ID** that can be used to get other info about the characters, the object, and the locations on the screen.
+
+```{r}
+str(exp3_pronouns$TrialID)
+```
+
+### Response: `Transcription`, `He`, `His`, `She`, `Her`, `They`, `Their`, `Disfluency`, `MultiplePronouns`, `PronounProduced`, `Accuracy`
+
+**Response text,** transcribed to include disfluencies:
+
+```{r}
+str(exp3_pronouns$Transcription)
+```
+
+If trial contains *he*, *his*, *she*, *her*, *they*, and/or *their* to refer to the target character. Coded for subject pronouns, but almost all pronouns were possessives.
+
+```{r}
+exp3_pronouns %>%
+  select(He, His, She, Her, They, Their) %>%
+  summary() %>%
+  kable()
+```
+
+Trials coded as 1 if they included a **disfluency:**
+
+```{r}
+exp3_pronouns$Disfluency %>% summary()
+exp3_pronouns %>% count(T_Pronoun, Disfluency) %>% kable()
+```
+
+Trials coded as 1 if they included multiple **different pronouns** referring to the target characters:
+
+```{r}
+exp3_pronouns$MultiplePronouns %>% summary()
+exp3_pronouns %>% count(T_Pronoun, MultiplePronouns) %>% kable()
+```
+
+## Survey `exp3_survey.csv`
+
+```{r}
+exp3_survey <- read.csv("exp3_survey.csv", stringsAsFactors = TRUE)
+str(exp3_survey)
+```
+
+### Participant-Level Variables: `ParticipantID`, `Condition`, `List`
+
+159 participants with survey data (51 questions) + 3 participants with missing data.
+
+```{r}
+str(exp3_survey$ParticipantID)
+
+exp3_survey %>%
+  group_by(ParticipantID) %>%
+  summarise(n_trials = n()) %>%
+  group_by(n_trials) %>%
+  summarise(n_subj = n()) %>%
+  kable()
+```
+
+Original **condition** labels:
+
+-   `Both` = +Nametag +Intro
+-   `Intro` = -Nametag +Intro
+-   `Nametag` = +Nametag -Intro
+-   `Neither` = -Nametag -Intro
+
+4 conditions x 6 lists of characters varying name-pronoun-image combinations (see `T_ID` in pronoun data).
+
+```{r}
+exp3_survey %>%
+  select(ParticipantID, Condition, List) %>%
+  unique() %>%
+  group_by(Condition, List) %>%
+  summarise(n = n_distinct(ParticipantID)) %>%
+  arrange(List) %>%
+  kable()
+```
+
+### Responses: `Category`, `Item`, `Response_Num`, `Response_Bool`, `Response_Cat`
+
+**Category** is group of questions, **item** is question text/option:
+
+```{r}
+exp3_survey %>% count(Category, Item) %>% select(-n) %>% kable()
+```
+
+Age, sentence naturalness ratings, and the transphobia/gender beliefs scale all have numeric responses:
+
+```{r}
+exp3_survey %>% filter(!is.na(Response_Num)) %>% count(Category) %>% kable()
+```
+
+1 **age** item per participant:
+
+```{r}
+exp3_survey %>% filter(Category == "Age") %>% pull(Response_Num) %>% summary()
+```
+
+6 **sentence naturalness rating** items per participant, on a 1-7 scale:
+
+```{r}
+exp3_survey %>%
+  filter(Category == "Sentence Naturalness Ratings") %>%
+  pull(Response_Num) %>%
+  summary()
+```
+
+9 **gender beliefs** items per participant, on a 1-7 scale:
+
+```{r}
+exp3_survey %>%
+  filter(Category == "Transphobia Scale") %>%
+  pull(Response_Num) %>%
+  summary()
+```
+
+Familiarity with using they/them pronouns, race/ethnicity, sexuality, and trans/gender diverse items have Boolean variables, because they were check-all-that-apply:
+
+```{r}
+exp3_survey %>% filter(!is.na(Response_Bool)) %>% count(Category) %>% kable()
+```
+
+5 options for **familiarity with using they/them pronouns:**
+
+```{r}
+exp3_survey %>%
+  filter(Category == "Familiarity With They/Them Pronouns") %>%
+  count(Item, Response_Bool) %>%
+  kable()
+```
+
+9 options for **race/ethnicity** (or missing):
+
+```{r}
+exp3_survey %>%
+  filter(Category == "Race/Ethnicity") %>%
+  count(Item, Response_Bool) %>%
+  kable()
+```
+
+8 options for **sexuality** (or missing):
+
+```{r}
+exp3_survey %>%
+  filter(Category == "Sexuality") %>%
+  count(Item, Response_Bool) %>%
+  kable()
+```
+
+6 options for **transgender/gender-diverse** (or missing):
+
+```{r}
+exp3_survey %>%
+  filter(Category == "Transgender & Gender-Diverse") %>%
+  count(Item, Response_Bool) %>%
+  kable()
+```
+
+Education, English experience, and familiarity with pronoun-sharing practices are all categorical variables because they were select-one-option. Gender is a categorical variable, after the preprocessing script removed spelling/capitalization differences to group responses. The race/ethnicity and sexuality responses are participants who entered something for "I use a different term."
+
+```{r}
+exp3_survey %>% filter(!is.na(Response_Cat)) %>% count(Category) %>% kable()
+```
+
+**Education:**
+
+```{r}
+exp3_survey %>%
+  filter(Category == "Education") %>%
+  pull(Response_Cat) %>%
+  droplevels() %>%
+  summary() %>%
+  kable()
+```
+
+**English Experience:**
+
+```{r}
+exp3_survey %>%
+  filter(Category == "English Experience") %>%
+  pull(Response_Cat) %>%
+  droplevels() %>%
+  summary() %>%
+  kable()
+```
+
+**Familiarity With Pronoun-Sharing:**
+
+```{r}
+exp3_survey %>%
+  filter(Category == "Familiarity With Pronoun-Sharing Practices") %>%
+  count(Item, Response_Cat) %>%
+  kable()
+```
+
+**Gender:**
+
+```{r}
+exp3_survey %>%
+  filter(Category == "Gender") %>%
+  pull(Response_Cat) %>%
+  droplevels() %>%
+  summary() %>%
+  kable()
+```
+
+**Use a different term:**
+
+```{r}
+exp3_survey %>%
+  filter(Item == "I use a different term" & Response_Bool == TRUE) %>%
+  count(Category, Response_Cat) %>%
+  kable()
+```
+
+## Demographics `exp3_demographics.csv`
+
+Summary of survey data, with `Total` of participants in each `Group` in each `Category` for age, education, English experience, gender, race/ethnicity, sexuality, and trans/gender-diverse identity. Does not include groups with no participants.
+
+```{r}
+exp3_demographics <- read.csv("exp3_demographics.csv", stringsAsFactors = TRUE)
+str(exp3_demographics)
+exp3_demographics %>% count(Category, Group) %>% select(-n) %>% kable()
+```
+
+## Participant Covariates `exp3_participant-covariates.csv`
+
+```{r}
+exp3_cov <- read.csv("exp3_participant-covariates.csv", stringsAsFactors = TRUE) 
+str(exp3_cov)
+```
+
+### Trial-Level Variables: `ParticipantID`, `Condition`
+
+1 row per **participant**, with missing data indicated by NAs in other columns.
+
+```{r}
+str(exp3_cov$ParticipantID)
+```
+
+Original **condition** labels:
+
+-   `Both` = +Nametag +Intro
+-   `Intro` = -Nametag +Intro
+-   `Nametag` = +Nametag -Intro
+-   `Neither` = -Nametag -Intro
+
+```{r}
+exp3_cov$Condition %>% summary() %>% kable()
+```
+
+### Responses: `Age`, `LGBQ`, `TGD`, `Rating_Generic`, `Rating_Name`, `Sharing`, `UseThey`, `GenderBeliefs`
+
+**Age** (not rescaled):
+
+```{r}
+exp3_cov$Age %>% summary()
+```
+
+**LGBQ** coded as 1 for participant who said they were asexual, bisexual/pansexual, gay/lesbian, and/or queer.
+
+```{r}
+exp3_cov$LGBQ %>% as.factor() %>% summary() %>% kable()
+```
+
+**TGD** coded as 1 if participant said they were trans and/or had a gender different than their sex assigned at birth.
+
+```{r}
+exp3_cov$TGD %>% as.factor() %>% summary() %>% kable()
+```
+
+**Rating_Generic** is the mean naturalness rating (on a 7-point scale) for singular *they* co-referring with generic and quantified (*each*, *every*) referents (better label for this group is indefinites). This was a total of 3 questions per participant.
+
+```{r}
+exp3_cov$Rating_Generic %>% summary()
+```
+
+**Rating_Name** is the mean naturalness rating (on a 7-point scale) for singular *they* co-referring with a masculine name, a feminine name, and a gender-neutral name.
+
+```{r}
+exp3_cov$Rating_Name %>% summary()
+```
+
+**Sharing** is the total of 4 questions about familiarity with pronoun-sharing practices: nametags and introductions, for yourself and in the groups you're in. "None" and "never, because I had not heard about this" responses were coded as 0, "never, because I prefer not to" responses were coded as 1, "rarely" and "a few" responses were coded as 2, "sometimes" and "some" responses were coded as 3, "usually" and "most" responses were coded as 4, and "always" and "all" were coded as 5. These 4 questions were summed to create 1 composite score, with 0 indicating the lowest familiarity and 20 indicating the highest.
+
+```{r}
+exp3_cov$Sharing %>% summary()
+```
+
+**UseThey** is familiarity with using they/them pronouns. Participants who had not heard about it before the study or had heard about it but hadn't met anyone who does were coded as 1; participants who had met someone who uses they/them but weren't close to them were coded as 2; participants who used they/them pronouns themself and/or were close to someone who uses they/them were coded as 3.
+
+```{r}
+exp3_cov$UseThey %>% as.factor() %>% summary() %>% kable()
+```
+
+**GenderBeliefs** is the total of the transphobia scale. Each question was rescaled from 1-7 to 0-6, then the 9 questions were summed, so that a score of 0 represents the lowest endorsement of the gender binary and gender essentialism, and 54 represents the highest.
+
+```{r}
+exp3_cov$GenderBeliefs %>% summary()
+```
+
+# Experiment 4
+
+## Timecourse `exp4_timecourse-full.csv`, `exp4_timecourse-names.csv`, `exp4_timecourse-preview.csv`, `exp4_timecourse-pronoun.csv`
+
+(Timesteps/trials with missing data have placeholders for condition/time variables and NAs for sum, prop, and binary data)
+
+`Pronoun` window is 180 ms after pronoun onset (includes extra 2 timesteps for calculating AR(1)) through 1210 ms (earliest shape word onset across all stimuli). Primarily used for stats.
+
+```{r}
+exp4_tc_pronoun <- read.csv("exp4_timecourse-pronoun.csv",
+                            stringsAsFactors = TRUE)
+str(exp4_tc_pronoun)
+summary(exp4_tc_pronoun)
+```
+
+`Full` window is 200 ms before pronoun onset through 2500 ms, primarily used for plots.
+
+```{r}
+exp4_tc_full <- read.csv("exp4_timecourse-full.csv", stringsAsFactors = TRUE)
+str(exp4_tc_full)
+summary(exp4_tc_full)
+```
+
+`Names` window is 500ms before audio onset (first word is first name) through 3000 ms, used for supplementary plot.
+
+```{r}
+exp4_tc_names <- read.csv("exp4_timecourse-names.csv", stringsAsFactors = TRUE)
+str(exp4_tc_names)
+summary(exp4_tc_names)
+```
+
+`Preview` window is start of screen display through 1000ms (audio start), used for supplementary plot.
+
+```{r}
+exp4_tc_preview <- read.csv("exp4_timecourse-preview.csv", stringsAsFactors = TRUE)
+str(exp4_tc_preview)
+summary(exp4_tc_preview)
+```
+
+### Trial-Level Variables: `TrialID`, `TrialNum`, `T_Pronoun`, `C_Pronoun`, `Order`, `Story`
+
+**Trial ID** is unique code that can reconstruct stimuli/conditions. 96 critical trials x 6 character lists = 576 trial IDs.
+
+```{r}
+96 * 6
+
+exp4_tc_pronoun$TrialID %>% as.factor() %>% str()
+exp4_tc_full$TrialID    %>% as.factor() %>% str()
+exp4_tc_names$TrialID   %>% as.factor() %>% str()
+exp4_tc_preview$TrialID %>% as.factor() %>% str()
+```
+
+**Trial number** is number in order of appearance starting after practice trials (0-5), 6-119:
+
+```{r}
+exp4_tc_pronoun$TrialNum %>% as.factor() %>% str()
+exp4_tc_full$TrialNum    %>% as.factor() %>% str()
+exp4_tc_names$TrialNum   %>% as.factor() %>% str()
+exp4_tc_preview$TrialNum %>% as.factor() %>% str()
+```
+
+Pronouns of `target` and `competitor` characters:
+
+```{r}
+exp4_tc_pronoun$T_Pronoun %>% summary()
+exp4_tc_full$T_Pronoun    %>% summary()
+exp4_tc_names$T_Pronoun   %>% summary()
+exp4_tc_preview$T_Pronoun %>% summary()
+```
+
+```{r}
+exp4_tc_pronoun$C_Pronoun %>% summary()
+exp4_tc_full$C_Pronoun    %>% summary()
+exp4_tc_names$C_Pronoun   %>% summary()
+exp4_tc_preview$C_Pronoun %>% summary()
+```
+
+### Time Variables: `Timestep`
+
+Pronoun window is 180--1220ms relative to pronoun onset:
+
+```{r}
+# Steps
+exp4_tc_pronoun$Timestep %>% str()
+# Starts
+exp4_tc_pronoun$Timestep %>% as.character() %>% parse_number() %>% summary()
+# Ends
+exp4_tc_pronoun$Timestep %>%
+  as.character() %>%
+  str_remove_all("\\[.*?,") %>%  # everything between [ and ,
+  parse_number() %>% summary()
+```
+
+Full window is -200--2500 ms relative to pronoun onset:
+
+```{r}
+# Steps
+exp4_tc_full$Timestep %>% str()
+# Starts
+exp4_tc_full$Timestep %>% as.character() %>% parse_number() %>% summary()
+# Ends
+exp4_tc_full$Timestep %>%
+  as.character() %>%
+  str_remove_all("\\[.*?,") %>%  # everything between [ and ,
+  parse_number() %>% summary()
+```
+
+Full window is -500--3000 ms relative to audio onset:
+
+```{r}
+# Steps
+exp4_tc_names$Timestep %>% str()
+# Starts
+exp4_tc_names$Timestep %>% as.character() %>% parse_number() %>% summary()
+# Ends
+exp4_tc_names$Timestep %>%
+  as.character() %>%
+  str_remove_all("\\[.*?,") %>%  # everything between [ and ,
+  parse_number() %>% summary()
+```
+
+Preview window is 0--1000 ms relative to screen display (up through audio start):
+
+```{r}
+# Steps
+exp4_tc_preview$Timestep %>% str()
+# Starts
+exp4_tc_preview$Timestep %>% as.character() %>% parse_number() %>% summary()
+# Ends
+exp4_tc_preview$Timestep %>%
+  as.character() %>%
+  str_remove_all("\\[.*?,") %>%  # everything between [ and ,
+  parse_number() %>% summary()
+```
+
+### Sum Data: `TG`, `CM`, `D1`, `D2`, `D3`, `D4`
+
+Number of milliseconds looking at target (`TG`), competitor (`CM`), and each of the 4 distractors (`D_`) out of 10ms timestep:
+
+```{r}
+exp4_tc_pronoun %>% select(TG, CM, starts_with("D")) %>% summary()
+exp4_tc_full    %>% select(TG, CM, starts_with("D")) %>% summary()
+exp4_tc_names   %>% select(TG, CM, starts_with("D")) %>% summary()
+exp4_tc_preview %>% select(TG, CM, starts_with("D")) %>% summary()
+```
+
+### Proportion Data: `T_Prop`, `C_Prop`, `Ds_Prop`
+
+Proportion of 10-ms timestep looking at target (`T_Prop`), competitor (`C_Prop`), and mean of four distractors (`Ds_Prop`):
+
+```{r}
+exp4_tc_pronoun %>% select(ends_with("Prop")) %>% summary()
+exp4_tc_full    %>% select(ends_with("Prop")) %>% summary()
+exp4_tc_names   %>% select(ends_with("Prop")) %>% summary()
+exp4_tc_preview %>% select(ends_with("Prop")) %>% summary()
+```
+
+### Binary Data: `IsTarget`, `WasTarget`
+
+`IsTarget` is 1 if \>5 ms of timestep are looking at timestep (ties broken based on previous timestep). `WasTarget` is AR(1), if previous timestep was looking at target. NA values are missing data; -999 values are initital timesteps where AR(1) can't be determined.
+
+```{r}
+exp4_tc_pronoun %>% select(ends_with("Target")) %>% summary()
+exp4_tc_full    %>% select(ends_with("Target")) %>% summary()
+exp4_tc_names   %>% select(ends_with("Target")) %>% summary()
+exp4_tc_preview %>% select(ends_with("Target")) %>% summary()
+```
+
+## Characters `exp4_characters.csv`
+
+```{r}
+exp4_characters <- read.csv("exp4_characters.csv", stringsAsFactors = TRUE)
+str(exp4_characters)
+```
+
+### Participant-Level Variables: `ParticipantID`, `List`
+
+30 **participants**, each completing at least 12 trials -- 1 round of pre-test and 1 round of post-test for 6 characters. Length varies based on how many times they had to do the pre-test to get all 6 right.
+
+```{r}
+str(exp4_characters$ParticipantID)
+
+exp4_characters %>%
+  group_by(Section, ParticipantID) %>%
+  summarise(n_trials = n()) %>%
+  group_by(Section, n_trials) %>%
+  summarise(n_subj = n()) %>%
+  kable()
+```
+
+6 **lists** varying name-pronoun-image combinations:
+
+```{r}
+exp4_characters %>%
+  select(ParticipantID, List) %>%
+  unique() %>%
+  pull(List) %>%
+  as.factor() %>%
+  summary() %>%
+  kable(row.names = TRUE)
+```
+
+### Trial-Level Variables: `Section`, `Test_Round`, `T_Pronoun`, `T_Image`, `T_ID`
+
+**Pre- or post-test:**
+
+```{r}
+exp4_characters$Section %>% summary() %>% kable()
+```
+
+**Test round** in pre-test section:
+
+```{r}
+exp4_characters$Test_Round %>% as.factor() %>% summary() %>% kable()
+```
+
+**Pronouns**, **image code**, and **ID** for target character:
+
+```{r}
+exp4_characters$T_Pronoun %>% summary() %>% kable()
+
+exp4_characters$T_Image %>% summary() %>% kable()
+
+exp4_characters$T_ID %>%
+  as.factor() %>%
+  summary() %>%
+  kable(row.names = TRUE)
+```
+
+### Responses: `Acc`, `Selected_Image`, `Selected_ID`, `Selected_Pronoun`
+
+**Accuracy** for pre-test:
+
+```{r}
+exp4_characters %>% filter(Section == "pre") %>% pull(Acc) %>% summary()
+```
+
+And for post-test:
+
+```{r}
+exp4_characters %>% filter(Section == "post") %>% pull(Acc) %>% summary()
+```
+
+**Pronouns**, **image code**, and **ID** for selected character (same as target character in correct trials):
+
+```{r}
+exp4_characters$Selected_Pronoun %>% summary() %>% kable()
+
+exp4_characters$Selected_Image %>% summary() %>% kable()
+
+exp4_characters$Selected_ID %>%
+  as.factor() %>%
+  summary() %>%
+  kable(row.names = TRUE)
+```
+
+## Match Judgments `exp4_match-judgments.csv`
+
+```{r}
+exp4_match <- read.csv("exp4_match-judgments.csv", stringsAsFactors = TRUE)
+str(exp4_match)
+```
+
+### Participant-Level Variables: `ParticipantID`
+
+30 **participants,** each with 120 trials:
+
+```{r}
+str(exp4_match$ParticipantID)
+
+exp4_match %>%
+  group_by(ParticipantID) %>%
+  summarise(n_trials = n()) %>%
+  group_by(n_trials) %>%
+  summarise(n_participants = n()) %>%
+  kable()
+```
+
+### Trial-Level Variables: `TrialType`, `TrialID`, `Pronoun_Pair`, `T_Pronoun`, `C_Pronoun`
+
+**Trial Type:**
+
+Each participant does:
+
+-   `PR` = 6 practice
+-   `CR` = 120 critical/test
+-   `FD` = 10 filler with a wrong color description
+-   `FP` = 8 filler with a pronoun pronoun
+
+```{r}
+exp4_match %>%
+  group_by(TrialType) %>%
+  summarise(n_total = n()) %>%
+  mutate(
+    n_per_subj = n_total / (length(levels(exp4_characters$ParticipantID)))
+  ) %>%
+  kable()
+```
+
+Target and competitor character **pronouns** are evenly distributed into 3 pronoun pair conditions:
+
+```{r}
+exp4_match %>% count(Pronoun_Pair, T_Pronoun, C_Pronoun) %>% kable()
+```
+
+### Response: `Match_Num`, `Match_Start`, `Match_End`, `Match_RT`, `IsOutlier`
+
+**Match judgments** are coded as 1 for yes and 0 for no, with a few NA trials where MATLAB recorded a click in the center.
+
+```{r}
+exp4_match$Match_Num %>% summary()
+
+exp4_match %>%
+  filter(!is.na(Match_Num)) %>%
+  count(TrialType, Pronoun_Pair, Match_Num) %>%
+  kable()
+```
+
+The timing here is calculated from the Eyelink messages, which are more reliably timed than the MATLAB txt output, and to keep the absolute times all on the same scale. So these are all in "tracker time", relative to Eyelink booting up. **Start** is the end of the audio stimuli (calculated from the start message + duration of the third audio file), because the match question displayed immediately after the end of the audio. **End** is the end of the eyetracker recording, which happened immediately after the click for the match question. (It's possible that this message might be a couple milliseconds after the actual click, but any offset will be consistent across trials, and the RTs here are long enough that a differences of a couple milliseconds wouldn't matter.)
+
+```{r}
+exp4_match$Match_Start %>% summary()
+exp4_match$Match_End   %>% summary()
+```
+
+**RT** in milliseconds:
+
+```{r}
+exp4_match$Match_RT %>% summary()
+```
+
+**Outliers** were determined by calculating 3SD for each trial type:
+
+```{r}
+exp4_match$IsOutlier %>% summary()
+
+exp4_match %>%
+  group_by(TrialType) %>%
+  summarise(
+    mean = Match_RT %>% mean %>% round,
+    sd   = Match_RT %>% sd   %>% round
+  ) %>%
+  kable()
+```
+
+So with outliers removed:
+
+```{r}
+exp4_match %>%
+  filter(IsOutlier == FALSE) %>%
+  group_by(TrialType) %>%
+  summarise(mean = Match_RT %>% mean %>% round) %>%
+  kable()
+```
+
+## Survey `exp4_survey.csv`
+
+```{r}
+exp4_survey <- read.csv("exp4_survey.csv", stringsAsFactors = TRUE)
+str(exp4_survey)
+```
+
+### Participant-Level Variables: `ParticipantID`
+
+30 participants completing 47 questions (fewer than Experiment 3 because no one here entered responses for "I use a different term").
+
+```{r}
+str(exp4_survey$ParticipantID)
+
+exp4_survey %>%
+  group_by(ParticipantID) %>%
+  summarise(n_trials = n()) %>%
+  group_by(n_trials) %>%
+  summarise(n_subj = n()) %>%
+  kable()
+```
+
+### Responses: `Category`, `Item`, `Response_Num`, `Response_Bool`, `Response_Cat`
+
+**Category** is group of questions, **item** is question text/option:
+
+```{r}
+exp4_survey %>% count(Category, Item) %>% select(-n) %>% kable()
+```
+
+Age, sentence naturalness ratings, and the transphobia/gender beliefs scale all have numeric responses:
+
+```{r}
+exp4_survey %>% filter(!is.na(Response_Num)) %>% count(Category) %>% kable()
+```
+
+1 **age** item per participant:
+
+```{r}
+exp4_survey %>% filter(Category == "Age") %>% pull(Response_Num) %>% summary()
+```
+
+6 **sentence naturalness rating** items per participant, on a 1-7 scale:
+
+```{r}
+exp4_survey %>%
+  filter(Category == "Sentence Naturalness Ratings") %>%
+  pull(Response_Num) %>%
+  summary()
+```
+
+9 **gender beliefs** items per participant, on a 1-7 scale:
+
+```{r}
+exp4_survey %>%
+  filter(Category == "Gender Beliefs") %>%
+  pull(Response_Num) %>%
+  summary()
+```
+
+Familiarity with using they/them pronouns, race/ethnicity, sexuality, and trans/gender diverse items have Boolean variables, because they were check-all-that-apply:
+
+```{r}
+exp4_survey %>% filter(!is.na(Response_Bool)) %>% count(Category) %>% kable()
+```
+
+5 options for **familiarity with using they/them pronouns:**
+
+```{r}
+exp4_survey %>%
+  filter(Category == "Familiarity With They/Them Pronouns") %>%
+  count(Item, Response_Bool) %>%
+  kable()
+```
+
+9 options for **race/ethnicity:**
+
+```{r}
+exp4_survey %>%
+  filter(Category == "Race/Ethnicity") %>%
+  count(Item, Response_Bool) %>%
+  kable()
+```
+
+8 options for **sexuality:**
+
+```{r}
+exp4_survey %>%
+  filter(Category == "Sexuality") %>%
+  count(Item, Response_Bool) %>%
+  kable()
+```
+
+6 options for **transgender/gender-diverse:**
+
+```{r}
+exp4_survey %>%
+  filter(Category == "Transgender & Gender-Diverse") %>%
+  count(Item, Response_Bool) %>%
+  kable()
+```
+
+Education and English experience are all categorical variables because they were select-one-option. Gender is a categorical variable, after the preprocessing script removed spelling/capitalization differences to group responses.
+
+```{r}
+exp4_survey %>% filter(!is.na(Response_Cat)) %>% count(Category) %>% kable()
+```
+
+**Education:**
+
+```{r}
+exp4_survey %>%
+  filter(Category == "Education") %>%
+  pull(Response_Cat) %>%
+  droplevels() %>%
+  summary() %>%
+  kable()
+```
+
+**English Experience:**
+
+```{r}
+exp4_survey %>%
+  filter(Category == "English Experience") %>%
+  pull(Response_Cat) %>%
+  droplevels() %>%
+  summary() %>%
+  kable()
+```
+
+**Gender:**
+
+```{r}
+exp4_survey %>%
+  filter(Category == "Gender") %>%
+  pull(Response_Cat) %>%
+  droplevels() %>%
+  summary() %>%
+  kable()
+```
+
+## Demographics `exp4_demographics.csv`
+
+Summary of survey data, with `Total` of participants in each `Group` in each `Category` for age, education, English experience, gender, race/ethnicity, sexuality, and trans/gender-diverse identity. Does not include groups with no participants.
+
+```{r}
+exp4_demographics <- read.csv("exp4_demographics.csv", stringsAsFactors = TRUE)
+str(exp4_demographics)
+exp4_demographics %>% count(Category, Group) %>% select(-n) %>% kable()
+```

@@ -1,0 +1,56 @@
+Category,Group,Total
+Age,Prefer not to answer / Missing data,3
+Age,45-54,19
+Age,18-24,31
+Age,35-44,35
+Age,25-34,53
+Age,55-64,12
+Age,65-74,8
+Age,75+,1
+Age,Total,162
+Education,Prefer not to answer / Missing data,4
+Education,Professional degree,23
+Education,4-year degree,63
+Education,2-year degree,16
+Education,Some college,24
+Education,High school graduate,23
+Education,Doctorate,7
+Education,Less than high school,2
+Education,Total,162
+English Experience,Prefer not to answer / Missing data,3
+English Experience,Native (learned from birth),151
+English Experience,"Fully competent in speaking, listening, reading, and writing, but not native",8
+English Experience,Total,162
+Gender,Prefer not to answer / Missing data,4
+Gender,Male,63
+Gender,Female,88
+Gender,Nonbinary,4
+Gender,Genderqueer,1
+Gender,Female/nonbinary,1
+Gender,Woman/questioning,1
+Gender,Total,162
+Race/Ethnicity,Prefer not to answer / Missing data,7
+Race/Ethnicity,White,112
+Race/Ethnicity,"Hispanic, Latino, or Spanish",19
+Race/Ethnicity,American Indian or Alaska Native,4
+Race/Ethnicity,"Black, African American, or African",21
+Race/Ethnicity,Asian,9
+Race/Ethnicity,I use a different term,2
+Race/Ethnicity,Middle Eastern or North African,2
+Race/Ethnicity,Total,176
+Sexuality,Prefer not to answer / Missing data,5
+Sexuality,Heterosexual/Straight,120
+Sexuality,Bisexual/Pansexual,24
+Sexuality,Queer,9
+Sexuality,I use a different term,2
+Sexuality,Asexual,6
+Sexuality,Gay/Lesbian,6
+Sexuality,Questioning,3
+Sexuality,Total,175
+Transgender & Gender-Diverse,Prefer not to answer / Missing data,3
+Transgender & Gender-Diverse,My gender is the same as what was written on my original birth certificate,150
+Transgender & Gender-Diverse,I consider myself cisgender,63
+Transgender & Gender-Diverse,My gender is different than what was written on my original birth certificate,6
+Transgender & Gender-Diverse,I consider myself transgender,4
+Transgender & Gender-Diverse,I don't consider myself cisgender or transgender,12
+Transgender & Gender-Diverse,Total,238
