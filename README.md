@@ -5,6 +5,7 @@
 *	[Analysis Code](#analysis-code)
 *	[Data](#data)
 *	[Materials](#materials)
+*	[R Data Files & Environments](#r-data-files-and-environments)
 *	[Resources](#resources)
 *	[Quarto Files](#quarto)
 
@@ -25,10 +26,11 @@
 │   ├───exp2
 │   ├───exp3
 │   └───exp4
-└───resources
-    ├───data-functions
-    ├───formatting
-    └───icons
+├───resources
+│   ├───data-functions
+│   ├───formatting
+│   └───icons
+└───r_data
 ```
 
 ---
@@ -68,7 +70,7 @@ Analysis code for each experiment and the appendix, which includes code for the 
 │       exp4_timecourse-preview.csv
 │       exp4_timecourse-pronoun.csv
 │       README.md
-│       README.qmd
+└───    README.qmd
 ```
 
 These are the de-identified data files, which are described in the [README](#data/README.md) in that directory.
@@ -204,15 +206,15 @@ These are the de-identified data files, which are described in the [README](#dat
     │       stimuli.png
     │
     └───survey_pcibex
-        │   1_setup.js
-        │   2_attitudes.js
-        │   3_demographics.js
-        │   demolink.txt
-        │   global_main.css
-        │   PennController.css
-        │   Scale.css
-        │   stim-acceptability.csv
-        └	stim-transphobia.csv
+            1_setup.js
+            2_attitudes.js
+            3_demographics.js
+            demolink.txt
+            global_main.css
+            PennController.css
+            Scale.css
+            stim-acceptability.csv
+            stim-transphobia.csv
 ```
 
 *	`audio-times.csv` has the duration for all audio stimuli files, plus the time of the shape word onset for each pronoun sentence. The audio files are available upon request.
@@ -231,6 +233,44 @@ These are the de-identified data files, which are described in the [README](#dat
 *	`eyetracking_matlab` is the MATLAB code for the character learning and eyetracking portions of the experiment. The comments in `they4.m` have more information.
 *	`figures` has the example screen, procedure, and results from Arnold et al. (2000) shown in the manuscript.
 *	`survey_pcibex` is the PCIbex code for the survey portion of the experiment. Like the rest of the experiments, it includes the PCIbex code (`*.js`), the subset of CSS files that were modified from the default (`.css`), the stimuli that appear in a randomized order (`stim-*.csv`), and the [demo link](https://farm.pcibex.net/r/QnnEGE/).
+
+---
+
+## R Data Files and Environments
+
+```
+└───r_data
+        exp1.RData
+        exp1a_memory_reliability.RDS
+        exp1a_production_reliability.RDS
+        exp1b_memory_reliability.RDS
+        exp1b_production_reliability.RDS
+        exp2.RData
+        exp3.RData
+        exp3_power_2way_N108.RDA
+        exp3_power_2way_N132.RDA
+        exp3_power_2way_N156.RDA
+        exp3_power_2way_N180.RDA
+        exp3_power_3way_N132.RDA
+        exp3_power_3way_N156.RDA
+        exp3_reliability.RDS
+        exp3_subj-covariates.RDS
+        exp4.RData
+        exp4_AR.RDS
+        exp4_pronoun-pair.RDS
+        exp4_pronoun-pair_HS-SH.RDS
+        exp4_pronoun-pair_HS-T.RDS
+        exp4_pronoun-pair_HS-T_first0.RDS
+        exp4_pronoun-pair_HS-T_second0.RDS
+        exp4_pronoun-pair_T-HS.RDS
+        exp4_target-pronoun.RDS
+        exp4_trend.RDS
+```
+
+*	The `exp*.RData` files are the R environments after running the analysis code file for the corresponding experiment. These are used in the supplementary analysis code file, and to save time re-running everything.
+*	The `exp3*.RDS` and `exp4*.RDS` files are the participant covariates model for Experiment 3 and the eyetracking models for Experiment 4. Each of these takes days to find the maximal random effects structure using `buildmer` (even running in parallel) and hours to refit the final model just using `lme4`. All of the other smaller models get cached when the analysis code files are rendered for the first time.
+*	The `exp1*_reliability.RDS` files are the Bayesian models fit with `brms`, which can take a couple of hours to run.
+*	The `*.RDA` files are the power simulations with `simr`, which also take at least a couple of hours to run.
 
 ---
 
