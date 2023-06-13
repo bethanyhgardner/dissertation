@@ -412,8 +412,8 @@ exp4_tb_fixed_labels <- c(  # Main effects
     "Pronoun Pair (HS|T vs HS|SH) * Order * Trend"
 )
 
-blank_row1 <- "<tr>\n<td style=\" padding:0.2cm; text-align:left; vertical-align:top; text-align:left;\">"
-blank_row4 <- "<td style=\" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:center;\" colspan=\"4\">"
+blank_row1 <- '<tr>\n<td style=\" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;\">'
+blank_row4 <- '</td>\n<td style=\" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:center;\" colspan=\"4\">'
 
 exp4_tb_random_effects <- function(text) {
   text %<>% str_replace_all(  # All models

@@ -107,23 +107,9 @@ match_theme <- theme(
 
 # TABLES----
 # CSS styling for model tables made with tab_model()
-table_css <- list(
-  css.table = "+font-family: Arial; font-size: 0.875em;",
-  css.randomparts =
+table_css <- list(css.randomparts =
     "border-top: 1px solid; border-bottom:1px solid; font-style:italic;"
 )
-
-# Add title row to model tables with tab_model()
-tab_model_title_row <- function(tb_knitr, title) {
-  tb_knitr %<>% str_replace(
-    '<tr>',  # find start of first row
-    str_c(   # add row before it, spanning all cols, with bold text
-      '<tr> <th colspan="5" style="text-align:left; font-weight:bold;" >',
-      title,
-      '</th></tr><tr>'  # close new row and restart original 1st row
-    )
-  )
-}
 
 # Helper function to drop sigma squared from logistic regression tables
 drop_sigma <- function(tb_knitr, title) {

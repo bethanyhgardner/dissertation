@@ -51,7 +51,6 @@ source("resources/data-functions/demographics.R")  # demographics tables
 
 <br>
 
-
 ```{r}
 #| label: exp3-load-data
 
@@ -109,7 +108,7 @@ exp(exp2_r_effect_size) # odds ratio
 ```
 
 ```{r}
-#| label: exp3-power-dataStruct
+#| label: exp3-power-data-struct
 
 # start with 108 participants each doing 30 trials
 exp3_pw_data_struct <- data.frame(
@@ -340,9 +339,7 @@ Participants were randomly assigned to 1 of 6 lists, in order to counterbalance 
 
 Following a task established by @pozzan2017, each trial showed 2 characters in the center of the screen, with their siblings in the 4 corners (@fig-exp3-trial). An animation showed an object moving from a character to one of their siblings, and participants verbally described what happened. This was designed to elicit possessive pronouns about the target character, e.g., *Jaime gave the apple to their brother*. It also allowed participants to produce subject pronouns referring to the character, e.g., *They gave the apple to their brother*, or to avoid pronouns entirely, e.g., *Jaime gave the apple to Jaime's brother*. Trials manipulated which pronouns the two pictured characters used \[Pronoun Pair\]: they/them targets with he/him or she/her distractors \[They\|HeShe\], he/him and she/her targets with they/them distractors \[HeShe\|They\], and he/him and she/her targets with she/her or he/him distractors \[HeShe\|SheHe\]. Trials also counterbalanced whether the object was passed to the brother or the sister and the locations of the characters. These trial frames were identical for each of the 6 character lists. Unlike @pozzan2017, no filler trials were included, as it was not possible to conceal that the study was targeting pronoun production.
 
-<br>
-
-![Experiment 3: Example Trial in the +Nametag condition, which preferentially elicited "Jaime gave the apple to their brother."](materials/exp3/figures/stimuli.png){#fig-exp3-trial}
+![Experiment 3: Example Trial in the +Nametag condition, which preferentially <br>elicited "Jaime gave the apple to their brother."](materials/exp3/figures/stimuli.png){#fig-exp3-trial width="650"}
 
 ### Procedure
 
@@ -350,9 +347,7 @@ Following a task established by @pozzan2017, each trial showed 2 characters in t
 
 Participants were randomly assigned to 1 of 4 between-participants conditions, manipulating what information about pronouns was given \[+Nametag vs --Nametag; +Introduction vs --Introduction\], then to 1 of 6 lists within each condition, counterbalancing the images and names of the characters. First, participants read introductions to 3 characters (1 he/him, 1 she/her, 1 they/them) (@fig-exp3-procedure). The characters were introduced by name, and in the +Introduction condition, their pronouns were explicitly stated (e.g., *This is Jaime, who uses they/them pronouns*). The images associated with each character included their name, resembling a display name in Zoom; in the +Nametag conditions, the images also included the character's pronouns in parentheses after their name. Each character had a brother and a sister, whose nametags indicated their relationship to the character. In all conditions, the facts about the character and the introductions to their siblings included 3 instances of the character's pronouns, with the character facts preceding the sibling introductions to reduce the ambiguity of singular *they* (i.e., not plural referring to the character and the sibling introduced next).
 
-<br>
-
-![Experiment 3: Stimuli and Procedure. \[A\] Example stimuli for the introductions to the characters, shown for the +Nametag/+Introduction and --Nametag/--Introduction conditions. \[B\] Experiment procedure.](materials/exp3/figures/procedure.png){#fig-exp3-procedure}
+![Experiment 3: Stimuli and Procedure. \[A\] Example stimuli for the introductions to the characters, shown for the +Nametag/+Introduction and --Nametag/--Introduction conditions. \[B\] Experiment procedure.](materials/exp3/figures/procedure.png){#fig-exp3-procedure width="80%"}
 
 #### Speech Production
 
@@ -484,11 +479,13 @@ exp3_r_gender_beliefs
 
 Participants were older than the typical college student sample (range = `r exp3_r_age['min','stat']`--`r exp3_r_age['max','stat']`, Mdn = `r exp3_r_age['med','stat']`). Around half the participants were women, and 6 were under the nonbinary umbrella. `r exp3_r_TGD` participants said that their gender was different than their sex assigned at birth and/or that they considered themselves transgender, and `r exp3_r_LGBQ` were LGBQ+ (@tbl-exp3-demographics1). These rates are somewhat higher than the U.S. average, but in line with previous data about the Prolific participant population [@douglas2023]. Overall, just about all participants were at least somewhat familiar with singular *they* before the experiment: a third had heard about people using they/them pronouns but had not met someone who does, a third had met but were not close to anyone who uses they/them, and a third were close to someone who uses they/them and/or used they/them themselves ([Figure @fig-exp3-survey]D). Similarly, most participants were familiar with including pronouns when introducing yourself and on nametags/display names, but didn't consider it a part of their or their social circles' norms. When describing their own habits, about half said they never do either because they prefer not to, about a quarter said they do rarely or sometimes, and about a tenth said they do usually or always ([Figure @fig-exp3-survey]B). When describing what people around them do, about a third were never around people who share pronouns, about half were rarely or sometimes around people who share pronouns, and about a fifth were usually or always around people who share pronouns ([Figure @fig-exp3-survey]C). Including pronouns on nametags was somewhat more common than including pronouns in introductions, which is unsurprising given that the former can be less marked. When rating the naturalness of singular *they* coreferring with different types of referents ([Figure @fig-exp3-survey]A), acceptance of indefinite forms was generally high (*M* = `r exp3_r_rating_means['Generic', 'mean']`, *SD* = `r exp3_r_rating_means['Generic', 'SD']`), and acceptance of proper names was more variable (*M* = `r exp3_r_rating_means['Name', 'mean']`, *SD* = `r exp3_r_rating_means['Name', 'SD']`) and was significantly lower (@tbl-exp3-ratings). For gender beliefs [@nagoshi2008], responses on a 1--7 Likert scale were scaled to the 0--6 range, giving a total range of 0--54, with higher scores indicating higher endorsement of the gender binary and gender essentialism and thus less favorable attitudes about trans and gender-nonconforming people ([Figure @fig-exp3-survey]E). Participant totals spanned the entire scale (range = `r exp3_r_gender_beliefs$min`--`r exp3_r_gender_beliefs$max`), but were skewed towards the lower end, with a mean response that was moderately favorable towards trans and gender-nonconforming people (*M* = `r exp3_r_gender_beliefs$mean`, *SD* = `r exp3_r_gender_beliefs$SD`; see @tbl-exp3-gender-beliefs for item text and means). While this experiment did not include direct measures of political affiliation, other studies show that the Prolific population skews left, with 35% identifying as a strong Democrat, and only 20% identifying as a strong, weak, or independent Republican [@douglas2023].
 
-<br>
+|     |
+|-----|
+|     |
 
-```{r}
-#| label: tbl-exp3-demographics1
-#| tbl-cap: "Experiment 3: Participant Demographics. The trans & gender-diverse and sexuality categories have variable totals, as participants could select multiple options. Participant education, English experience, and race/ethnicity are included in the appendix (@tbl-exp3-demographics2)."
+: Experiment 3: Participant Demographics. The trans & gender-diverse and sexuality categories have variable totals, as participants could select multiple options. Participant education, English experience, and race/ethnicity are included in the appendix (@tbl-exp3-demographics2). {#tbl-exp3-demographics1 .borderless}
+
+```{r ft.align="left"}
 #| output: true
 
 demographics_table(
@@ -500,8 +497,8 @@ demographics_table(
 
 ```{r}
 #| label: fig-exp3-survey
-#| fig-cap: "[A] Naturalness ratings (1 = very unnatural, 7 = very natural) for singular they coreferring with indefinites and proper names. [B] Frequency that participants include their pronouns when introducing themselves and in places like nametags. [C] Frequency that the participants’ social circles include pronouns in introductions and on nametags. [D] Experience with using they/them. [E] Gender binary and essentialism beliefs, with higher scores indicating higher endorsement and thus more negative attitudes about trans and gender non-conforming people. The black line is the mean response."
-#| fig-asp: 1.15
+#| fig-cap: "[A] Naturalness ratings (1 = very unnatural, 7 = very natural) for singular they coreferring with indefinites and proper names. [B] Frequency that participants include their pronouns when introducing themselves and in places like nametags. [C] Frequency that the participants’ social circles include pronouns in introductions and on nametags. [D] Experience with using they/them. [E] Gender binary and essentialism beliefs, with higher scores indicating higher endorsement and thus more negative attitudes about trans and gender non-conforming people. The black line is the mean response."
+#| fig-asp: 1.25
 #| output: true
 #| cache: true
 
@@ -818,14 +815,11 @@ Trials were automatically transcribed using *whisper* [@radford2022], then check
 
 [Figure @fig-exp3-dist]A shows the distribution of final pronouns produced by target character and condition. Trials with one pronoun are shown in darker colors; trials with multiple pronouns (e.g., *Jaime gave the apple to her bro---to their brother*, `r exp3_prop_multiple`%) show the final pronoun in lighter colors. Participants were numerically more likely to not use pronouns for they/them characters (N = `r exp3_n_none['they/them', 'n']`) than for he/him (N = `r exp3_n_none['he/him', 'n']`) and she/her characters (N = `r exp3_n_none['she/her', 'n']`), but the comparison between the mean rates of no-pronoun responses for they/them and he/him + she/her was not statistically significant, *t*(`r exp3_r_none$df`) = `r exp3_r_none$t`, `r exp3_r_none$p`. Rather, participants who only used names (e.g., *Jaime gave the apple to Jaime's brother*) tended to do so for all 3 characters. In trials where participants produced multiple pronouns, self-corrections from *his* to *their* (N = `r exp3_n_multiple['his their', 'n']`, light purple) and *her* to *their* (N = `r exp3_n_multiple['her their', 'n']`, light purple) were more common than self-corrections from *their* to *his* (N = `r exp3_n_multiple['their his', 'n']`) or *her* (N = `r exp3_n_multiple['their her', 'n']`), or between *his* and *her* (N = `r exp3_n_multiple['his her', 'n']`, N = `r exp3_n_multiple['her his', 'n']`). Unexpectedly, *their* responses for each participant were typically at floor or near ceiling ([Figure @fig-exp3-dist]B), with the Nametag and Introduction conditions affecting whether a participant produced *their* at all, more than affecting accuracy within participants who produced *their* in some trials.
 
-<br>
-
 ```{r}
 #| label: fig-exp3-dist
-#| fig-cap: "Experiment 3: Distribution of Responses.[A] Final pronoun produced. Trials where participants used multiple pronouns to refer to the character (e.g., *Jaime gave the apple to her bro---to their brother*) are grouped based on the final pronoun and shown in lighter colors. [B] Number of *their* responses per participant."
-#| fig-asp: 1.25
+#| fig-cap: "Experiment 3: Distribution of Responses.[A] Final pronoun produced. Trials where participants used multiple pronouns to refer to the character (e.g., *Jaime gave the apple to her bro---to their brother*) are grouped based on the final pronoun and shown in lighter colors. [B] Number of *their* responses per participant."
+#| fig-asp: 1
 #| output: true
-#| warning: false
 #| cache: true
 
 # Distribution----
@@ -912,8 +906,6 @@ exp3_p_dist + exp3_p_they +
 ### Pronoun Accuracy
 
 The primary analysis measured accuracy of pronouns referring to the target character (@fig-exp3-acc). Trials where participants produced different pronouns (`r exp3_prop_multiple`%) were coded based on the final pronoun (e.g., *Jaime gave the apple to her bro---to their brother* would be coded based on the accuracy of *their*); trials with no pronouns (`r exp3_prop_none`%) were excluded from this analysis. Pronoun was manipulated between both the character described (target) and the other character pictured on the screen (distractor). The first Pronoun Pair contrast compared trials with they/them target characters to trials with he/him and she/her target characters (They\|HeShe vs HeShe\|They + HeShe\|They). Within he/him and she/her character trials, the second contrast compared trials with they/them distractors to trials with he/him and she/her distractors (HeShe\|They vs HeShe\|They). There were no significant effects of the second Pronoun Pair contrast, so for simplicity's sake, the first Pronoun Pair contrast is referred to as the effect of Pronoun from here on. The fixed effects of Nametag and Introduction (between-participants) were both mean-center effects coded. The maximal model justified by the experimental design [@baayen2008; @barr2013] included by-participant slopes for Pronoun and by-item intercepts. Item was defined as the combinations of name, image, and pronouns that varied across the 6 lists of characters; because these combinations did not fully vary across pronouns, by-item random slopes were not included. The final model [@bates2015; @rcoreteam2023; @voeten2023] included all interactions between fixed effects, plus by-item and by-participant intercepts (@tbl-exp3-acc).
-
-<br>
 
 ```{r}
 #| label: fig-exp3-acc
@@ -1117,13 +1109,12 @@ exp3_r_nametag_no0 <- tidy_model_results(exp3_m_nametag_no0)
 
 Across all conditions, participants were more likely to produce the correct pronoun than not (`r exp3_r_acc['Intercept', 'Text']`). Participants were more accurate for he/him and she/her characters (*M* = `r exp3_r_means['HS All', 'mean']` across Nametag and Introduction conditions) than for they/them characters (*M* = `r exp3_r_means['T All', 'mean']`) (`r exp3_r_acc['PronounTarget', 'Text']`). Within he/him and she/her trials, there was no significant difference between trials where the other character used he/him or she/her and trials where the other character used they/them (`r exp3_r_acc['PronounDist', 'Text']`). The main effects of Nametag and Introduction were not significant (`r exp3_r_acc['Nametag', 'Text']`; `r exp3_r_acc['Intro', 'Text']`). The three-way interaction between Pronoun, Nametag, and Introduction was significant (`r exp3_r_acc['PronounTarget:Nametag:Intro', 'Text']`). This was qualified by significant interactions between Pronoun and Introduction (`r exp3_r_acc['PronounTarget:Intro', 'Text']`), and Pronoun and Nametag (`r exp3_r_acc['PronounTarget:Nametag', 'Text']`). Post-hoc comparisons showed that Introduction attenuated the difference in accuracy between they/them and he/him + she/her in the --Nametag conditions (`r exp3_r_nametag_no0['PronounTarget:Intro', 'Text']`), but not in the +Nametag conditions (`r exp3_r_nametag_yes0['PronounTarget:Intro', 'Text']`). @fig-exp3-conds shows the means for each condition: accuracy for he/him and she/her characters was near ceiling for all conditions, and accuracy for they/them characters was highest in the --‍Nametag +‍Introduction condition (*M* = `r exp3_r_means['T -Nametag +Intro', 'mean']`, *SD* = `r exp3_r_means['T -Nametag +Intro', 'sd']`), slightly lower in the +‍Nametag +‍Introduction (*M* = `r exp3_r_means['T +Nametag +Intro', 'mean']`, *SD* = `r exp3_r_means['T +Nametag +Intro', 'sd']`) and +‍Nametag --‍Introduction (*M* = `r exp3_r_means['T +Nametag -Intro', 'mean']`, *SD* = `r exp3_r_means['T +Nametag -Intro', 'sd']`) conditions, and lowest in the --‍Nametag --‍Introduction condition (*M* = `r exp3_r_means['T -Nametag -Intro', 'mean']`, *SD* = `r exp3_r_means['T -Nametag -Intro', 'sd']`).
 
-<br>
-
 ```{r}
 #| label: fig-exp3-conds
-#| fig-cap: "Experiment 3: Condition Means. Means and 95% CIs of accuracy for he/him + she/her characters and they/them characters, split by Nametag and Introduction conditions."
-#| fig-height: 4
+#| fig-cap: "Experiment 3: Condition Means. Means and 95% CIs of  <br>accuracy for he/him + she/her characters and they/them characters,  <br>split by Nametag and Introduction conditions."
 #| fig-width: 4.5
+#| fig-height: 4
+#| out-width: "55%"
 #| output: true
 #| cache: true
 
@@ -1160,9 +1151,14 @@ exp3_load_data_dist() %>%
   )
 ```
 
+|                                       |
+|---------------------------------------|
+| **Experiment 3: Production Accuracy** |
+
+: Experiment 3: Production Accuracy. Model results for the effects of Pronoun Pair, Introduction, and Nametag on Pronoun Accuracy (=1), with trials that did not include a pronoun referring to the target character excluded, and trials that contained different pronouns coded based on the final one. {#tbl-exp3-acc .borderless}
+
 ```{r}
-#| label: tbl-exp3-acc
-#| tbl-cap: "Experiment 3: Production Accuracy. Model results for the effects of Pronoun Pair, Introduction, and Nametag on Pronoun Accuracy (=1), with trials that did not include a pronoun referring to the target character excluded, and trials that contained different pronouns coded based on the final one."
+#| label: table-exp3-acc
 #| output: true
 
 exp3_tb_accuracy <- tab_model(
@@ -1177,10 +1173,7 @@ exp3_tb_accuracy <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp3_tb_accuracy$knitr %<>%
-  tab_model_title_row("Experiment 3: Production Accuracy") %>%
-  exp3_tb_random_labels() %>%
-  drop_sigma()
+exp3_tb_accuracy$knitr %<>% exp3_tb_random_labels() %>% drop_sigma()
 exp3_tb_accuracy
 ```
 
@@ -1313,13 +1306,12 @@ exp3_tb_corr <- exp3_r_corr_Rs %>%
 
 The strongest correlation between participant covariates (@fig-exp3-corr) was familiarity with pronoun-sharing practices and familiarity with using they/them pronouns (*r* = `r exp3_tb_corr['Sharing+UseThey', 'r']`, `r exp3_tb_corr['Sharing+UseThey', 'p']`), which is unsurprising given that people who use they/them nearly always have to explicitly state their pronouns in order to not be misgendered. The brief naturalness ratings questionnaire largely replicated prior results correlating gender beliefs, familiarity, LGBTQ+ identity, and age with judgments about singular *they* [@camilliere2021; @hernandez2020; @minkin2021; @parker2019; @conrod2019; @hekanaho2020; @nichols2019]. The second-strongest correlation was between naturalness ratings and gender beliefs, with participants who more strongly endorsed the gender binary and gender essentialism rating singular *they* coreferring with proper names as less natural (*r* = `r exp3_tb_corr['GenderBeliefs+Rating_Name', 'r']`, `r exp3_tb_corr['GenderBeliefs+Rating_Name', 'p']`) [see in particular @hernandez2020]. LGBTQ+ participants (*r* = `r exp3_tb_corr['LGBTQ+Rating_Name', 'r']`, `r exp3_tb_corr['LGBTQ+Rating_Name', 'p']`) and participants more familiar with using they/them (*r* = `r exp3_tb_corr['Rating_Name+UseThey', 'r']`, `r exp3_tb_corr['Rating_Name+UseThey', 'p']`) and with pronoun-sharing practices (*r* = `r exp3_tb_corr['Rating_Name+Sharing', 'r']`, `r exp3_tb_corr['Rating_Name+Sharing', 'p']`) rated *they* coreferring with proper names as more natural. Older participants rated it as less natural (*r* = `r exp3_tb_corr['Age+Rating_Name', 'r']`, `r exp3_tb_corr['Age+Rating_Name', 'p']`). However, ratings for indefinite singular *they* (generic, each, every) were not significantly correlated with other participant covariates---or with ratings for *they* coreferring with proper names (*r* = `r exp3_tb_corr['Rating_Generic+Rating_Name', 'r']`, `r exp3_tb_corr['Rating_Generic+Rating_Name', 'p']`).
 
-<br>
-
 ```{r}
 #| label: fig-exp3-corr
-#| fig-cap: "Experiment 3: Correlations Between Participant Covariates. Age, LGBTQ+ identity, familiarity with using they/them pronouns and pronoun sharing practices, naturalness rating for singular they coreferring with indefinite referents (generic, each, every) and with proper names."
+#| fig-cap: "Experiment 3: Correlations Between Participant Covariates. <br>Age, LGBTQ+ identity, familiarity with using they/them pronouns and <br>pronoun sharing practices, naturalness ratings for sg. *they* coreferring <br>with indefinite referents (generics, *each*, *every*) and with proper names."
 #| fig-width: 4.5
 #| fig-height: 4
+#| out-width: "55%"
 #| output: true
 #| cache: true
 
@@ -1424,13 +1416,10 @@ I then tested if adding these participant covariates to the hypothesis-testing m
 
 Participants who more strongly endorsed the gender binary and gender essentialism were less accurate overall (`r exp3_r_subj_cov['GenderBeliefs', 'Text']`) and showed a larger relative difference in accuracy between they/them and he/him + she/her (`r exp3_r_subj_cov['PronounTarget:GenderBeliefs', 'Text']`) (@fig-exp3-gender-beliefs). The interaction between Pronoun, Introduction, and Gender Beliefs was marginally significant after correction for multiple comparisons (`r exp3_r_subj_cov['PronounTarget:Intro:GenderBeliefs', 'Text']`), such that Gender Beliefs had a larger effect on the relative accuracy of they/them in the --Introduction condition than in the +Introduction condition.
 
-<br>
-
 ```{r}
 #| label: fig-exp3-gender-beliefs
 #| fig-cap: "Experiment 3: Accuracy by Gender Beliefs. By-participant mean accuracy for they/them characters, predicted by endorsement of the gender binary and gender essentialism. Points are by-participant means; the line is a GLM fit over the raw data."
 #| fig-asp: 0.6
-#| warning: false
 #| output: true
 #| cache: true
 

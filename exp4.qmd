@@ -67,9 +67,7 @@ Part \[1\] introduced 2 named characters (*Donald, Mickey/Minnie*), using a verb
 
 The stories in @arnold2000 manipulated 2 factors: the ambiguity of the pronoun (target and competitor characters using the same vs different pronouns) and the accessibility of the referent (target mentioned first vs second). The results showed that listeners rapidly use both gender and accessibility cues to identify which character the pronoun referred to. If gender was unambiguous (top right in [Figure @fig-exp4-arnold2000]A), the pronoun referred to the character mentioned first (bottom left), or both (top left), participants looked at the target character starting at approximately 200ms after the pronoun. This is about as quickly as effects in the visual world paradigm can be observed [@hallett1986; @tanenhaus1995]. When neither gender nor accessibility cues disambiguated the referent (bottom right), participants were slower to look at the target character ([Figure @fig-exp4-arnold2000]B). For the purposes of the present experiment, these results provide a validated stimuli design and a baseline for how we expect *he* and *she* to be processed.
 
-<br>
-
-![@arnold2000. [A] Recreation of design, showing the pronoun ambiguity and order of mention conditions. The original materials were illustrated using the Disney characters. \[B\] Results, with 0 indicating pronoun onset and horizontal lines indicating the verb (*bringing*).](materials/exp4/arnold2000.png){#fig-exp4-arnold2000}
+![@arnold2000. \[A\] Recreation of design, showing the pronoun <br>ambiguity and order of mention conditions. The original materials were illustrated <br>using the Disney characters. \[B\] Results, with 0ms indicating pronoun onset and <br>horizontal lines indicating the verb (*bringing*).](materials/exp4/figures/arnold2000.png){#fig-exp4-arnold2000}
 
 A later set of studies used a similar design to examine how listeners process pronouns acoustically ambiguous between *he* and *she* [@brown-schmidt2017; @falandays2020]. This experiment used similar stories as Arnold et al. [-@arnold2000; -@arnold2007], but different images. Instead of 2 characters being drawn to match the scene, characters were pictured in colored shapes. The target character was disambiguated by describing their location, e.g., *he's standing on a blue square* instead of *he's carrying an umbrella*. This allows for a larger range of stimuli to be created, and the prior results demonstrate that listeners can process *he* and *she* smoothly in these types of stories. Critically, while the descriptions may seem odd and somewhat discontinuous, the discourse structure matches how speakers introduce new referents and when they tend to use pronouns instead of names.
 
@@ -106,9 +104,7 @@ exp4_n <- exp4_d_demographics %>%
 
 Participants learned about 6 characters, each associated with a name and an image: 2 who used he/him, 2 who used she/her, and 2 who used they/them ([Figure @fig-exp4-stimuli]A). The 6 character names and 6 character images were the same as in Experiment 3 [@drucker2019] ([materials](https://github.com/bethanyhgardner/dissertation/blob/main/materials/exp4/images.md)). Recall that all names were gender neutral since counterbalancing gender associations of the names within lists was not feasible. Participants were randomly assigned to 1 of 6 lists, in order to counterbalance the images and names associated with characters who use they/them. Across lists, 3 images appeared twice with he/him and once with they/them, and 3 images appeared twice with she/her and once with they/them; each name appeared twice with each pronoun. Critically, across lists they/them appeared once with each image and once with each name, in order to avoid confounding interpretations about what aspects of a person's name or appearance may make it easier for someone to learn that they use they/them pronouns.
 
-<br>
-
-![Experiment 4: Stimuli. \[A\] Example set of characters. \[B\] Example trial screen and story, with grey boxes indicating information not shown to participants.](materials/exp4/figures/stimuli.png){#fig-exp4-stimuli}
+![Experiment 4: Stimuli. \[A\] Example set of characters. \[B\] Example trial screen and story, with grey boxes indicating information not shown to participants.](materials/exp4/figures/stimuli.png){#fig-exp4-stimuli width="750"}
 
 #### Stories
 
@@ -156,9 +152,7 @@ Participants then completed 96 critical and 18 filler trials, mixed in a randomi
 
 Finally, participants completed the same singular they naturalness ratings, familiarity with using they/them pronouns, gender binary and gender essentialism beliefs, and demographics questions as in Experiment 3 ([materials](https://github.com/bethanyhgardner/dissertation/blob/main/materials/exp4/survey.md)). All demographic questions included the option to not respond. @fig-exp4-procedure shows an overview of the full procedure.
 
-<br>
-
-![Experiment 4: Procedure.](materials/exp4/figures/procedure.png){#fig-exp4-procedure}
+![Experiment 4: Procedure.](materials/exp4/figures/procedure.png){#fig-exp4-procedure width="700"}
 
 ## Predictions
 
@@ -287,11 +281,13 @@ exp4_d_gender_beliefs
 
 To contextualize the findings, I first discuss the results of the survey. Most participants were in the typical undergraduate age range (*M* = `r exp4_n_age$mean`, *SD* = `r exp4_n_age$sd`) and described themselves as native English speakers (N = `r exp4_n_english$Native`). `r exp4_n_gender$Female` were women, `r exp4_n_gender$Male` were men, and none identified as transgender and/or a gender different than their sex assigned at birth (@tbl-exp4-demographics). Overall, all participants were at least somewhat familiar with singular *they* before the experiment: `r exp4_d_use_they$HeardAbout` had heard about people using they/them pronouns but not met someone who does, `r exp4_d_use_they$HaveMet` had met but were not close to anyone who uses they/them, and `r exp4_d_use_they$CloseTo` were close to someone who uses they/them, but `r exp4_d_use_they$Myself` participants used they/them themselves ([Figure @fig-exp4-survey]B). When rating the naturalness of singular *they* coreferring with different types of referents ([Figure @fig-exp4-survey]A), acceptance of indefinite forms was generally high (*M* = `r exp4_r_rating_means['Generic', 'mean']`, *SD* = `r exp4_r_rating_means['Generic', 'SD']`). Surprisingly, ratings for proper names (*M* = `r exp4_r_rating_means['Name', 'mean']`, *SD* = `r exp4_r_rating_means['Name', 'SD']`) were not significantly lower than ratings for indefinites @tbl-exp4-ratings). For the gender beliefs measure [@nagoshi2008], responses were again scaled to 0--6 and summed, so that a score of 0 indicated the lowest endorsement of the gender binary and gender essentialism, and a score of 54 indicated the highest [Figure @fig-exp4-survey]C. Participant totals spanned the entire range but were strongly skewed towards the lower end, with the mean response favorable towards trans and gender-nonconforming people (range = `r exp4_d_gender_beliefs$min`--`r exp4_d_gender_beliefs$max`, *M* = `r exp4_d_gender_beliefs$mean`, *SD* = `r exp4_d_gender_beliefs$SD`) (see @tbl-exp4-gender-beliefs for item text and means).
 
-<br>
+|     |
+|-----|
+|     |
 
-```{r}
-#| label: tbl-exp4-demographics
-#| tbl-cap: "Experiment 4: Participant demographics. Categories with higher totals allowed participants to select as many options as applied. All questions included the option to not respond."
+: Experiment 4: Participant demographics. Categories with higher totals allowed participants to select as many options as applied. All questions included the option to not respond. {#tbl-exp4-demographics .borderless}
+
+```{r ft.align="left"}
 #| output: true
 
 demographics_table(
@@ -304,12 +300,10 @@ demographics_table(
 )
 ```
 
-<br>
-
 ```{r}
 #| label: fig-exp4-survey
-#| fig-cap: "Experiment 4: Prior Familiarity and Attitudes Survey. [A] Naturalness ratings on a 7-point Likert scale (1 = very unnatural, 7 = very natural) for singular *they* coreferring with generic and quantified referents and with proper names. [B] Experience with using they/them pronouns. [C] Gender binary and essentialism beliefs, with higher scores indicating higher endorsement and thus more negative attitudes towards transgender and gender non-conforming people. The mean response is indicated by the black line."
-#| fig-asp: 1
+#| fig-cap: "Experiment 4: Prior Familiarity and Attitudes Survey. [A] Naturalness ratings on a 7-point Likert scale (1 = very unnatural, 7 = very natural) for singular *they* coreferring with generic and quantified referents and with proper names. [B] Experience with using they/them pronouns. [C] Gender binary and essentialism beliefs, with higher scores indicating higher endorsement and thus more negative attitudes towards transgender and gender non-conforming people. The mean response is indicated by the black line."
+#| fig-asp: 0.85
 #| output: true
 #| cache: true
 
@@ -868,8 +862,6 @@ exp4_d %>%
 
 @fig-exp4-6panel shows fixations to the target, competitor, distractor, and no characters, starting 500ms before the onset of the pronoun and continuing for 2500ms (e.g., *...spilling on the floor. They are standing in a blue triangle, and the painting looks amazing*). The He\|She and She\|He trials (first row) generally resemble prior results [@arnold2000; @arnold2007; @brown-schmidt2017], with participants starting to look at the target more than the competitor rapidly after the onset of the pronoun, and more so when the target character was mentioned first. Unexpectedly, the order of mention effect---where listeners look more at the character named first in the story than to the character named second---is only clear in He\|She trials, not in She\|He trials. The He\|They and She\|They trials (second row) show the expected order effect, but participants are less likely to be looking at the target than in the He\|She and She\|He trials. The They\|He and They\|She trials (third row) still show participants looking at the target more than the competitor before the onset of the shape word, but less than in the other two conditions, and no order effect is apparent. Examining fixations during the beginning of the story (@fig-exp4-names), participants looked at the target and competitor after each was named, and the time course did not differ by the character's pronouns. This confirms that participants knew the names of the characters and had identified the two possible referents before the start of the critical time window.
 
-<br>
-
 ```{r}
 #| label: fig-exp4-6panel
 #| fig-cap: "Experiment 4: Eyetracking: Full Window. Proportions of looks to the target, competitor, distractor (average of 4), and no characters, split by target pronoun, competitor pronoun, and order of mention conditions. The gray box indicates the analysis region, starting 200ms after pronoun onset and ending at 1210ms, the earliest shape word onset across stimuli."
@@ -915,8 +907,6 @@ exp4_load_data_plots_full() %>%
 The primary analysis window, shown in grey in @fig-exp4-6panel, was offset by 200ms after the onset of the pronoun, the estimated time it takes to plan and execute a saccade in response to the auditory stimulus [@hallett1986]. It continued until `r max(exp4_d$Time)`ms after the pronoun onset, which was the earliest shape word onset across all of the stimuli (range = `r exp4_audio_times$min`--`r exp4_audio_times$max`ms, *M* = `r exp4_audio_times$mean`ms, *SD* = `r exp4_audio_times$sd`ms). Results were analyzed with dynamic generalized mixed-effects models, predicting whether participants looked at the target character (=1) or not (=0) at each time point [@cho2018; @brown-schmidt2020]. Observations were down-sampled to 10ms bins, where bins that included \>5ms of a fixation on or a saccade to the target [@mcmurray2009; @mcmurray2019] were coded as 1, bins that included \<5ms were coded as 0, and bins that included 5ms were coded as 1 if they followed a bin that was coded as 1 and 0 if not. Aside from this, the data was not aggregated across trials or participants. The model included a fixed effect for Trend (timestep during trial, mean-centered) to capture linear changes across the trial in the level of fixations to the target. To account for autocorrelation between time points, the model included an AR(1) term, which captures whether the participant was looking at the target in the prior timestep. To calculate AR(1) for the start of the window, timesteps for 180ms and 190ms were included in the data, and then the first timestep with missing data for AR(1) was excluded prior to estimation, resulting in `r n_distinct(exp4_d$Timestep)` data points for each trial.
 
 The fixed effect of Pronoun Pair was coded with orthogonal Helmert contrasts, with the first contrast comparing trials with *they* target characters to trials with *he* or *she* target characters (They\|HeShe vs HeShe\|They + HeShe\|SheHe), and the second contrast comparing trials with *he* or *she* target and *they* competitor characters to trials with *he* or *she* target and *she* or *he* competitor characters (HeShe\|They vs HeShe\|SheHe). The fixed effect of Order was mean-center effects coded, comparing trials where the target character was mentioned second to trials where the target character was mentioned first. @fig-exp4-3panel shows the proportion of looks to the target and competitor characters during the analysis window, comparing the 3 Pronoun Pair and 2 Order of Mention conditions.
-
-<br>
 
 ```{r}
 #| label: fig-exp4-3panel
@@ -1197,11 +1187,14 @@ exp4_r_AR <- exp4_m_AR@model %>% tidy_model_results()
 
 After noting differences between the He\|She and She\|He trials in @fig-exp4-6panel, an exploratory analysis tested the effect of Target Pronoun. As in previous experiments, it was coded with orthogonal Helmert contrasts, with the first contrast comparing they/them to he/him + she/her target trials, and the second contrast comparing she/her to he/him target trials. The comparison between *he* and *she* trials was not significant (`r exp4_r_target_pronoun['T_Pronoun=S_H', 'Text']`) (@tbl-exp4-target-pronoun). Additional exploratory analyses tested if Trend and AR(1) interacted with Pronoun Pair and Order, finding no significant effects in addition to those reported in the main model (@tbl-exp4-trend, @tbl-exp4-AR).
 
-<br>
+|                                                 |
+|-------------------------------------------------|
+| **Experiment 4: Looks to the Target Character** |
+
+: Experiment 4: Model results for the effects of Pronoun Pair, Order, AR(1), and Trend on the likelihood of looking at the target character (=1) or not (=0). {#tbl-exp4-pronoun-pair .borderless}
 
 ```{r}
-#| label: tbl-exp4-pronoun-pair
-#| tbl-cap: "Experiment 4: Model results for the effects of Pronoun Pair, Order, AR(1), and Trend on the likelihood of looking at the target character (1) or not (0)."
+#| label: table-exp4-pronoun-pair
 #| output: true
 
 exp4_tb_pronoun_pair <- tab_model(
@@ -1213,13 +1206,10 @@ exp4_tb_pronoun_pair <- tab_model(
   digits = 3, digits.re = 3,
   dv.labels = "Looks to Target",
   pred.labels = exp4_tb_fixed_labels,
-  wrap.labels = 80,
+  wrap.labels = 51,
   CSS = table_css
 )
-exp4_tb_pronoun_pair$knitr %<>%
-  tab_model_title_row("Experiment 4: Looks to the Target Character") %>%
-  exp4_tb_random_effects() %>%
-  drop_sigma()
+exp4_tb_pronoun_pair$knitr %<>% exp4_tb_random_effects() %>% drop_sigma()
 exp4_tb_pronoun_pair
 ```
 

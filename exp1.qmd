@@ -155,13 +155,15 @@ exp1a_r_memory <- exp1a_m_memory@model %>% tidy_model_results()
 
 For accuracy in the multiple-choice memory task (@tbl-exp1a-mem), participants responded more accurately than inaccurately across all three pronoun conditions (`r exp1a_r_memory['Intercept', 'Text']`). He/him and she/her (*M* = `r exp1a_r_memory_means['HS', 'mean']`) were remembered significantly more accurately than they/them (*M* = `r exp1a_r_memory_means['T', 'mean']`) (`r exp1a_r_memory['Pronoun=They_HeShe', 'Text']`). Errors were asymmetric: not remembering that a character used they/them was more common than incorrectly attributing they/them to a character (@fig-exp1a-mem).
 
-<br>
+|                           |
+|---------------------------|
+| **Experiment 1A: Memory** |
+
+: Experiment 1A: Model results for the effect of Pronoun on Memory Accuracy. {#tbl-exp1a-mem .borderless}
 
 ```{r}
-#| label: tbl-exp1a-mem
-#| tbl-cap: "Experiment 1A: Model results for the effect of Pronoun on Memory Accuracy."
+#| label: table-exp1a-mem
 #| output: true
-#| warning: false
 
 exp1a_tb_memory <- tab_model(
   model = exp1a_m_memory@model,
@@ -178,7 +180,6 @@ exp1a_tb_memory <- tab_model(
   CSS = table_css
 )
 exp1a_tb_memory$knitr %<>%
-  tab_model_title_row("Experiment 1A: Memory") %>%  # add title row
   exp1_tb_random_labels() %>%  # change random effects labels
   drop_sigma()  # drop sigma squared because it doesn't make sense for logistic
 exp1a_tb_memory
@@ -186,7 +187,7 @@ exp1a_tb_memory
 
 ```{r}
 #| label: fig-exp1a-mem
-#| fig-cap: "[A] Pronoun accuracy in the multiple-choice memory task. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means. [B] Distribution of memory responses, with the correct pronoun on the X axis and the selected pronoun by color."
+#| fig-cap: "Experiment 1A: [A] Pronoun accuracy in the multiple-choice memory task. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means. [B] Distribution of memory responses, with the correct pronoun on the X axis and the selected pronoun by color."
 #| fig-asp: 0.45
 #| output: true
 #| cache: true
@@ -241,8 +242,6 @@ exp1a_p_mem_acc + exp1a_p_mem_dist + plot_annotation(
   theme = patchwork_theme
 )
 ```
-
-<br>
 
 ```{r}
 #| label: exp1a-pets-means
@@ -368,7 +367,7 @@ exp1a_r_prod <- exp1a_m_prod@model %>% tidy_model_results()
 ```
 
 ```{r}
-#| label: exp1a-useThey
+#| label: exp1a-use-they
 
 # count how many times each participant used they/them in production task
 exp1a_d_they <- exp1a_d %>%
@@ -395,13 +394,15 @@ exp1a_r_they <- round(exp1a_r_they * 100, 0)
 
 Responses were coded by whether the sentence continuation used he/him, she/her, they/them, or no pronoun to refer to the character (@fig-exp1a-prod). Responses that did not include a pronoun referring to the character either used the character's name as the subject of the continuing clause (e.g., *After Emily got home from working as a teacher...Emily made dinner*), or were ungrammatical continuations with no subject (e.g., *...made dinner*). Because these responses were infrequent (`r exp1a_tb_prod['Sum', 'none']*100`% of trials) and evenly distributed between pronoun conditions, they are included in the analysis (@tbl-exp1a-prod) as incorrect responses. Participants responded more accurately than inaccurately across all three pronoun conditions (`r exp1a_r_prod['Intercept', 'Text']`). He/him and she/her (*M* = `r exp1a_r_prod_means['HS', 'mean']`) were produced significantly more accurately than they/them (*M* = `r exp1a_r_prod_means['T', 'mean']`) (`r exp1a_r_prod['Pronoun=They_HeShe', 'Text']`). They/them was incorrectly produced as he/him and she/her each about one third of the time, while he/him and she/her were each incorrectly produced as they/them about an eighth of the time. Approximately `r exp1a_r_they`% of participants produced singular *they* at least once, regardless of accuracy.
 
-<br>
+|                               |
+|-------------------------------|
+| **Experiment 1A: Production** |
+
+: Experiment 1A: Model results for the effect of Pronoun on Production Accuracy. {#tbl-exp1a-prod .borderless}
 
 ```{r}
-#| label: tbl-exp1a-prod
-#| tbl-cap: "Experiment 1A: Model results for the effect of Pronoun on Production Accuracy."
+#| label: table-exp1a-prod
 #| output: true
-#| warning: false
 
 exp1a_tb_prod <- tab_model(
   model = exp1a_m_prod@model,
@@ -416,7 +417,6 @@ exp1a_tb_prod <- tab_model(
   CSS = table_css
 )
 exp1a_tb_prod$knitr %<>%
-  tab_model_title_row("Experiment 1A: Production") %>%
   exp1_tb_random_labels() %>%
   str_replace(  # bug with tab_model() makes it drop random slope labels
     "&rho;<sub>01</sub>",
@@ -432,7 +432,7 @@ exp1a_tb_prod
 
 ```{r}
 #| label: fig-exp1a-prod
-#| fig-cap: "Experiment 1A: [A] Pronoun accuracy in the written sentence completion task. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means. [B] Distribution of pronoun production responses, with the correct pronoun on the X axis and the selected pronoun by color. [C] Number of times each participant produced they/them (correct = 4), regardless of accuracy."
+#| fig-cap: "Experiment 1A: [A] Pronoun accuracy in the written sentence completion task. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means. [B] Distribution of pronoun production responses, with the correct pronoun on the X axis and the selected pronoun by color. [C] Number of times each participant produced they/them (correct = 4), regardless of accuracy."
 #| fig-asp: 1
 #| output: true
 #| cache: true
@@ -545,11 +545,14 @@ exp1a_r_mp <- exp1a_m_mp@model %>% tidy_model_results()
 
 Extending the second model to test the effects of pronoun and memory accuracy on production accuracy (@tbl-exp1a-both) showed that participants were more likely to produce the correct pronoun when they had correctly remembered it (`r exp1a_r_mp['M_Acc=Wrong_Right', 'Text']`). Memory accuracy interacted with pronoun for the comparison between they/them and he/him + she/her (`r exp1a_r_mp['Pronoun=They_HeShe:M_Acc=Wrong_Right', 'Text']`), such that memory improved production more for they/them characters than for he/him + she/her characters (@fig-exp1a-both). Remembering but not producing they/them was more common than producing it but not remembering it.
 
-<br>
+|                                                 |
+|-------------------------------------------------|
+| **Experiment 1A: Memory Predicting Production** |
+
+: Experiment 1A: Model results for the effects of Pronoun and Memory Accuracy on Production Accuracy. {#tbl-exp1a-both .borderless}
 
 ```{r}
-#| label: tbl-exp1a-both
-#| tbl-cap: "Experiment 1A: Model results for the effects of Pronoun and Memory Accuracy on Production Accuracy."
+#| label: table-exp1a-both
 #| output: true
 
 exp1a_tb_mp <- tab_model(
@@ -564,10 +567,7 @@ exp1a_tb_mp <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp1a_tb_mp$knitr %<>%
-  tab_model_title_row("Experiment 1A: Memory Predicting Production") %>%
-  exp1_tb_random_labels() %>%
-  drop_sigma()
+exp1a_tb_mp$knitr %<>% exp1_tb_random_labels() %>% drop_sigma()
 exp1a_tb_mp
 ```
 
@@ -669,14 +669,12 @@ exp1a_p_split + exp1a_p_compare + plot_annotation(
 )
 ```
 
-<br>
-
 ## Experiment 1B
 
 In the first experiment, people learned about a set of 12 characters whose pronouns---they/them or the expected he/him or she/her---could not be predicted from their name or other cues. These results demonstrate that, after only a brief exposure, people can learn that a character uses they/them pronouns and retrieve this information from memory to produce singular they in reference to them. Remembering that the character used they/them was a strong predictor of accurate pronoun production, with `r exp1a_r_mp_means['T Right', 'percent']` of production trials correct when the memory trial had been correct, but only `r exp1a_r_mp_means['T Wrong', 'percent']` of production trials correct when the memory trial had been incorrect. These results are congruent with a model where learning to use singular they requires a change from inferring a person's pronouns (*he* or *she*) based on semantic/conceptual features of a person or based on morphosyntactic gender associated with a person's name, and instead recalling episodic information about a person's stated pronouns.
 
 ```{r}
-#| label: exp1a-taskDiff-setup
+#| label: exp1a-task-setup
 
 # pivot back to get 1 row per task
 exp1a_d_long <- exp1a_d %>%
@@ -699,7 +697,7 @@ exp1a_d_long %<>% mutate(
 ```
 
 ```{r}
-#| label: exp1a-taskDiff-model
+#| label: exp1a-task-model
 #| cache: true
 
 exp1a_m_task <- buildmer(
@@ -802,11 +800,9 @@ exp1b_n_english
 
 Responses were analyzed using the same logistic mixed-effects model specifications as in Experiment 1A [@bates2015; @rcoreteam2023; @voeten2023], although the maximal random effects structures that converged differed slightly in this data set. @fig-exp1ab-they highlights results for the they/them characters; results for all three pronouns, parallel to the figures in Experiment 1A, are included in the appendix (@fig-exp1ab-panel1, @fig-exp1ab-panel2). To compare these results to those of Experiment 1A, an additional trio of models with the combined data included Experiment as a mean-centered fixed effect.
 
-<br>
-
 ```{r}
 #| label: fig-exp1ab-they
-#| fig-cap: "[A] By-participant mean memory accuracy for they/them characters, split by task order. [B] By-participant mean production accuracy for they/them characters, split by task order. [C] Production accuracy for they/them characters, split by memory accuracy and task order. Error bars indicate 95% CIs."
+#| fig-cap: "[A] By-participant mean memory accuracy for they/them characters, split by task order. [B] By-participant mean production accuracy for they/them characters, split by task order. [C] Production accuracy for they/them characters, split by memory accuracy and task order. Error bars indicate 95% CIs."
 #| fig-asp: 1
 #| output: true
 #| cache: true
@@ -1266,13 +1262,12 @@ summary(exp1_m_diff)
 exp1_r_diff <- exp1_m_diff %>% tidy_model_results()
 ```
 
-@fig-exp1-taskDiff shows each participant's mean difference in accuracy between the two tasks. For they/them characters, participants in both experiments are more accurate in the memory task. Conversely, for he/him + she/her characters, participants in both experiments are more accurate in the production task. Both patterns are consistent with participants forgetting that a character uses they/them or choosing not to use singular *they*, then defaulting to the pronouns associated with the character's name. In a linear regression with pronoun and task order predicting the by-participant mean task differences, there were no significant effects of task order (@tbl-exp1-task).
+@fig-exp1-task shows each participant's mean difference in accuracy between the two tasks. For they/them characters, participants in both experiments are more accurate in the memory task. Conversely, for he/him + she/her characters, participants in both experiments are more accurate in the production task. Both patterns are consistent with participants forgetting that a character uses they/them or choosing not to use singular *they*, then defaulting to the pronouns associated with the character's name. In a linear regression with pronoun and task order predicting the by-participant mean task differences, there were no significant effects of task order (@tbl-exp1-task).
 
-<br>
 ```{r}
-#| label: fig-exp1-taskDiff
+#| label: fig-exp1-task
 #| fig-cap: "Experiments 1A & 1B: Differences between memory accuracy and production accuracy for each participant, split by character pronoun and task order."
-#| fig-asp: 0.8
+#| fig-asp: 0.65
 #| output: true
 #| cache: true
 

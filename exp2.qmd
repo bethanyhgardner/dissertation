@@ -173,13 +173,15 @@ exp2_r_memory <- exp2_m_memory@model %>% tidy_model_results()
 
 In the multiple-choice memory task (@tbl-exp2-memory), participants responded more accurately than not across pronouns and training conditions (`r exp2_r_memory['Intercept', 'Text']`). He/him and she/her (*M* = `r min(exp2_r_memory_means_heshe$mean)`--`r max(exp2_r_memory_means_heshe$mean)` between PSA and Biography conditions) were remembered more accurately than they/them (*M* = `r min(exp2_r_memory_means_they$mean)`--`r max(exp2_r_memory_means_they$mean)`) (`r exp2_r_memory['Pronoun=They_HeShe', 'Text']`). There was no difference in accuracy between he/him and she/her, and they/them was misremembered as he/him and she/her at similar rates ([Figure @fig-exp2-memory]A). The lower accuracy of they/them compared to she/her and he/him ([Figure @fig-exp2-memory]B) was attenuated when participants read the gendered language PSA compared to the unrelated PSA (`r exp2_r_memory['Pronoun=They_HeShe:PSA=GenLang', 'Text']`).
 
-<br>
+|                          |
+|--------------------------|
+| **Experiment 2: Memory** |
+
+: Experiment 2: Model results for the effects of Pronoun, PSA, and Biography on Memory Accuracy. {#tbl-exp2-memory .borderless}
 
 ```{r}
-#| label: tbl-exp2-memory
-#| tbl-cap: "Experiment 2: Model results for the effects of Pronoun, PSA, and Biography on Memory Accuracy."
+#| label: table-exp2-memory
 #| output: true
-#| warning: false
 
 exp2_tb_memory <- tab_model(
   model = exp2_m_memory@model,
@@ -195,20 +197,19 @@ exp2_tb_memory <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp2_tb_memory$knitr %<>%
-  tab_model_title_row("Experiment 2: Memory") %>%  # add title row
-  drop_sigma()  # drop sigma squared because it doesn't make sense for logistic
+# drop sigma squared because it doesn't make sense for logistic models
+exp2_tb_memory$knitr %<>% drop_sigma()
 exp2_tb_memory
 ```
 
 ```{r}
 #| label: fig-exp2-memory
-#| fig-cap: "Experiment 2: [A] Pronoun accuracy in the multiple-choice memory task, split by PSA and Biography conditions. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means. [B] Mean and 95% CI of memory accuracy for he/him + she/her characters and they/them characters, comparing PSA and Biography conditions. The distribution of responses is shown in the appendix (@fig-exp2-dist)."
+#| fig-cap: "Experiment 2: [A] Pronoun accuracy in the multiple-choice memory task, split by PSA and Biography conditions. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means. [B] Mean and 95% CI of memory accuracy for he/him + she/her characters and they/them characters, comparing PSA and Biography conditions. The distribution of responses is shown in the appendix (@fig-exp2-dist)."
 #| fig-asp: 0.8
 #| output: true
 #| cache: true
 
-# accuracy
+# Accuracy----
 exp2_p_memory_acc <- exp2_d %>%
   group_by(Participant, Pronoun, PSA, Biography) %>%
   summarise(M_Acc = mean(M_Acc)) %>%
@@ -238,7 +239,7 @@ exp2_p_memory_acc <- exp2_d %>%
   labs(x = element_blank(), y = "By-Participant Mean Accuracy") +
   guides(fill = guide_none(), color = guide_none())
 
-# PSA effect
+# PSA effect----
 exp2_p_memory_PSA <- exp2_d %>%
   mutate(
     Pronoun_Group =
@@ -272,7 +273,7 @@ exp2_p_memory_PSA <- exp2_d %>%
   ) +
   labs(x = element_blank(), y = "Mean Accuracy")
 
-# combine
+# Combine----
 exp2_p_memory_acc + exp2_p_memory_PSA +
   plot_annotation(
     title = "Experiment 2: Accuracy of Memory Responses",
@@ -285,8 +286,6 @@ exp2_p_memory_acc + exp2_p_memory_PSA +
     heights = c(2, 1.5)
   )
 ```
-
-<br>
 
 ```{r}
 #| label: exp2-compare-pets-setup
@@ -500,7 +499,7 @@ exp2_d %>%
 ```
 
 ```{r}
-#| label: exp2-prod-useThey-means
+#| label: exp2-prod-use-they-means
 
 exp2_d_use_they <- exp2_d %>%
   mutate(P_IsThey = ifelse(P_Response == "they/them", 1, 0)) %>%
@@ -527,7 +526,7 @@ exp2_r_use_they_means
 ```
 
 ```{r}
-#| label: exp2-prod-useThey-model
+#| label: exp2-prod-use-they-model
 
 exp2_m_use_they <- glm(
   UseThey ~ PSA * Biography,
@@ -539,13 +538,15 @@ exp2_r_use_they <- exp2_m_use_they %>% tidy_model_results()
 
 Responses were coded by whether the sentence continuation used he/him, she/her, they/them, or no pronouns to refer to the character (@fig-exp2-prod). Responses that did not include a pronoun were `r exp2_tb_prod['Sum', 'none']*100`% of the data and are included in the analysis as incorrect responses (@tbl-exp2-prod). Across all conditions, participants produced the correct pronoun more often than not (`r exp2_r_prod['Intercept', 'Text']`). He/him and she/her (*M* = `r min(exp2_r_prod_means_heshe$mean)`--`r max(exp2_r_prod_means_heshe$mean)` between PSA and Biography conditions) were produced more accurately than they/them (*M* = `r min(exp2_r_prod_means_they$mean)`--`r max(exp2_r_prod_means_they$mean)`) (`r exp2_r_prod['Pronoun=They_HeShe', 'Text']`). He/him was produced somewhat more accurately than she/her (`r exp2_r_prod['Pronoun=He_She', 'Text']`). The relative difficulty of they/them was attenuated with the gendered language PSA (`r exp2_r_prod['Pronoun=They_HeShe:PSA=GenLang', 'Text']`), and there was a significant interaction between PSA and Biography (`r exp2_r_prod['PSA=GenLang:Biography=They', 'Text']`). These effects were qualified by a three-way interaction between Pronoun, PSA, and Biography (`r exp2_r_prod['Pronoun=They_HeShe:PSA=GenLang:Biography=They', 'Text']`). A follow-up analysis probing this interaction found that the gendered language PSA reduced the relative difficulty of they/them more when paired with the biographies that used he/him and she/her (`r exp2_r_prod_bio_heshe0['Pronoun=They_HeShe:PSA=GenLang', 'Text']`) than when paired with the biographies that used they/them (`r exp2_r_prod_bio_they0['Pronoun=They_HeShe:PSA=GenLang', 'Text']`). However, examining the means for the two conditions with the gendered language PSA (red in [Figure @fig-exp2-prod]B) indicates that the difference in relative accuracy for they/them compared to he/him + she/her is due to Biography affecting accuracy for he/him + she/her characters, but not accuracy for they/them characters. Finally, an exploratory analysis measured the proportion of participants who produced singular *they* at all, regardless of accuracy (@tbl-exp2-prod-they). Participants who read the gendered language PSA were more likely to produce singular *they* at least once (`r exp2_r_use_they['PSA=GenLang', 'Text']`), with proportions rising from `r exp2_r_use_they_means['Unrelated HeShe', 'percent']`% and `r exp2_r_use_they_means['Unrelated They', 'percent']`% in conditions that read the unrelated PSA to `r exp2_r_use_they_means['GenLang They', 'percent']`% and `r exp2_r_use_they_means['GenLang HeShe', 'percent']`% in conditions that read the gendered language PSA.
 
-<br>
+|                              |
+|------------------------------|
+| **Experiment 2: Production** |
+
+: Experiment 2: Model results for the effects of Pronoun, PSA, and Biography on Production Accuracy. {#tbl-exp2-prod .borderless}
 
 ```{r}
-#| label: tbl-exp2-prod
-#| tbl-cap: "Experiment 2: Model results for the effects of Pronoun, PSA, and Biography on Production Accuracy."
+#| label: table-exp2-prod
 #| output: true
-#| warning: false
 
 exp2_tb_prod <- tab_model(
   model = exp2_m_prod@model,
@@ -560,20 +561,18 @@ exp2_tb_prod <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp2_tb_prod$knitr %<>%
-  tab_model_title_row("Experiment 2: Production") %>%
-  drop_sigma()
+exp2_tb_prod$knitr %<>% drop_sigma()
 exp2_tb_prod
 ```
 
 ```{r}
 #| label: fig-exp2-prod
-#| fig-cap: "Experiment 2: [A] Pronoun accuracy in written sentence completion task, split by PSA and Biography conditions. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means. [B] Production accuracy for he/him + she/her characters and they/them characters, split by PSA and Biography conditions. [C] Number of times each participant produced singular *they*, split by PSA and Biography conditions. The distribution of all pronoun responses is shown in the appendix (@fig-exp2-dist)."
+#| fig-cap: "Experiment 2: [A] Pronoun accuracy in written sentence completion task, split by PSA and Biography conditions. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means. [B] Production accuracy for he/him + she/her characters and they/them characters, split by PSA and Biography conditions. [C] Number of times each participant produced singular *they*, split by PSA and Biography conditions. The distribution of all pronoun responses is shown in the appendix (@fig-exp2-dist)."
 #| fig-asp: 1
 #| output: true
 #| cache: true
 
-# accuracy
+# Accuracy----
 exp2_p_prod_acc <- exp2_d %>%
   group_by(Participant, Pronoun, PSA, Biography) %>%
   summarise(P_Acc = mean(P_Acc)) %>%
@@ -603,7 +602,7 @@ exp2_p_prod_acc <- exp2_d %>%
   labs(x = element_blank(), y = "By-Participant Mean Accuracy") +
   guides(fill = guide_none(), color = guide_none())
 
-# PSA effect
+# PSA effect----
 exp2_p_prod_PSA <- exp2_d %>%
   mutate(Pronoun_Group = ifelse(
     Pronoun == "they/them", "they/them", "he/him +\nshe/her"
@@ -631,7 +630,7 @@ exp2_p_prod_PSA <- exp2_d %>%
   theme(axis.ticks.y = element_line()) +
   labs(x = element_blank(), y = "Mean Accuracy")
 
-# use they/them
+# Use they/them----
 exp2_p_prod_they <- exp2_d %>%
   mutate(P_IsThey = ifelse(P_Response == "they/them", 1, 0)) %>%
   group_by(Participant, PSA, Biography) %>%
@@ -667,7 +666,7 @@ exp2_p_prod_they <- exp2_d %>%
     fill = element_blank()
   )
 
-# combine
+# Combine----
 exp2_p_prod_acc + exp2_p_prod_PSA + exp2_p_prod_they +
   plot_annotation(
     title = "Experiment 2: Accuracy & Distribution of Production Responses",
@@ -703,16 +702,14 @@ exp2_r_mp <- exp2_m_mp@model %>% tidy_model_results()
 
 The third model tested the effects of memory accuracy, PSA, Biography, and pronoun on production accuracy (@tbl-exp2-both). In addition to the effects described above, participants were more likely to accurately use a character's pronouns in the sentence completion task if they had remembered that character's pronouns in the multiple-choice task (`r exp2_r_mp['M_Acc=Wrong_Right', 'Text']`). No other interactions with memory accuracy were significant. Examining the combined distribution of responses, it was again more common to remember but not produce they/them than to produce but not remember they/them (@fig-exp2-both).
 
-<br>
-
 ```{r}
 #| label: fig-exp2-both
-#| fig-cap: "Experiment 2: [A] Production accuracy, split by memory accuracy in the prior task, then PSA and Biography conditions. The lighter colors indicate trials where memory had been incorrect, and the darker colors indicate trials where memory had been correct. Error bars indicate 95% CIs calculated over trials. [B] Distribution of combined memory and production accuracy, split by PSA and Biography conditions."
+#| fig-cap: "Experiment 2: [A] Production accuracy, split by memory accuracy in the prior task, then PSA and Biography conditions. The lighter colors indicate trials where memory had been incorrect, and the darker colors indicate trials where memory had been correct. Error bars indicate 95% CIs calculated over trials. [B] Distribution of combined memory and production accuracy, split by PSA and Biography conditions."
 #| fig-asp: 1.1
 #| output: true
 #| cache: true
 
-# compare
+# Compare----
 exp2_p_mp_compare <- exp2_d %>%
   mutate(
     CompareTask = case_when(
@@ -749,7 +746,7 @@ exp2_p_mp_compare <- exp2_d %>%
     fill  = element_blank()
   )
 
-# production split by memory
+# Production split by memory----
 exp2_p_mp_split <- exp2_d %>%
   ggplot(aes(x = Pronoun, y = P_Acc, fill = Pronoun, alpha = M_Acc_Factor)) +
   stat_summary(fun.data = mean_cl_boot, geom = "bar", position = "dodge") +
@@ -785,7 +782,7 @@ exp2_p_mp_split <- exp2_d %>%
     alpha = element_blank()
   )
 
-# combine
+# Combine----
 exp2_p_mp_split / exp2_p_mp_compare +
   plot_annotation(
     title = "Experiment 2: Memory & Production",

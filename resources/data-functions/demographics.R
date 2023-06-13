@@ -131,7 +131,7 @@ demographics_table <- function(
   require(tidyverse)
   require(magrittr)
   require(flextable)
-  set_flextable_defaults(padding = 0, line_spacing = 1)
+  set_flextable_defaults(padding = 5, line_spacing = 1, font.size = 12)
 
   # Join counts with all response options
   items <- demographics_items(d)

@@ -45,8 +45,6 @@ load("r_data/exp1.RData")
 
 In addition to whether the characters used he/him, she/her, or they/them, participants were also asked about the characters' job and pets (@fig-exp1a-job-pet). Accuracy matching the 12 jobs to the 12 characters was lower (*M* = `r exp1a_r_job$mean`, *SD* = `r exp1a_r_job$sd`) than for the 3 pets (*M* = `r exp1a_r_pet_means['all', 'mean']`, *SD* = `r exp1a_r_pet_means['all', 'sd']`) and 3 pronouns (*M* = `r exp1a_r_memory_means['all', 'mean']`, *SD* = `r exp1a_r_memory_means['all', 'sd']`), but not at floor. Neither job nor pet accuracy varied based on the character's pronouns. Accuracy for the characters' pets (cat, dog, or fish) was designed as a comparison to pronoun accuracy, and the two were compared in a model including the character's pronouns (contrast coded as in the main analyses) and question type (pronoun vs pet, mean-center effects coded) as fixed effects. The most complex model that converged included by-participant random slopes for question type (@tbl-exp1a-pet). Averaging across the three character pronouns, participants were significantly more accurate for pronoun questions than pet questions (`r exp1a_r_pet['M_Type=Pet_Pronoun', 'Text']`). The interaction between character pronoun (they/them vs he/him + she/her) and question type was significant (`r exp1a_r_pet['M_Type=Pet_Pronoun:CharPronoun=They_HeShe', 'Text']`), reflecting that the character pronouns affected accuracy for the pronoun question, but not the pet question. Probing this interaction indicated that for they/them characters, there was no significant difference in accuracy between pronouns and pets (`r exp1a_r_pet_they['M_Type=Pet_Pronoun', 'Text']`), but that for he/him + she/her characters, pronoun accuracy was higher than pet accuracy (`r exp1a_r_pet_heshe['M_Type=Pet_Pronoun', 'Text']`).
 
-<br>
-
 ```{r}
 #| label: fig-exp1a-job-pet
 #| fig-cap: "Experiment 1A: By-participant mean accuracy in the multiple-choice memory task for each character's pronouns, pet, and job, with colors indicating the character's pronouns. Error bars indicate a 95% CI calculated over the by-participant means."
@@ -91,11 +89,14 @@ read.csv("data/exp1a_data.csv", stringsAsFactors = TRUE) %>%
   )
 ```
 
-<br>
+|                                                |
+|------------------------------------------------|
+| **Experiment 1A: Memory for Pronouns vs Pets** |
+
+: Experiment 1A: Model results for the effects of Character Pronoun and Question Type (character's pronoun or pet) on Memory Accuracy. Character Pronoun is contrast-coded as in the main analysis. {#tbl-exp1a-pet .borderless}
 
 ```{r}
-#| label: tbl-exp1a-pet
-#| tbl-cap: "Experiment 1A: Model results for the effects of Character Pronoun and Question Type (character's pronoun or pet) on Memory Accuracy. Character Pronoun is contrast-coded as in the main analysis."
+#| label: table-exp1a-pet
 #| output: true
 
 exp1a_tb_pets_all <- tab_model(
@@ -114,20 +115,20 @@ exp1a_tb_pets_all <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp1a_tb_pets_all$knitr %<>%
-  tab_model_title_row("Experiment 1A: Memory for Pronouns vs Pets") %>%
-  exp1_tb_random_labels() %>%
-  drop_sigma()
+exp1a_tb_pets_all$knitr %<>% exp1_tb_random_labels() %>% drop_sigma()
 exp1a_tb_pets_all
 ```
 
 The memory and production tasks were compared directly by creating a model predicting accuracy in both tasks, with Task as a mean-center effects coded fixed effect (@tbl-exp1a-task). The main effect of Task was not significant (`r exp1a_r_task['Task=M_P', 'Text']`), but the interaction between Pronoun (They vs He + She) was significant (`r exp1a_r_task['Pronoun=They_HeShe:Task=M_P', 'Text']`). Probing this interaction indicated that memory was more accurate than production for they/them characters (`r exp1a_r_task_they['Task=M_P', 'Text']`). Conversely, memory was less accurate than production for he/him and she/her characters (`r exp1a_r_task_heshe['Task=M_P', 'Text']`).
 
-<br>
+|                                                             |
+|-------------------------------------------------------------|
+| **Experiment 1A: Comparing Memory and Production Accuracy** |
+
+: Experiment 1A: Model results for the effects of Pronoun and Task (memory vs production) on accuracy. {#tbl-exp1a-task .borderless}
 
 ```{r}
-#| label: tbl-exp1a-task
-#| tbl-cap: "Experiment 1A: Model results for the effects of Pronoun and Task (memory vs production) on accuracy."
+#| label: table-exp1a-task
 #| output: true
 
 exp1a_tb_task <- tab_model(
@@ -146,9 +147,6 @@ exp1a_tb_task <- tab_model(
   CSS = table_css
 )
 exp1a_tb_task$knitr %<>%
-  tab_model_title_row(
-    "Experiment 1A: Comparing Memory and Production Accuracy"
-  ) %>%
   exp1_tb_random_labels() %>%
   str_replace(  # bug with tab_model() makes it drop random slope labels
     "&rho;<sub>01</sub>",
@@ -164,11 +162,14 @@ exp1a_tb_task
 
 ### Experiment 1B: Additional Results {#supplementary-exp1b}
 
-<br>
+|                           |
+|---------------------------|
+| **Experiment 1B: Memory** |
+
+: Experiment 1B: Model results for the effect of Pronoun on Memory Accuracy, when the memory task was completed after the production task. {#tbl-exp1b-mem .borderless}
 
 ```{r}
-#| label: tbl-exp1b-mem
-#| tbl-cap: "Experiment 1B: Model results for the effect of Pronoun on Memory Accuracy, when the memory task was completed after the production task."
+#| label: table-exp1b-mem
 #| output: true
 
 exp1b_tb_mem <- tab_model(
@@ -185,15 +186,18 @@ exp1b_tb_mem <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp1b_tb_mem$knitr %<>%
-  tab_model_title_row("Experiment 1B: Memory") %>%
-  drop_sigma()
+exp1b_tb_mem$knitr %<>% drop_sigma()
 exp1b_tb_mem
 ```
 
+|                               |
+|-------------------------------|
+| **Experiment 1B: Production** |
+
+: Experiment 1B: Model results for the effect of Pronoun on Production Accuracy, when the memory task was completed after the production task. {#tbl-exp1b-prod .borderless}
+
 ```{r}
-#| label: tbl-exp1b-prod
-#| tbl-cap: "Experiment 1B: Model results for the effect of Pronoun on Production Accuracy, when the memory task was completed after the production task."
+#| label: table-exp1b-prod
 #| output: true
 
 exp1b_tb_prod <- tab_model(
@@ -208,15 +212,18 @@ exp1b_tb_prod <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp1b_tb_prod$knitr %<>%
-  tab_model_title_row("Experiment 1B: Production") %>%
-  drop_sigma()
+exp1b_tb_prod$knitr %<>% drop_sigma()
 exp1b_tb_prod
 ```
 
+|                                                 |
+|-------------------------------------------------|
+| **Experiment 1B: Memory Predicting Production** |
+
+: Experiment 1B: Model results for the effect of Pronoun on Production Accuracy, when the memory task was completed after the production task. {#tbl-exp1b-both .borderless}
+
 ```{r}
-#| label: exp1b-mp-table
-#| output: true
+#| label: table-exp1b-mp
 #| results: asis
 
 exp1b_tb_mp <- tab_model(
@@ -231,21 +238,9 @@ exp1b_tb_mp <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp1b_tb_mp$knitr %<>%
-  tab_model_title_row(
-    "Experiment 1B: Memory Predicting Production"
-  ) %>%
-  drop_sigma()
+exp1b_tb_mp$knitr %<>% drop_sigma()
 cat(exp1b_tb_mp$knitr)
 ```
-
-|     |     |
-|-----|-----|
-|     |     |
-
-: Experiment 1B: Model results for the effects of Pronoun and Memory Accuracy on Production Accuracy, when the memory task was completed after the production task. {#tbl-exp1b-both}
-
-<br>
 
 ```{r}
 #| label: fig-exp1b-job-pet
@@ -291,11 +286,14 @@ read.csv("data/exp1b_data.csv", stringsAsFactors = TRUE) %>%
   )
 ```
 
-<br>
+|                                                |
+|------------------------------------------------|
+| **Experiment 1B: Memory for Pronouns vs Pets** |
+
+: Experiment 1B: Model results for the effects of Character Pronoun and Question Type on accuracy in the pronoun and pet memory questions, when the memory task was completed after the production task. {#tbl-exp1b-pet .borderless}
 
 ```{r}
-#| label: tbl-exp1b-pet
-#| tbl-cap: "Experiment 1B: Model results for the effects of Character Pronoun and Question Type on accuracy in the pronoun and pet memory questions, when the memory task was completed after the production task."
+#| label: table-exp1b-pet
 #| output: true
 
 exp1b_tb_pets_all <- tab_model(
@@ -314,16 +312,11 @@ exp1b_tb_pets_all <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp1b_tb_pets_all$knitr %<>%
-  tab_model_title_row("Experiment 1B: Memory for Pronouns vs Pets") %>%
-  exp1_tb_random_labels() %>%
-  drop_sigma()
+exp1b_tb_pets_all$knitr %<>% exp1_tb_random_labels() %>% drop_sigma()
 exp1b_tb_pets_all
 ```
 
 ### Comparing Experiments 1A & 1B {#supplementary-exp1ab}
-
-<br>
 
 ```{r}
 #| label: fig-exp1ab-panel1
@@ -477,8 +470,6 @@ exp1b_p_memory_acc +
   )
 ```
 
-<br>
-
 ```{r}
 #| label: fig-exp1ab-panel2
 #| fig-cap: "Experiments 1A & 1B. Distribution of combined memory and production accuracy, then production accuracy split by memory accuracy, comparing between task orders. Error bars indicate 95% CIs calculated over trials."
@@ -577,11 +568,14 @@ exp1b_p_compare / exp1b_p_split +
   ))
 ```
 
-<br>
+|                                                                                    |
+|------------------------------------------------------------------------|
+| **Comparing Experiments 1A (Memory First) & 1B (Production First):**<br>**Memory** |
+
+: Experiments 1A & 1B: Model results for the effects of Pronoun and Task Order (Experiment 1A vs Experiment 1B) on Memory Accuracy. {#tbl-exp1-mem .borderless}
 
 ```{r}
-#| label: tbl-exp1-mem
-#| tbl-cap: "Experiments 1A & 1B: Model results for the effects of Pronoun and Task Order (Experiment 1A vs Experiment 1B) on Memory Accuracy."
+#| label: table-exp1-mem
 #| output: true
 
 exp1_tb_mem <- tab_model(
@@ -598,17 +592,18 @@ exp1_tb_mem <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp1_tb_mem$knitr %<>%
-  tab_model_title_row(
-    "Comparing Experiments 1A (Memory First) & 1B (Production First): Memory"
-  ) %>%
-  drop_sigma()
+exp1_tb_mem$knitr %<>% drop_sigma()
 exp1_tb_mem
 ```
 
+|                                                                                        |
+|------------------------------------------------------------------------|
+| **Comparing Experiments 1A (Memory First) & 1B (Production First):**<br>**Production** |
+
+: Experiments 1A & 1B: Model results for the effects of Pronoun and Task Order (Experiment 1A vs Experiment 1B) on Production Accuracy. {#tbl-exp1-prod .borderless}
+
 ```{r}
-#| label: exp1-prod-table
-#| output: true
+#| label: table-exp1-prod
 #| results: asis
 
 exp1_tb_prod <- tab_model(
@@ -626,26 +621,18 @@ exp1_tb_prod <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp1_tb_prod$knitr %<>%
-  tab_model_title_row(paste(
-    "Comparing Experiments 1A (Memory First) & 1B (Production First):<br>",
-    "Production"
-  )) %>%
-  drop_sigma()
-cat(exp1_tb_prod$knitr, "\n--------\n")
+exp1_tb_prod$knitr %<>% drop_sigma()
+cat(exp1_tb_prod$knitr)
 ```
 
-|     |     |
-|-----|-----|
-|     |     |
+|                                                                                                          |
+|------------------------------------------------------------------------|
+| **Comparing Experiments 1A (Memory First) & 1B (Production First):**<br>**Memory Predicting Production** |
 
-: Experiments 1A & 1B: Model results for the effects of Pronoun and Task Order (Experiment 1A vs Experiment 1B) on Production Accuracy. {#tbl-exp1-prod}
-
-<br>
+: Experiments 1A & 1B: Model results for the effects of Pronoun, Memory Accuracy, and Task Order (Experiment 1A vs Experiment 1B) on Production Accuracy. {#tbl-exp1-both .borderless}
 
 ```{r}
-#| label: exp1-mp-table
-#| output: true
+#| label: table-exp1-mp
 #| results: asis
 
 exp1_tb_mp <- tab_model(
@@ -662,26 +649,20 @@ exp1_tb_mp <- tab_model(
 )
 exp1_tb_mp$knitr %<>%
   tab_model_title_row(paste(
-    "Comparing Experiments 1A (Memory First) & 1B (Production First):<br>",
-    "Memory Predicting Production"
+    ""
   )) %>%
   drop_sigma()
 cat(exp1_tb_mp$knitr)
 ```
 
-|     |     |
-|-----|-----|
-|     |     |
+|                                                                  |
+|------------------------------------------------------------------|
+| **Comparing Experiments 1A (Memory First) & 1B (Production First):**<br>**By-Participant Differences Between Memory & Production** |
 
-: Experiments 1A & 1B: Model results for the effects of Pronoun, Memory Accuracy, and Task Order (Experiment 1A vs Experiment 1B) on Production Accuracy. {#tbl-exp1-both}
-
-<br>
+: Experiments 1A & 1B: Model results for the effects of Pronoun and Task Order on the difference between memory accuracy and production accuracy for each participant. {#tbl-exp1-task .borderless}
 
 ```{r}
-#| label: exp1-task-table
-#| include: true
-#| echo: false
-#| warning: false
+#| label: table-exp1-task
 #| results: asis
 
 exp1_tb_diff <- tab_model(
@@ -698,27 +679,15 @@ exp1_tb_diff <- tab_model(
   wrap.labels = 70,
   CSS = table_css
 )
-exp1_tb_diff$knitr %<>%
-  tab_model_title_row(paste(
-    "Comparing Experiments 1A (Memory First) & 1B (Production First):<br>",
-    "By-Participant Differences Between Memory & Production"
-  )) %>%
-  drop_sigma()
+exp1_tb_diff$knitr %<>% drop_sigma()
 cat(exp1_tb_diff$knitr)
 ```
 
-|     |     |
-|-----|-----|
-|     |     |
-
-: Experiments 1A & 1B: Model results for the effects of Pronoun and Task Order on the difference between memory accuracy and production accuracy for each participant. {#tbl-exp1-task}
-
-<br>
-
 ```{r}
 #| label: fig-exp1-reliability
-#| fig-cap: "Experiments 1A & 1B: Correlations between by-participant random slopes for the effect of Pronoun in each half of the data, for the memory and production tasks."
+#| fig-cap: "Experiments 1A & 1B: Correlations between by-participant random slopes <br>for the effect of Pronoun in each half of the data, for the memory and production tasks."
 #| fig-asp: 1
+#| out-width: "70%"
 #| output: true
 #| cache: true
 
@@ -825,8 +794,6 @@ As in Experiments 1A & 1B, memory for the characters' 12 jobs was analyzed in or
 
 Pronoun and pet questions were compared in a model including the character's pronouns (contrast coded as in the main analyses), the question type (mean-center effects coded), and the PSA and Biography conditions as fixed effects. The initial model included interactions between Character Pronoun, PSA, and Biography as in the main analyses; the interaction between Character Pronoun and Question Type; by-participant and by-item intercepts; and by-participant and by-item slopes for Character Pronoun and Question Type. In addition to the subset of interactions between fixed effects listed above, the most complex model that converged included by-participant intercepts, by-item intercepts, and by-item slopes for Question Type (@tbl-exp2-pet). Participants were significantly more accurate for pronoun questions than pet questions (`r exp2_r_pet['M_Type=Pet_Pronoun', 'Text']`), and the interaction between Character Pronoun (they/them vs he/him + she/her) and Question Type was significant (`r exp2_r_pet['M_Type=Pet_Pronoun:CharPronoun=They_HeShe', 'Text']`). Probing this interaction indicated that there was no significant difference in accuracy between pronouns and pets for they/them characters (`r exp2_r_pet_they['M_Type=Pet_Pronoun', 'Text']`), only for he/him + she/her characters (`r exp2_r_pet_heshe['M_Type=Pet_Pronoun', 'Text']`). This resembles the pattern of results in Experiment 1.
 
-<br>
-
 ```{r}
 #| label: fig-exp2-job-pet
 #| fig-cap: "Experiment 2: Mean accuracy in the multiple-choice memory task for pronoun, pet, and job, split by PSA and Biography conditions. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means."
@@ -873,11 +840,14 @@ exp2_d_all %>%
   )
 ```
 
-<br>
+|                                               |
+|-----------------------------------------------|
+| **Experiment 2: Memory for Pronouns vs Pets** |
+
+: Experiment 2: Model results for the effects of Character Pronoun, PSA, Biography, and Question Type on accuracy in the pronoun and pet memory questions. {#tbl-exp2-pet .borderless}
 
 ```{r}
-#| label: tbl-exp2-pet
-#| tbl-cap: "Experiment 2: Model results for the effects of Character Pronoun, PSA, Biography, and Question Type on accuracy in the pronoun and pet memory questions."
+#| label: table-exp2-pet
 #| output: true
 
 exp2_tb_pets <- tab_model(
@@ -896,16 +866,11 @@ exp2_tb_pets <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp2_tb_pets$knitr %<>%
-  tab_model_title_row("Experiment 2: Memory for Pronouns vs Pets") %>%
-  exp2_tb_random_labels() %>%
-  drop_sigma()
+exp2_tb_pets$knitr %<>% exp2_tb_random_labels() %>% drop_sigma()
 exp2_tb_pets
 ```
 
 ### Additional Figures {#supplementary-exp2-figures}
-
-<br>
 
 ```{r}
 #| label: fig-exp2-dist
@@ -971,11 +936,14 @@ exp2_p_memory_dist / exp2_p_prod_dist +
 
 ### Additional Model Results {#supplementary-exp2-tables}
 
-<br>
+|                                                |
+|------------------------------------------------|
+| **Experiment 2: Memory Predicting Production** |
+
+: Experiment 2: Model results for the effects of Pronoun, PSA, Biography, and Memory Accuracy on Production Accuracy. {#tbl-exp2-both .borderless}
 
 ```{r}
-#| label: tbl-exp2-both
-#| tbl-cap: "Experiment 2: Model results for the effects of Pronoun, PSA, Biography, and Memory Accuracy on Production Accuracy."
+#| label: table-exp2-both
 #| output: true
 
 exp2_tb_mp <- tab_model(
@@ -990,15 +958,18 @@ exp2_tb_mp <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp2_tb_mp$knitr %<>%
-  tab_model_title_row("Experiment 2: Memory Predicting Production") %>%
-  drop_sigma()
+exp2_tb_mp$knitr %<>% drop_sigma()
 exp2_tb_mp
 ```
 
+|                                                 |
+|-------------------------------------------------|
+| **Experiment 2: Production of Singular *They*** |
+
+: Experiment 2: Model results for the effects of PSA and Biography on whether each participant produced singular *they* at least once. Participants were coded with a 1 if they produced singular *they* at least once in the written sentence completion task, regardless of accuracy, and with a 0 if they did not. {#tbl-exp2-prod-they .borderless}
+
 ```{r}
 #| label: table-exp2-use-they
-#| output: true
 #| results: asis
 
 exp2_tb_use_they <- tab_model(
@@ -1017,18 +988,8 @@ exp2_tb_use_they <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp2_tb_use_they$knitr %<>%
-  tab_model_title_row(
-    "Experiment 2: Production of Singular <i>They</i>"
-  )
 cat(exp2_tb_use_they$knitr)
 ```
-
-|     |     |
-|-----|-----|
-|     |     |
-
-: Experiment 2: Model results for the effects of PSA and Biography on whether each participant produced singular they at least once. Participants were coded with a 1 if they produced singular they at least once in the written sentence completion task, regardless of accuracy, and with a 0 if they did not. {#tbl-exp2-prod-they}
 
 ## Experiment 3 {#supplementary-exp3}
 
@@ -1043,9 +1004,13 @@ load("r_data/exp3.RData")
 
 ### Norming Study {#supplementary-norming}
 
-```{r}
-#| label: tbl-norming
-#| tbl-cap: "Image Norming: Results. Counts and proportions of they/them, he/him, she/her, and no pronoun responses for each image in norming study."
+|  |
+|--|
+|  |
+
+: Image Norming: Results. Counts and proportions <br>of they/them, he/him, she/her, and no pronoun responses for <br>each image in norming study. {#tbl-norming .borderless}
+
+```{r ft.align="left"}
 #| output: true
 
 exp3_d_norming %>%
@@ -1081,16 +1046,23 @@ exp3_d_norming %>%
   bold(i = c(1, 8, 15), part = "body") %>%
   border_remove() %>%
   hline(part = "header") %>%
-  hline(i = c(1, 7, 8, 14, 15), part = "body")
+  hline(i = c(1, 7, 8, 14, 15), part = "body") %>%
+  width(j = 1, width = 0.25) %>%
+  width(j = 3:6, width = 0.75) %>%
+  fontsize(size = 12, part = "all")
 ```
-
-### Additional Survey Results {#supplementary-exp3-survey}
 
 <br>
 
-```{r}
-#| label: tbl-exp3-demographics2
-#| tbl-cap: "Experiment 3: Additional Demographics. Race/ethnicity has a higher total, as participants could select more than one option."
+### Additional Survey Results {#supplementary-exp3-survey}
+
+|  |
+|--|
+|  |
+
+: Experiment 3: Additional Demographics. Race/ethnicity has a higher total, as participants could select more than one option. {#tbl-exp3-demographics2 .borderless}
+
+```{r ft.align="left"}
 #| output: true
 
 demographics_table(
@@ -1100,13 +1072,18 @@ demographics_table(
 )
 ```
 
-The difference in naturalness ratings between singular *they* co-referring with generics, *each*, and *every* [Indefinite] and with masculine, feminine, and gender-neutral names [Proper Name] was tested using a linear mixed-effects model, with Referent Type mean-center effects coded. The model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp3_r_ratings['Intercept', 'Text']`). The significant effect of Referent Type indicated that singular *they* was rated as more natural with indefinites than with proper names (`r exp3_r_ratings['Type=Name_Generic', 'Text']`) (@tbl-exp3-ratings).
-
 <br>
 
+The difference in naturalness ratings between singular *they* co-referring with generics, *each*, and *every* \[Indefinite\] and with masculine, feminine, and gender-neutral names \[Proper Name\] was tested using a linear mixed-effects model, with Referent Type mean-center effects coded. The model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp3_r_ratings['Intercept', 'Text']`). The significant effect of Referent Type indicated that singular *they* was rated as more natural with indefinites than with proper names (`r exp3_r_ratings['Type=Name_Generic', 'Text']`) (@tbl-exp3-ratings).
+
+|                                                               |
+|---------------------------------------------------------------|
+| **Experiment 3: Naturalness Ratings for Singular** ***They*** |
+
+: Experiment 3: Naturalness Ratings. Model results for the effect of Referent Type (generics, *each*, *every* vs masculine, feminine, gender-neutral names) on sentence naturalness ratings for singular *they*. {#tbl-exp3-ratings .borderless}
+
 ```{r}
-#| label: tbl-exp3-ratings
-#| tbl-cap: "Experiment 3: Naturalness Ratings. Model results for the effect of Referent Type (generic, each, every vs masculine, feminine, gender-neutral names) on sentence naturalness ratings for singular *they*."
+#| label: table-exp3-ratings
 #| output: true
 
 exp3_tb_ratings <- tab_model(
@@ -1123,18 +1100,17 @@ exp3_tb_ratings <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp3_tb_ratings$knitr %<>%
-  tab_model_title_row(
-    "Experiment 3: Naturalness Ratings for Singular <i>They"
-  ) %>%
-  exp3_tb_random_labels() %>%
-  drop_sigma()
+exp3_tb_ratings$knitr %<>% exp3_tb_random_labels() %>% drop_sigma()
 exp3_tb_ratings
 ```
 
-```{r}
-#| label: tbl-exp3-gender-beliefs
-#| tbl-cap: "Experiment 3: Gender Beliefs. Question texts, distributions, means, and SDs for items in the gender beliefs scale [@nagoshi2008]."
+|     |
+|-----|
+|     |
+
+: Experiment 3: Gender Beliefs. Question texts, distributions, means, <br>and SDs for items in the gender beliefs scale [@nagoshi2008]. {#tbl-exp3-gender-beliefs .borderless}
+
+```{r ft.align="left"}
 #| output: true
 
 # Make histograms of responses for each item
@@ -1224,13 +1200,13 @@ exp3_d_survey %>%
   hline(i = 9, part = "body")
 ```
 
-### Additional Pronoun Accuracy Results {#supplementary-exp3-accuracy}
-
 <br>
+
+### Additional Pronoun Accuracy Results {#supplementary-exp3-accuracy}
 
 ```{r}
 #| label: fig-exp3-by-character
-#| fig-cap: "Experiment 3: [A] Distribution of pronouns produced for each of the 6 character images. [B] Mean accuracy for each of the 18 name + image + pronoun combinations, summarized across Nametag & Introduction conditions. Error bars indicate 95% CIs calculated over the by-item means."
+#| fig-cap: "Experiment 3: [A] Distribution of pronouns produced for each of the 6 character images [@drucker2019]. [B] Mean accuracy for each of the 18 name + image + pronoun combinations, summarized across Nametag & Introduction conditions. Error bars indicate 95% CIs calculated over the by-item means."
 #| fig-width: 6.5
 #| fig-height: 5
 #| output: true
@@ -1351,8 +1327,6 @@ exp3_p_dist_image + exp3_p_acc_image +
 
 ### Participant Covariate Analyses {#supplementary-exp3-covariates}
 
-<br>
-
 ```{r}
 #| label: fig-exp3-cov-dist
 #| fig-cap: "Experiment 3: Distribution of mean-centered, rescaled participant covariates tested for model inclusion."
@@ -1449,11 +1423,14 @@ exp3_p_dist_image + exp3_p_acc_image +
 )
 ```
 
-<br>
+|                                          |
+|------------------------------------------|
+| **Experiment 3: Participant Covariates** |
+
+: Experiment 3: Model results for the effects of Pronoun, Nametag, Introduction, Gender Beliefs, and Familiarity with Pronoun Sharing on accuracy. {#tbl-exp3-cov .borderless}
 
 ```{r}
-#| label: tbl-exp3-cov
-#| tbl-cap: "Experiment 3: Model results for the effects of Pronoun, Nametag, Introduction, Gender Beliefs, and Familiarity with Pronoun Sharing on accuracy."
+#| label: table-exp3-cov
 #| output: true
 
 exp3_tb_subj_cov <- tab_model(
@@ -1469,7 +1446,6 @@ exp3_tb_subj_cov <- tab_model(
   CSS = table_css
 )
 exp3_tb_subj_cov$knitr %<>%
-  tab_model_title_row("Experiment 3: Participant Covariates") %>%
   drop_sigma() %>%
   exp3_tb_random_labels() %>%
   str_replace_all("Introduction", "Intro")
@@ -1483,18 +1459,19 @@ exp3_tb_subj_cov
 #| label: load-workspace-exp4
 
 rm(list = ls(pattern = "exp3"))  # clear 3 first
-
-source("resources/data-functions/exp4_load_data.R")
 load("r_data/exp4.RData")
+source("resources/data-functions/exp4_load_data.R")
 ```
 
 ### Additional Survey Results {#supplementary-exp4-survey}
 
-<br>
+|     |
+|-----|
+|     |
 
-```{r}
-#| label: tbl-exp4-gender-beliefs
-#| tbl-cap: "Experiment 4: Gender Beliefs. Question texts, distributions, means, and SDs for items in the gender beliefs scale [@nagoshi2008]."
+: Experiment 4: Gender Beliefs. Question texts, distributions, means, and SDs for items in the gender beliefs scale [@nagoshi2008]. {#tbl-exp4-gender-beliefs .borderless}
+
+```{r ft.align="left"}
 #| output: true
 
 # Make histograms of responses for each item
@@ -1584,14 +1561,19 @@ exp4_d_survey %>%
   hline(i = 9, part = "body")
 ```
 
-As in Experiment 3, the difference in naturalness ratings between singular *they* co-referring with generics, *each*, and *every* [Indefinite] and with masculine, feminine, and gender-neutral* names [Proper Name] was tested using a linear mixed-effects model (@tbl-exp4-ratings). Referent Type was mean-center effects coded, and the model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp4_r_ratings['Intercept', 'Text']`). There was no significant difference between proper name and indefinite referents (`r exp4_r_ratings['Type=Name_Generic', 'Text']`).
-
 <br>
 
+As in Experiment 3, the difference in naturalness ratings between singular *they* co-referring with generics, *each*, and *every* \[Indefinite\] and with masculine, feminine, and gender-neutral names \[Proper Name\] was tested using a linear mixed-effects model (@tbl-exp4-ratings). Referent Type was mean-center effects coded, and the model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp4_r_ratings['Intercept', 'Text']`). There was no significant difference between proper name and indefinite referents (`r exp4_r_ratings['Type=Name_Generic', 'Text']`).
+
+|                                                               |
+|---------------------------------------------------------------|
+| **Experiment 4: Naturalness Ratings for Singular** ***They*** |
+
+: Experiment 4: Model results for the effect of Referent Type (generics, *each*, *every* vs masculine, feminine, gender-neutral names) on sentence naturalness ratings for singular *they.* {#tbl-exp4-ratings .borderless}
+
 ```{r}
-#| label: tbl-exp4-ratings
-#| tbl-cap: "Experiment 4: Model results for the effect of Referent Type (generics, each, every vs masculine, feminine, gender-neutral names) on sentence naturalness ratings for singular *they.*"
-#| output: asis
+#| label: table-exp4-ratings
+#| output: true
 
 exp4_tb_ratings <- tab_model(
   model = exp4_m_ratings,
@@ -1606,21 +1588,21 @@ exp4_tb_ratings <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp4_tb_ratings$knitr %<>%
-  exp4_tb_random_effects() %>%
-  tab_model_title_row(
-    "Experiment 4: Naturalness Ratings for Singular <i>They</i>"
-  )
+exp4_tb_ratings$knitr %<>% exp4_tb_random_effects()
 exp4_tb_ratings
 ```
 
 ### Match Judgments {#supplementary-exp4-match}
 
-<br>
+|                                                       |
+|-------------------------------------------------------|
+| **Experiment 4: Match Judgment Rates in Test Trials** |
+
+: Experiment 4: Test Trial Match Rates. Model results for the effect of Pronoun Pair on the likelihood of judging the story to match the scene in test trials (match = 1 = correct). {#tbl-exp4-match-CR .borderless}
+
 ```{r}
-#| label: tbl-exp4-match-CR
-#| tbl-cap: "Experiment 4: Test Trial Match Rates. Model results for the effect of Pronoun Pair on the likelihood of judging the story to match the scene in test trials."
-#| output: asis
+#| label: table-exp4-match-CR
+#| output: true
 
 exp4_tb_match_CR <- tab_model(
   model = exp4_m_match_CR@model,
@@ -1638,32 +1620,38 @@ exp4_tb_match_CR <- tab_model(
     "Pronoun_Pair=TheyComp" =
       "Pronoun Pair: HeShe|They (-.5) vs HeShe|SheHe (+.5)"
   ),
-  wrap.labels = 80,
+  wrap.labels = 53,
   CSS = table_css
 )
+
 exp4_tb_match_CR$knitr %<>%
-  tab_model_title_row("Experiment 4: Match Judgment Rates in Test Trials") %>%
   exp4_tb_random_effects() %>%
   str_replace_all(  # bug in tab_model that drops rho labels
     "&rho;<sub>01</sub>",
     "&rho;<sub>01 Pronoun Pair (T|HS vs HS|T + HS|SH) | Participant</sub>"
   ) %>%
   str_replace_all(
-    str_c(blank_row4, "-0.637"),
+    str_c(blank_row1, blank_row4, "-0.637"),
     str_c(
       blank_row1,
-      "&rho;<sub>01 Pronoun Pair (HS|T vs HS|SH) | Participant</sub></td>\n",
-      blank_row4, "-0.637"
+      '&rho;<sub>01 Pronoun Pair (HS|T vs HS|SH) | Participant</sub>',
+      blank_row4,
+      "-0.637"
   )) %>%
   drop_sigma()
 
 exp4_tb_match_CR
 ```
 
+|                                                                |
+|----------------------------------------------------------------|
+| **Experiment 4: Match Judgment Rates in Wrong Pronoun Trials** |
+
+: Experiment 4: Wrong Pronoun Trial Match Rates. Model results for the effect of Pronoun on judging the story to match the scene in wrong pronoun trials (match = 1 = incorrect). There were no wrong pronoun trials for the HeShe\|They condition, so They\|HeShe (they/them character referred to with he/him or she/her, whichever the competitor did not use) and HeShe\|SheHe (he/him and she/her characters referred to with they/them) were mean-center effects coded. {#tbl-exp4-match-FP .borderless}
+
 ```{r}
-#| label: tbl-exp4-match-FP
-#| tbl-cap: "Experiment 4: Wrong Pronoun Trial Match Rates. Model results for the effect of Pronoun on judging the story to match the scene in wrong pronoun trials. There were no wrong pronoun trials for the HeShe|They condition, so They|HeShe (they/them character referred to with he/him or she/her, whichever the competitor did not use) and HeShe|SheHe (he/him and she/her characters referred to with they/them) were mean-center effects coded."
-#| output: asis
+#| label: table-exp4-match-FP
+#| output: true
 
 exp4_tb_match_FP <- tab_model(
   model = exp4_m_match_FP@model,
@@ -1681,9 +1669,6 @@ exp4_tb_match_FP <- tab_model(
   CSS = table_css
 )
 exp4_tb_match_FP$knitr %<>%
-  tab_model_title_row(
-    "Experiment 4: Match Judgment Rates in Wrong Pronoun Trials"
-  ) %>%
   exp4_tb_random_effects() %>%
   str_replace_all(  # bug in tab_model that drops rho labels
     "&rho;<sub>01</sub> <sub>Story</sub></td>",
@@ -1694,10 +1679,15 @@ exp4_tb_match_FP$knitr %<>%
 exp4_tb_match_FP
 ```
 
+|                                                    |
+|----------------------------------------------------|
+| **Experiment 4: Match Judgment RT in Test Trials** |
+
+: Experiment 4: Test Trial Match RT. Model results for the effect of Pronoun Pair on reaction times for test trial match judgments. {#tbl-exp4-match-RT .borderless}
+
 ```{r}
-#| label: tbl-exp4-match-RT
-#| tbl-cap: "Experiment 4: Test Trial Match RT. Model results for the effect of Pronoun Pair on reaction times for test trial match judgments."
-#| output: asis
+#| label: table-exp4-match-RT
+#| output: true
 
 exp4_tb_match_RT <- tab_model(
   model = exp4_m_match_RT@model,
@@ -1711,8 +1701,7 @@ exp4_tb_match_RT <- tab_model(
       "Pronoun Pair: HeShe|They (-.5) vs HeShe|SheHe (+.5)",
     exp4_tb_fixed_labels
   ),
-  title = "Experiment 4: Match Judgment RT in Test Trials",
-  wrap.labels = 80,
+  wrap.labels = 60,
   CSS = table_css
 )
 exp4_tb_match_RT$knitr %<>%
@@ -1728,34 +1717,31 @@ exp4_tb_match_RT$knitr %<>%
     "&rho;<sub>01 Pronoun Pair (T|HS vs HS|T + HS|SH) | Story</sub>"
   ) %>%
   str_replace_all(
-    str_c(blank_row4, "-0.961"),
+    str_c(blank_row1, blank_row4, "-0.961"),
     str_c(
       blank_row1,
       "&rho;<sub>01 Pronoun Pair (HS|T vs HS|SH) | Story</sub></td>",
       blank_row4, "-0.961"
   )) %>%
   str_replace_all(
-    str_c(blank_row4, "-0.833"),
+    str_c(blank_row1, blank_row4, "-0.833"),
     str_c(
       blank_row1,
       "&rho;<sub>01 Pronoun Pair (T|HS vs HS|T + HS|SH) | Participant</sub></td>",
       blank_row4, "-0.833"
   )) %>%
   str_replace_all(
-    str_c(blank_row4, "0.092"),
+    str_c(blank_row1, blank_row4, "0.092"),
     str_c(
       blank_row1,
       "&rho;<sub>01 Pronoun Pair (HS|T vs HS|SH) | Participant</sub></td>",
       blank_row4, "0.092"
-  )) %>%
-  tab_model_title_row("Experiment 4: Match Judgment RT in Test Trials")
+  ))
 
 exp4_tb_match_RT
 ```
 
 ### Additional Figures {#supplementary-exp4-figures}
-
-<br>
 
 ```{r}
 #| label: fig-exp4-names
@@ -1791,8 +1777,6 @@ exp4_load_data_plots_names() %>%
     color = "Character\nPronouns"
   )
 ```
-
-<br>
 
 ```{r}
 #| label: fig-exp4-preview
@@ -1842,13 +1826,15 @@ The Order of Mention effect was estimated separately for each Pronoun Pair condi
 
 In HeShe\|SheHe trials (@tbl-exp4-HS-SH), neither the main effect of Order (`r exp4_r_HS.SH['Order=First', 'Text']`) nor its interaction with Pronoun Pair (`r exp4_r_HS.SH['Pronoun_Pair_HS.SH:Order=First', 'Text']`) were significant. In HeShe\|They trials (@tbl-exp4-HS-T), the main effect of Order was significant as anticipated, with participants more likely to be looking at target characters who had been named first in the story than target characters who had been named second (`r exp4_r_HS.T['Order=First', 'Text']`). The interaction between Order and Pronoun Pair was also significant (`r exp4_r_HS.T['Pronoun_Pair_HS.T:Order=First', 'Text']`). Probing this interaction indicated that listeners were less likely to be looking at the target in HeShe\|They trials than in HeShe\|SheHe and They\|HeShe trials when the target was mentioned second (`r exp4_r_HS.T_Second0['Pronoun_Pair_HS.T', 'Text']`), but not when the target was mentioned first (`r exp4_r_HS.T_First0['Pronoun_Pair_HS.T', 'Text']`). In They\|HeShe trials (@tbl-exp4-T-HS), neither the main effect of Order (`r exp4_r_T.HS['Order=First', 'Text']`) nor its interaction with Pronoun Pair (`r exp4_r_T.HS['Pronoun_Pair_T.HS:Order=First', 'Text']`) were significant.
 
-<br>
+|                                              |
+|----------------------------------------------|
+| **Experiment 4: Looks to the Target Character<br>(HeShe\|SheHe As Reference Group)** |
+
+: Experiment 4: Model results for the effects of Pronoun and Order on the likelihood of looking at the target character (=1) or not (=0). The HeShe\|SheHe condition is coded as 0, and the HeShe\|They and They\|HeShe conditions are coded as 1. {#tbl-exp4-HS-SH .borderless}
 
 ```{r}
-#| label: tbl-exp4-HS-SH
-#| tbl-cap: "Experiment 4: Model results for the effects of Pronoun and Order on the likelihood of looking at the target character (1) or not (0). The HeShe|SheHe condition is coded as 0, and the HeShe|They and They|HeShe conditions are coded as 1."
+#| label: table-exp4-HS-SH
 #| output: true
-#| results: asis
 
 exp4_tb_HS.SH <- tab_model(
   model = exp4_m_HS.SH,
@@ -1864,10 +1850,6 @@ exp4_tb_HS.SH <- tab_model(
   CSS = table_css
 )
 exp4_tb_HS.SH$knitr %<>%
-  tab_model_title_row(paste(
-    "Experiment 4: Looks to the Target Character<br>",
-    "(HeShe|SheHe as Reference Group)"
-  )) %>%
   exp4_tb_random_effects() %>%
   str_replace_all(  # bug in tab_model that drops rho labels
     "&rho;<sub>01</sub> <sub>Story</sub>",
@@ -1878,11 +1860,15 @@ exp4_tb_HS.SH$knitr %<>%
 exp4_tb_HS.SH
 ```
 
+|                                              |
+|----------------------------------------------|
+| **Experiment 4: Looks to the Target Character<br>(HeShe\|They As Reference Group)** |
+
+: Experiment 4: Model results for the effects of Pronoun and Order on the likelihood of looking at the target character (=1) or not (=0). The HeShe\|They condition is coded as 0, and the HeShe\|SheHe and They\|HeShe conditions are coded as 1. {#tbl-exp4-HS-T .borderless}
+
 ```{r}
-#| label: tbl-exp4-HS-T
-#| tbl-cap: "Experiment 4: Model results for the effects of Pronoun and Order on the likelihood of looking at the target character (1) or not (0). The HeShe|They condition is coded as 0, and the HeShe|SheHe and They|HeShe conditions are coded as 1."
+#| label: table-exp4-HS-T
 #| output: true
-#| results: asis
 
 exp4_tb_HS.T <- tab_model(
   model = exp4_m_HS.T,
@@ -1894,25 +1880,22 @@ exp4_tb_HS.T <- tab_model(
   dv.labels = "Looks to Target",
   pred.labels = exp4_tb_fixed_labels,
   order.terms = c(1, 2, 4, 5, 3, 6),
-  wrap.labels = 80,
+  wrap.labels = 82,
   CSS = table_css
 )
-exp4_tb_HS.T$knitr %<>%
-  tab_model_title_row(paste(
-    "Experiment 4: Looks to the Target Character<br>",
-    "(HeShe|They as Reference Group)"
-  )) %>%
-  exp4_tb_random_effects() %>%
-  drop_sigma()
-
+exp4_tb_HS.T$knitr %<>% exp4_tb_random_effects() %>% drop_sigma()
 exp4_tb_HS.T
 ```
 
+|                                              |
+|----------------------------------------------|
+| **Experiment 4: Looks to the Target Character<br>(They\|HeShe As Reference Group)** |
+
+: Experiment 4: Model results for the effects of Pronoun and Order on the likelihood of looking at the target character (=1) or not (=0). The They\|HeShe condition is coded as 0, and the HeShe\|They and HeShe\|SheHe conditions are coded as 1. {#tbl-exp4-T-HS .borderless}
+
 ```{r}
-#| label: tbl-exp4-T-HS
-#| tbl-cap: "Experiment 4: Model results for the effects of Pronoun and Order on the likelihood of looking at the target character (1) or not (0). The They|HeShe condition is coded as 0, and the HeShe|They and HeShe|SheHe conditions are coded as 1."
+#| label: table-exp4-T-HS
 #| output: true
-#| results: asis
 
 exp4_tb_T.HS <- tab_model(
   model = readRDS("r_data/exp4_pronoun-pair_T-HS.RDS"),
@@ -1930,20 +1913,19 @@ exp4_tb_T.HS <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp4_tb_T.HS$knitr %<>% drop_sigma() %>%
-  exp4_tb_random_effects() %>%
-  tab_model_title_row(paste(
-    "Experiment 4: Looks to the Target Character<br>",
-    "(They|HeShe as Reference Group)"
-  ))
+exp4_tb_T.HS$knitr %<>% exp4_tb_random_effects() %>% drop_sigma()
 exp4_tb_T.HS
 ```
 
+|                                  |
+|----------------------------------|
+| **Experiment 4: Target Pronoun** |
+
+: Experiment 4: Model results for the effects of Target Pronoun and Order on the likelihood of looks to the target character (=1), during the window starting 200ms after pronoun onset and ending at 1210ms, the earliest shape word onset. {#tbl-exp4-target-pronoun .borderless}
+
 ```{r}
-#| label: tbl-exp4-target-pronoun
-#| tbl-cap: "Experiment 4: Model results for the effects of Target Pronoun and Order on the likelihood of looks to the target character, during the window starting 200ms after pronoun onset and ending at 1210ms, the earliest shape word onset."
+#| label: table-exp4-target-pronoun
 #| output: true
-#| results: asis
 
 exp4_tb_target_pronoun <- tab_model(
   model = readRDS("r_data/exp4_target-pronoun.RDS")@model,
@@ -1957,19 +1939,19 @@ exp4_tb_target_pronoun <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp4_tb_target_pronoun$knitr %<>% 
-  tab_model_title_row("Experiment 4: Target Pronoun") %>%
-  exp4_tb_random_effects() %>%
-  drop_sigma()
-  
+exp4_tb_target_pronoun$knitr %<>% exp4_tb_random_effects() %>% drop_sigma()
 exp4_tb_target_pronoun
 ```
 
+|                                           |
+|-------------------------------------------|
+| **Experiment 4: Interactions with Trend** |
+
+: Experiment 4: Trend Interactions. Model results for the interactions between Trend and Pronoun Pair and Order on the likelihood of looking at the target character (=1). {#tbl-exp4-trend .borderless}
+
 ```{r}
-#| label: tbl-exp4-trend
-#| tbl-cap: "Experiment 4: Trend Interactions. Model results for the interactions between Trend and Pronoun Pair and Order on the likelihood of looking at the target character."
+#| label: table-exp4-trend
 #| output: true
-#| results: asis
 
 exp4_tb_trend <- tab_model(
   model = exp4_m_trend@model,
@@ -1984,33 +1966,32 @@ exp4_tb_trend <- tab_model(
   CSS = table_css
 )
 exp4_tb_trend$knitr %<>%
-  tab_model_title_row("Experiment 4: Interactions with Trend") %>%
   exp4_tb_random_effects() %>%
   str_replace_all(  # bug in tab_model that drops rho labels
     "&rho;<sub>01</sub>",
     "&rho;<sub>01 AR(1) | Participant</sub>"
   ) %>%
   str_replace_all(
-    str_c(blank_row4, "0.063"),
+    str_c(blank_row1, blank_row4, "0.063"),
     str_c(
       blank_row1, "&rho;<sub>01 Order | Participant</sub></td>",
       blank_row4, "0.063"
   )) %>%
   str_replace_all(
-    str_c(blank_row4, "0.463"),
+    str_c(blank_row1, blank_row4, "0.463"),
     str_c(
       blank_row1, "&rho;<sub>01 Trial Number | Participant</sub></td>",
       blank_row4, "0.463"
   )) %>%
   str_replace_all(
-    str_c(blank_row4, "0.441"),
+    str_c(blank_row1, blank_row4, "0.441"),
     str_c(
       blank_row1,
       "&rho;<sub>01 Pronoun Pair (T|HS vs HS|T + HS|SH) | Participant </sub></td>",
       blank_row4, "0.441"
   )) %>%
   str_replace_all(
-    str_c(blank_row4, "0.272"),
+    str_c(blank_row1, blank_row4, "0.272"),
     str_c(
       blank_row1,
       "&rho;<sub>01 Pronoun Pair (HS|T vs HS|SH) | Participant</sub></td>",
@@ -2021,11 +2002,15 @@ exp4_tb_trend$knitr %<>%
 exp4_tb_trend
 ```
 
+|                                           |
+|-------------------------------------------|
+| **Experiment 4: Interactions with AR(1)** |
+
+: Experiment 4: AR(1) Interactions. Model results for the interactions between AR(1) and Pronoun Pair and Order on the likelihood of looking at the target character (=1). {#tbl-exp4-AR .borderless}
+
 ```{r}
-#| label: tbl-exp4-AR
-#| tbl-cap: "Experiment 4: AR(1) Interactions. Model results for the interactions between AR(1) and Pronoun Pair and Order on the likelihood of looking at the target character."
+#| label: table-exp4-AR
 #| output: true
-#| results: asis
 
 exp4_tb_AR <- tab_model(
   model = exp4_m_AR@model,
@@ -2040,12 +2025,12 @@ exp4_tb_AR <- tab_model(
   CSS = table_css
 )
 exp4_tb_AR$knitr %<>%
-  tab_model_title_row("Experiment 4: Interactions with AR(1)") %>%
   exp4_tb_random_effects() %>%
   str_replace_all(  # bug in tab_model that drops rho labels
     "&rho;<sub>01</sub> <sub>Story",
     "&rho;<sub>01 Trial Number | Story</sub>"
-  ) %>%
+  ) %>%  # N.S. after multiple comparisons:
+  str_replace_all("<strong>0.045</strong>", "0.045") %>%
   drop_sigma()
   
 exp4_tb_AR
