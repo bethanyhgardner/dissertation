@@ -13,7 +13,7 @@ Likert scale with 1 = “very unnatural” and 7 = “very natural”. Subset of
 | 2    | masculine name      | Mark is very generous. They usually have a spare dollar to give to a good cause. |
 | 2    | feminine name       | Sarah is very clumsy. They can't try a new sport without getting injured. |
 | 2    | gender-neutral name | Jordan is very funny. They can make a pun out of almost any word. |
-| 2    | quantifier          | Concerts are very popular. Every music fan tries to buy his ticket early. |
+| 2    | quantifier          | Concerts are very popular. Every music fan tries to buy their ticket early. |
 | 2    | quantifier          | Dogs are very cute. Each dog owner tries to take their dog’s picture constantly. |
 | 2    | generic             | The ideal barista is very attentive. They will always make drinks carefully and quickly. |
 
