@@ -1,4 +1,15 @@
+# Temporarily ignoring
+docs/
+
 *.Rproj
+*.Rmarkdown
+
+# Tracking version in docs/
+exp1_files/
+exp2_files/
+exp3_files/
+exp4_files/
+supplementary_analyses_files/
 
 # History files
 .Rhistory
@@ -40,9 +51,6 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
-
-# pkgdown site
-docs/
 
 # translation temp files
 po/*~

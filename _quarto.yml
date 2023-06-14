@@ -6,11 +6,11 @@ project:
 book:
   # Metadata
   title: "Learning to comprehend and produce singular <i>they</i><br>"
-  date: today
+  date: 06/15/2023
   author:
     - name: Bethany Gardner
       orcid: 0000-0002-5154-2040
-  doi: "placeholder"
+  # doi: "placeholder"
 
   # Structure
   chapters:
@@ -32,9 +32,9 @@ book:
       - icon: person-circle
         text: "Contact"
         href: "mailto: bethany.gardner@vanderbilt.edu"
-      - icon: filetype-pdf
-        text: "Download"
-        href: https://placeholder-to-proquest
+      # - icon: filetype-pdf
+      #  text: "Download"
+      #  href: https://placeholder-to-proquest
     search: true
     style: docked
     foreground: "#7570B3"
@@ -48,7 +48,7 @@ link-bibliography: true
 
 # Other citation info
 citation:
-  title: Learning to comprehend and produce singular they
+  title: Learning to comprehend and produce singular \emph{they}
   author:
     - name: Bethany Gardner
       orcid: 0000-0002-5154-2040
