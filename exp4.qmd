@@ -607,8 +607,8 @@ exp4_r_RT_means
 ```
 
 ```{r}
-#| label: exp4-match-RT-model
-#| cache: true
+#| label: exp4-match-RT-model-build
+#| eval: false
 
 exp4_m_match_RT <- buildmer(
   formula = Match_RT ~ Pronoun_Pair +
@@ -618,6 +618,12 @@ exp4_m_match_RT <- buildmer(
   family = inverse.gaussian(link = "identity"),
   buildmerControl(direction = c("order"))
 )
+```
+
+```{r}
+#| label: exp4-match-RT-model-results
+
+exp4_m_match_RT <- readRDS("r_data/exp4_match_RT.RDS")
 summary(exp4_m_match_RT)
 exp4_r_match_RT <- exp4_m_match_RT@model %>% tidy_model_results()
 ```

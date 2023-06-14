@@ -647,11 +647,7 @@ exp1_tb_mp <- tab_model(
   wrap.labels = 80,
   CSS = table_css
 )
-exp1_tb_mp$knitr %<>%
-  tab_model_title_row(paste(
-    ""
-  )) %>%
-  drop_sigma()
+exp1_tb_mp$knitr %<>% drop_sigma()
 cat(exp1_tb_mp$knitr)
 ```
 
@@ -851,7 +847,7 @@ exp2_d_all %>%
 #| output: true
 
 exp2_tb_pets <- tab_model(
-  model = exp1b_m_pet@model,
+  model = exp2_m_pet@model,
   transform = NULL,
   show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
@@ -861,7 +857,7 @@ exp2_tb_pets <- tab_model(
   pred.labels = c(
     "M_Type=Pet_Pronoun" =
       "<b>Question Type: Pet</b> (-.5) <b>vs Pronoun</b> (+.5)",
-    exp1_tb_fixed_labels
+    exp2_tb_fixed_labels
   ),
   wrap.labels = 80,
   CSS = table_css

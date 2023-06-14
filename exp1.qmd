@@ -1150,8 +1150,11 @@ exp1b_r_prod_means
 #| label: exp1b-prod-model
 #| cache: true
 
+# change from (Pronoun | Participant) + (Pronoun | Name) because it flips back
+# and forth about whether it can get by-item slopes to converge
+
 exp1b_m_prod <- buildmer(
-  formula = P_Acc ~ Pronoun + (Pronoun | Participant) + (Pronoun | Name),
+  formula = P_Acc ~ Pronoun + (1 | Participant) + (1 | Name),
   data = exp1b_d, family = binomial,
   buildmerControl(direction = "order")
 )
@@ -1240,7 +1243,7 @@ summary(exp1_m_mp)
 exp1_r_mp <- exp1_m_mp@model %>% tidy_model_results()
 ```
 
-Testing the effects of pronoun condition and memory accuracy on production accuracy (@tbl-exp1b-both) showed that, in addition to the effects described above, participants were more likely to produce the correct pronoun if they also remembered it(`r exp1b_r_mp['M_Acc=Wrong_Right', 'Text']`). Memory accuracy interacted with pronoun for the comparison between they/them and he/him + she/her (`r exp1b_r_mp['Pronoun=They_HeShe:M_Acc=Wrong_Right', 'Text']`), such that memory improved production more for they/them than for he/him + she/her. Remembering but not producing they/them was again more common than producing but not remembering it. Comparing between experiments, memory accuracy did not interact with task order (@tbl-exp1-both).
+Testing the effects of pronoun condition and memory accuracy on production accuracy (@tbl-exp1b-both) showed that, in addition to the effects described above, participants were more likely to produce the correct pronoun if they also remembered it (`r exp1b_r_mp['M_Acc=Wrong_Right', 'Text']`). Memory accuracy interacted with pronoun for the comparison between they/them and he/him + she/her (`r exp1b_r_mp['Pronoun=They_HeShe:M_Acc=Wrong_Right', 'Text']`), such that memory improved production more for they/them than for he/him + she/her. Remembering but not producing they/them was again more common than producing but not remembering it. Comparing between experiments, memory accuracy did not interact with task order (@tbl-exp1-both).
 
 ```{r}
 #| label: exp1-compare-diff
