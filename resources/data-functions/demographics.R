@@ -32,8 +32,7 @@ demographics_items <- function(d) {
   # TGD
   TGD_items <- c(
     "Total",
-    "I consider myself cisgender",
-    "I consider myself transgender",
+    "I consider myself cisgender", "I consider myself transgender",
     "I don't consider myself cisgender or transgender",
     paste("My gender is the same as what was written on my",
           "original birth certificate"),
@@ -48,14 +47,8 @@ demographics_items <- function(d) {
 
   # Sexuality
   sexuality_items <- c(
-    "Total",
-    "Asexual",
-    "Bisexual/Pansexual",
-    "Gay/Lesbian",
-    "Heterosexual/Straight",
-    "Queer",
-    "Questioning",
-    "I use a different term",
+    "Total", "Asexual", "Bisexual/Pansexual", "Gay/Lesbian",
+    "Heterosexual/Straight", "Queer", "Questioning", "I use a different term",
     "Prefer not to answer / Missing data"
   )
   sexuality <- tibble(
@@ -65,14 +58,8 @@ demographics_items <- function(d) {
 
   # Education
   education_items <- c(
-    "Total",
-    "Less than high school",
-    "High school graduate",
-    "Some college",
-    "2-year degree",
-    "4-year degree",
-    "Professional degree",
-    "Doctorate",
+    "Total", "Less than high school", "High school graduate", "Some college",
+    "2-year degree", "4-year degree", "Professional degree", "Doctorate",
     "Prefer not to answer / Missing data"
   )
   education <- tibble(
@@ -95,16 +82,10 @@ demographics_items <- function(d) {
 
   # Race and ethnicity
   race_ethnicity_items <- c(
-    "Total",
-    "American Indian or Alaska Native",
-    "Asian",
-    "Black, African American, or African",
-    "Hispanic, Latino, or Spanish",
-    "Middle Eastern or North African",
-    "Native Hawaiian or Pacific Islander",
-    "White",
-    "I use a different term",
-    "Prefer not to answer / Missing data"
+    "Total", "American Indian or Alaska Native", "Asian",
+    "Black, African American, or African", "Hispanic, Latino, or Spanish",
+    "Middle Eastern or North African", "Native Hawaiian or Pacific Islander",
+    "White", "I use a different term", "Prefer not to answer / Missing data"
   )
   race_ethnicity <- tibble(
     Category = rep("Race/Ethnicity", length(race_ethnicity_items)),
@@ -123,10 +104,7 @@ demographics_items <- function(d) {
 }
 
 # Creates demographics table----
-demographics_table <- function(
-    d,          # Demographics csv
-    categories, # List of categories to include
-    title) {
+demographics_table <- function(d, categories, title) {
   # Setup
   require(tidyverse)
   require(magrittr)
@@ -140,9 +118,8 @@ demographics_table <- function(
   # Order
   table_data$Category %<>% factor(
     levels = c(
-      "Age", "Gender", "Transgender & Gender-Diverse",
-      "Sexuality", "Race/Ethnicity",
-      "English Experience", "Education"
+      "Age", "Gender", "Transgender & Gender-Diverse", "Sexuality",
+      "Race/Ethnicity", "English Experience", "Education"
     ),
     ordered = TRUE
   )
@@ -154,18 +131,14 @@ demographics_table <- function(
   table_data %<>% mutate(Total = tidyr::replace_na(Total, 0))
 
   # Take out repeats for printing table in right order
-  table_data %<>% mutate(Category = ifelse(Group != "Total", NA,
-    as.character(Category)
+  table_data %<>% mutate(Category = ifelse(
+    Group != "Total", NA, as.character(Category)
   ))
 
   # Table content
   t <- table_data %>%
     flextable() %>%
-    set_header_labels(
-      Category = title,
-      Group = "",
-      Total = ""
-    ) %>%
+    set_header_labels(Category = title, Group = "", Total = "") %>%
     add_footer(
       Category = "Total Participants",
       Group = "",
@@ -175,10 +148,7 @@ demographics_table <- function(
   # Table formatting
   t %<>% merge_h_range(i = 1, j1 = 1, j2 = 3, part = "header") %>%
     merge_h_range(i = 1, j1 = 1, j2 = 2, part = "footer") %>%
-    merge_h_range(
-      i = ~ Group == "Total",
-      j1 = 1, j2 = 2, part = "body"
-    ) %>%
+    merge_h_range(i = ~ Group == "Total", j1 = 1, j2 = 2, part = "body") %>%
     bold(part = "header") %>%
     bold(part = "footer") %>%
     italic(i = ~ Group == "Total", part = "body") %>%
@@ -186,10 +156,7 @@ demographics_table <- function(
     hline_bottom(part = "header") %>%
     hline_top(part = "footer") %>%
     hline_bottom(part = "footer") %>%
-    hline(
-      i = ~ (lead(Group) == "Total" | Group == "Total"),
-      part = "body"
-    ) %>%
+    hline(i = ~ (lead(Group) == "Total" | Group == "Total"), part = "body") %>%
     width(j = 1, width = 0.25) %>%
     width(j = 2, width = 5) %>%
     align(j = 3, align = "center", part = "all")

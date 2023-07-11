@@ -1,5 +1,5 @@
 # Loads accuracy data, sets up contrast coding and scaling----
-exp3_load_data_acc <- function(){
+exp3_load_data_acc <- function() {
   library(dplyr)
   library(forcats)
   library(scales)
@@ -20,10 +20,11 @@ exp3_load_data_acc <- function(){
   # Orthogonal Helmert contrast codes for Pronoun Pair
   d %<>% rename("Pronoun" = "Pronoun_Pair")
   d$Pronoun %<>% fct_relevel("T_HS", after = 0) %>%
-                 fct_relevel("HS_T", after = 1)
+    fct_relevel("HS_T", after = 1)
   contrasts(d$Pronoun) <- cbind(
     "Target" = c(-.66, +.33, +.33),
-    "Dist"     = c(0,    -.50, +.50))
+    "Dist"     = c(0,    -.50, +.50)
+  )
 
   # Add dummy-coded factor for They vs He/She
   d %<>% mutate(Pronoun_They0 = ifelse(Pronoun == "T_HS", 0, 1))
@@ -33,69 +34,82 @@ exp3_load_data_acc <- function(){
     Nametag_Yes0 = ifelse(Nametag == "+Nametag", 0, 1),
     Nametag_No0  = ifelse(Nametag == "-Nametag", 0, 1),
     Intro_Yes0   = ifelse(Intro   == "+Intro", 0, 1),
-    Intro_No0    = ifelse(Intro   == "-Intro", 0, 1))
+    Intro_No0    = ifelse(Intro   == "-Intro", 0, 1)
+  )
 
   # Scale character (1-18)
-  d %<>% mutate(.keep = c("unused"),
-    Character = rescale(T_ID, c(-0.5, 0.5)))
+  d %<>% mutate(.keep = c("unused"), Character = rescale(T_ID, c(-0.5, 0.5)))
 
-  d %<>% select(ParticipantID, Nametag, Nametag_Yes0, Nametag_No0,
-                Intro, Intro_Yes0, Intro_No0, Pronoun, Pronoun_They0,
-                Character, Accuracy)
+  d %<>% select(
+    ParticipantID, Nametag, Nametag_Yes0, Nametag_No0,
+    Intro, Intro_Yes0, Intro_No0, Pronoun, Pronoun_They0, Character, Accuracy
+  )
 
   return(d)
 }
 
 # Loads distribution data, sets up labels for plots----
-exp3_load_data_dist <- function(){
+exp3_load_data_dist <- function() {
   library(dplyr)
   library(magrittr)
   library(stringr)
   library(forcats)
 
   d <- read.csv("data/exp3_pronouns.csv", stringsAsFactors = TRUE) %>%
-  select(Nametag, Intro, ParticipantID, Pronoun_Pair, T_Pronoun, T_ID,
-         He, His, She, Her, They, Their, MultiplePronouns,
-         PronounProduced, Accuracy)
+  select(
+    Nametag, Intro, ParticipantID, Pronoun_Pair, T_Pronoun, T_ID,
+    He, His, She, Her, They, Their, MultiplePronouns, PronounProduced, Accuracy
+  )
 
   # Add column for no pronouns produced
-  d %<>% mutate(.after = MultiplePronouns,
-                None =ifelse(PronounProduced == "none", 1, 0))
+  d %<>% mutate(
+    .after = MultiplePronouns,
+    None = ifelse(PronounProduced == "none", 1, 0)
+  )
 
   # Labels
-  d %<>% mutate(.before = Nametag,
-    CondLabels = case_when(
+  d %<>% mutate(.before = Nametag, CondLabels = case_when(
       Nametag == 1 & Intro == 1 ~ "+Nametag +Intro",
       Nametag == 1 & Intro == 0 ~ "+Nametag –Intro",
       Nametag == 0 & Intro == 1 ~ "–Nametag +Intro",
-      Nametag == 0 & Intro == 0 ~ "–Nametag –Intro")) %>%
+      Nametag == 0 & Intro == 0 ~ "–Nametag –Intro"
+    )) %>%
     mutate(.after = PronounProduced, Order = case_when(
       MultiplePronouns == 0 ~ "only",
-      MultiplePronouns == 1 ~ "corrected"))
-
-  d$CondLabels_Short <- str_replace(d$CondLabels, ' ', '\n')
+      MultiplePronouns == 1 ~ "corrected"
+    ))
 
   d$CondLabels %<>% factor(
-    levels = c("+Nametag +Intro", "+Nametag –Intro",
-               "–Nametag +Intro", "–Nametag –Intro"),
-    ordered = TRUE)
+    levels = c(
+      "+Nametag +Intro", "+Nametag –Intro",
+      "–Nametag +Intro", "–Nametag –Intro"
+    ),
+    ordered = TRUE
+  )
+
+  d$CondLabels_Short <- str_replace(d$CondLabels, " ", "\n")
   d$CondLabels_Short %<>% factor(
-    levels = c("+Nametag\n+Intro", "+Nametag\n–Intro",
-               "–Nametag\n+Intro", "–Nametag\n–Intro"),
-    ordered = TRUE)
+    levels = c(
+      "+Nametag\n+Intro", "+Nametag\n–Intro",
+      "–Nametag\n+Intro", "–Nametag\n–Intro"
+    ),
+    ordered = TRUE
+  )
 
-  d$Order %<>% factor(levels = c("corrected", "only"),
-                      ordered = TRUE)
+  d$Order %<>% factor(levels = c("corrected", "only"), ordered = TRUE)
 
-  d$T_Pronoun %<>% recode("he"   = "he/him",
-                          "she"  = "she/her",
-                          "they" = "they/them")
+  d$T_Pronoun %<>% recode(
+    "he"   = "he/him",
+    "she"  = "she/her",
+    "they" = "they/them"
+  )
 
-  d$PronounProduced %<>% as.character() %>% str_to_lower() %>%
-    str_remove('she/') %>% str_remove('he/') %>%
-    str_remove('they/') %>%
-    factor(levels = c("his", "her", "their", "none"),
-           ordered = TRUE)
+  d$PronounProduced %<>% as.character() %>%
+    str_to_lower() %>%
+    str_remove("she/") %>%
+    str_remove("he/") %>%
+    str_remove("they/") %>%
+    factor(levels = c("his", "her", "their", "none"), ordered = TRUE)
 
   d %<>% rename("Character" = "T_ID")
 
@@ -103,11 +117,13 @@ exp3_load_data_dist <- function(){
 }
 
 # Adds participant covariates to accuracy data, mean-centers + rescales them----
-exp3_load_data_subj <- function(){
+exp3_load_data_subj <- function() {
   # Join participant covariates to accuracy df
-  d <- left_join(exp3_load_data_acc(),
-                 read.csv("data/exp3_participant-covariates.csv", stringsAsFactors = TRUE),
-                 by = "ParticipantID") %>%
+  d <- left_join(
+      exp3_load_data_acc(),
+      read.csv("data/exp3_participant-covariates.csv", stringsAsFactors = TRUE),
+      by = "ParticipantID"
+    ) %>%
     rename("Familiarity" = "UseThey", "Rating" = "Rating_Name")
 
   # Remove participants with no pronouns (1) or no survey data (3)
@@ -121,7 +137,8 @@ exp3_load_data_subj <- function(){
     GenderBeliefs_C = scale(GenderBeliefs / 60, center = TRUE, scale = FALSE),
     LGBTQ_C = LGBQ - 0.50,
     Rating_C = scale(Rating / 6, center = TRUE, scale = FALSE),
-    Sharing_C = scale(Sharing / 20, center = TRUE, scale = FALSE))
+    Sharing_C = scale(Sharing / 20, center = TRUE, scale = FALSE)
+  )
 
   # Effects-code LGBTQ
   d %<>% mutate(LGBTQ_Fct = as.factor(LGBTQ_C))
@@ -208,7 +225,7 @@ exp3_tb_random_labels <- function(text) {
   text %<>% str_replace_all(
     "ParticipantID", "Participant"
   ) %>% str_replace_all(
-    "Participant.Type=Name_Generic",
+    "Participant.Type=Name_Indefinite",
     "Referent Type | Participant"
   )
 }

@@ -16,15 +16,15 @@ tidy_p_values <- function(df) {
 
 # Tidy means/SD for printing in text
 tidy_means <- function(df) {
-  # convert means to % for text
+  # Convert means to % for text
   df %<>% mutate(percent = mean * 100) # %>%
 
-  # round mean/sd to 2 digits and percent to whole number
+  # Round mean/sd to 2 digits and percent to whole number
   df %<>% mutate(across(c(mean, sd), ~format(., digits = 2, nsmall = 2))) %>%
     mutate(percent = format(percent, digits = 2, nsmall = 0) %>% str_c("%"))
 
-  # row labels
-  if ("Pronoun" %in% colnames(df) & "M_Acc" %in% colnames(df)) {
+  # Row labels
+  if ("Pronoun" %in% colnames(df) && "M_Acc" %in% colnames(df)) {
     df %<>% ungroup() %>%
       mutate(
         label = case_when(.default = Pronoun,

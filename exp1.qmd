@@ -8,17 +8,17 @@ toc-title: "Experiment 1: Associating Pronouns with a Person"
 #| label: exp1-setup
 #| include: false
 
-library(tidyverse) # data wrangling
+library(tidyverse)  # data wrangling
 library(magrittr)
 library(sjmisc)
 options(dplyr.group.inform = FALSE, dplyr.summarise.inform = FALSE)
 
-library(lme4) #  stats
+library(lme4)  #  stats
 library(lmerTest)
 library(buildmer)
 library(brms)
 
-library(insight) # model results
+library(insight)  # model results
 library(broom.mixed)
 
 library(kableExtra)  # tables
@@ -32,8 +32,8 @@ library(ggdist)
 library(ggtext)
 
 source("resources/data-functions/exp1_load_data.R")  # setting up data
-source("resources/formatting/printing.R")   # model results in text
-source("resources/formatting/aesthetics.R") # plot and table themes
+source("resources/formatting/printing.R")  # model results in text
+source("resources/formatting/aesthetics.R")  # plot and table themes
 ```
 
 [![](resources/icons/preregistered.svg){title="Preregistration" width="30"}](https://osf.io/cmkw5) [![](resources/icons/open-materials.svg){title="Materials" width="30"}](https://github.com/bethanyhgardner/dissertation/blob/main/materials/exp1) [![](resources/icons/open-data.svg){title="Data" width="30"}](https://github.com/bethanyhgardner/dissertation/blob/main/data) [![](resources/icons/file-code-fill.svg){title="Analysis Code" width="30"}](https://github.com/bethanyhgardner/dissertation/blob/main/exp1.qmd)
@@ -135,7 +135,7 @@ exp1a_r_memory_means <- exp1a_d %>%
     mean = mean(exp1a_d$M_Acc),
     sd = sd(exp1a_d$M_Acc),
   ) %>%
-  tidy_means() # add percentage, round values, fix labels
+  tidy_means()  # add percentage, round values, fix labels
 
 exp1a_r_memory_means
 ```
@@ -167,14 +167,14 @@ For accuracy in the multiple-choice memory task (@tbl-exp1a-mem), participants r
 
 exp1a_tb_memory <- tab_model(
   model = exp1a_m_memory@model,
-  transform = NULL, # show log-odds not odds ratios
+  transform = NULL,  # show log-odds not odds ratios
   show.stat = TRUE, string.stat = "z", # show z
-  show.ci = FALSE, # show SE instead of CI
+  show.ci = FALSE,  # show SE instead of CI
   show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE, # don't make sense for logistic models
+  show.r2 = FALSE, show.icc = FALSE,  # don't make sense for logistic models
   # shows intercept, p values, random effects, n group, n obs by default
-  digits = 3, digits.re = 3, # round to 3
-  dv.labels = "Memory Accuracy", # labels
+  digits = 3, digits.re = 3,  # round to 3
+  dv.labels = "Memory Accuracy",  # labels
   pred.labels = exp1_tb_fixed_labels,
   wrap.labels = 80,
   CSS = table_css
@@ -215,7 +215,7 @@ exp1a_p_mem_acc <- exp1a_d %>%
   scale_y_continuous(expand = c(0.01, 0.01)) +
   guides(fill = guide_none(), color = guide_none()) +
   theme_classic() +
-  dissertation_plot_theme + # nudge Y title over from A label:
+  dissertation_plot_theme +  # nudge Y title over from A label:
   theme(axis.title.y = element_text(margin = margin(l = 4, r = 2))) +
   labs(x = "Pronoun", y = "By-Participant Mean Accuracy")
 
@@ -348,7 +348,7 @@ exp1a_r_prod_means <- exp1a_d %>%
     mean = mean(exp1a_d$P_Acc),
     sd = sd(exp1a_d$P_Acc),
   ) %>%
-  tidy_means() # add percentage, round values, fix labels
+  tidy_means()  # add percentage, round values, fix labels
 
 exp1a_r_prod_means
 ```
@@ -848,7 +848,7 @@ exp1_p_memory_they <- exp1_d %>%
   ) +
   theme_classic() +
   dissertation_plot_theme +
-  theme(  # Text sizes/spacing for this set are a bit different
+  theme(  # text sizes/spacing for this set are a bit different
     axis.text.y   = element_text(size = 9),
     axis.ticks.y  = element_line(),
     axis.title.y  = element_text(size = 9),
@@ -904,7 +904,7 @@ exp1_p_prod_they <- exp1_d %>%
   ) +
   theme_classic() +
   dissertation_plot_theme +
-  theme(  # Text sizes/spacing for this set are a bit different
+  theme(  # text sizes/spacing for this set are a bit different
     axis.text.y   = element_text(size = 9),
     axis.ticks.y  = element_line(),
     axis.title.y  = element_text(size = 9),
@@ -1008,7 +1008,7 @@ exp1b_r_memory_means <- exp1b_d %>%
     mean = mean(exp1b_d$M_Acc),
     sd = sd(exp1b_d$M_Acc),
   ) %>%
-  tidy_means() # add percentage, round values, fix labels
+  tidy_means()  # add percentage, round values, fix labels
 
 exp1b_r_memory_means
 ```
@@ -1062,7 +1062,7 @@ exp1b_m_pet <- buildmer(
 )
 exp1b_r_pet <- exp1b_m_pet@model %>% tidy_model_results()
 
-# Dummy code pronoun to get question type in they/them characters only
+# dummy code pronoun to get question type in they/them characters only
 exp1b_d_pets %>% count(CharPronoun, CharPronoun_They0)
 exp1b_m_pet_they <- glmer(
   formula = M_Acc ~ CharPronoun_They0 * M_Type +
@@ -1071,7 +1071,7 @@ exp1b_m_pet_they <- glmer(
 )
 exp1b_r_pet_they <- exp1b_m_pet_they %>% tidy_model_results()
 
-# Dummy code pronoun to get question type in he/she characters only
+# dummy code pronoun to get question type in he/she characters only
 exp1b_d_pets %>% count(CharPronoun, CharPronoun_HeShe0)
 exp1b_m_pet_heshe <- glmer(
   formula = M_Acc ~ CharPronoun_HeShe0 * M_Type +
@@ -1141,7 +1141,7 @@ exp1b_r_prod_means <- exp1b_d %>%
     mean = mean(exp1b_d$P_Acc),
     sd = sd(exp1b_d$P_Acc),
   ) %>%
-  tidy_means() # add percentage, round values, fix labels
+  tidy_means()  # add percentage, round values, fix labels
 
 exp1b_r_prod_means
 ```
@@ -1356,7 +1356,7 @@ exp1a_d %>% count(Pronoun, Pronoun_Even, Pronoun_Odd)
 #| cache: true
 
 exp1a_m_mem_reliability <- brm(
-  formula = M_Acc ~ Pronoun_Even + Pronoun_Odd + # fixed effects for each half
+  formula = M_Acc ~ Pronoun_Even + Pronoun_Odd +  # fixed effects for each half
     (1 + Pronoun_Even + Pronoun_Odd | Participant),  # random slopes by subj
   data = exp1a_d,
   family = bernoulli(),  # keep default priors
@@ -1372,7 +1372,7 @@ exp1a_m_mem_reliability
 #| cache: true
 
 exp1a_m_prod_reliability <- brm(
-  formula = P_Acc ~ Pronoun_Even + Pronoun_Odd + # fixed effects for each half
+  formula = P_Acc ~ Pronoun_Even + Pronoun_Odd +  # fixed effects for each half
     (1 + Pronoun_Even + Pronoun_Odd | Participant),  # random slopes by subj
   data = exp1a_d,
   family = bernoulli(),  # keep default priors
@@ -1416,7 +1416,7 @@ exp1b_d %>% count(Pronoun, Pronoun_Even, Pronoun_Odd)
 #| cache: true
 
 exp1b_m_mem_reliability <- brm(
-  formula = M_Acc ~ Pronoun_Even + Pronoun_Odd + # fixed effects for each half
+  formula = M_Acc ~ Pronoun_Even + Pronoun_Odd +  # fixed effects for each half
     (1 + Pronoun_Even + Pronoun_Odd | Participant),  # random slopes by subj
   data = exp1b_d,
   family = bernoulli(),  # keep default priors
@@ -1432,7 +1432,7 @@ exp1b_m_mem_reliability
 #| cache: true
 
 exp1b_m_prod_reliability <- brm(
-  formula = P_Acc ~ Pronoun_Even + Pronoun_Odd + # fixed effects for each half
+  formula = P_Acc ~ Pronoun_Even + Pronoun_Odd +  # fixed effects for each half
     (1 + Pronoun_Even + Pronoun_Odd | Participant),  # random slopes by subj
   data = exp1b_d,
   family = bernoulli(),  # keep default priors

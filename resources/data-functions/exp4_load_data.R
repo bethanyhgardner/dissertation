@@ -20,11 +20,14 @@ exp4_load_data_stats <- function() {
   library(magrittr)
   library(scales)
 
-  d <- read.csv("data/exp4_timecourse-pronoun.csv",
-                stringsAsFactors = TRUE,
-                na.strings = "-999") %>%
-    select(T_Pronoun, C_Pronoun, Order, ParticipantID, Story, TrialID,
-           TrialNum, Timestep, IsTarget, WasTarget)
+  d <- read.csv(
+      "data/exp4_timecourse-pronoun.csv",
+      stringsAsFactors = TRUE, na.strings = "-999"
+    ) %>%
+    select(
+      T_Pronoun, C_Pronoun, Order, ParticipantID, Story, TrialID,
+      TrialNum, Timestep, IsTarget, WasTarget
+    )
 
   # Get timestep start interval
   d %<>% format_timestep() %>% rename("Time" = "Timestep_Start")
@@ -62,13 +65,15 @@ exp4_load_data_stats <- function() {
   d$Pronoun_Pair %<>% fct_relevel("T_HS", "HS_T", "HS_SH")
   contrasts(d$Pronoun_Pair) <- cbind(
     "=TheyTarget" = c(-.66, .33, .33),
-    "=TheyComp"   = c(0, -.5, .5))
+    "=TheyComp"   = c(0, -.5, .5)
+  )
 
   contrasts(d$Order) <- cbind("=First" = c(.5, -.5))
 
   contrasts(d$T_Pronoun) <- cbind(
     "=T_HS" = c(+0.33, +0.33, -0.66),
-    "=S_H"  = c(+0.50, -0.50, 0))
+    "=S_H"  = c(+0.50, -0.50, 0)
+  )
 
   return(d)
 }
@@ -81,7 +86,7 @@ exp4_load_data_plots_crit <- function() {
 
   # Load data
   d <- read.csv("data/exp4_timecourse-pronoun.csv", stringsAsFactors = TRUE) %>%
-    format_timestep() %>% # Get timestep start interval
+    format_timestep() %>%  # Get timestep start interval
     filter(!is.na(TG))
 
   # Pronoun Pair
@@ -149,7 +154,7 @@ exp4_load_data_plots_full <- function() {
 
   # Load data
   d <- read.csv("data/exp4_timecourse-full.csv", stringsAsFactors = TRUE) %>%
-    format_timestep() %>% # Get timestep start interval
+    format_timestep() %>%  # Get timestep start interval
     filter(!is.na(TG))
 
   # Pronoun Pair (not combining he+she)
@@ -203,22 +208,22 @@ exp4_load_data_plots_full <- function() {
   black_bar   <- "<b style='color:#000000'> | </b>"
   green_he    <- "<b style='color:#1B9E77'>He</b>"
   orange_she  <- "<b style='color:#D95F02'>She</b>"
-  pruple_they <- "<b style='color:#7570B3'>They</b>"
+  purple_they <- "<b style='color:#7570B3'>They</b>"
 
   d$Pronoun_Pair %<>% factor(
     ordered = TRUE,
     levels = c(
-      "He|She", "She|He",
+      "He|She",  "She|He",
       "He|They", "She|They",
       "They|He", "They|She"
     ),
     labels = c(
       "He|She"   = str_c(green_he, black_bar, orange_she),
       "She|He"   = str_c(orange_she, black_bar, green_he),
-      "He|They"  = str_c(green_he, black_bar, pruple_they),
-      "She|They" = str_c(orange_she, black_bar, pruple_they),
-      "They|He"  = str_c(pruple_they, black_bar, green_he),
-      "They|She" = str_c(pruple_they, black_bar, orange_she)
+      "He|They"  = str_c(green_he, black_bar, purple_they),
+      "She|They" = str_c(orange_she, black_bar, purple_they),
+      "They|He"  = str_c(purple_they, black_bar, green_he),
+      "They|She" = str_c(purple_they, black_bar, orange_she)
     )
   )
 
@@ -299,8 +304,10 @@ exp4_load_data_plots_preview <- function() {
     filter(!is.na(TG))
 
   # Add location data to get 4 distractor characters' pronouns
-  stimuli <- read_excel("materials/exp4/stimuli.xlsx",
-                        sheet = "Lists", skip = 1) %>%
+  stimuli <- read_excel(
+      "materials/exp4/stimuli.xlsx",
+      sheet = "Lists", skip = 1
+    ) %>%
     select(Trial_ID, contains("_Pronoun"), -Story_Pronoun) %>%
     mutate(across(contains("_Pronoun"), ~str_remove(., " 1| 2"))) %>%
     mutate(across(everything(), factor)) %>%
@@ -310,7 +317,7 @@ exp4_load_data_plots_preview <- function() {
 
   # Pronouns of character that current fixation is on
   d %<>% mutate(
-    Fixation_Pronoun = case_when( # Pick item with most fixations in 10ms bin
+    Fixation_Pronoun = case_when(  # Pick item with most fixations in 10ms bin
       (TG + CM + D1 + D2 + D3 + D4) == 0 ~ "none",  # No fixations in bin
       (TG >= CM) & (TG >= D1) & (TG >= D2) & (TG >= D3) & (TG >= D4) ~
         Target_Pronoun,  # Then using >= to break few tie rows
@@ -393,7 +400,7 @@ exp4_tb_fixed_labels <- c(  # Main effects
   "Pronoun_Pair_HS.T:Order=First" = "<b>Pronoun Pair * Order",
   "T_Pronoun=T_HS:Order=First" = "Target Pronoun (They vs He + She) * Order",
   "T_Pronoun=S_H:Order=First" = "Target Pronoun (She vs He) * Order",
-  "WasTarget:Pronoun_Pair=TheyTarget" = # AR(1) + Trend interactions
+  "WasTarget:Pronoun_Pair=TheyTarget" =  # AR(1) + Trend interactions
     "Pronoun Pair (T|HS vs HS|T + HS|SH) * AR(1)",
   "WasTarget:Pronoun_Pair=TheyComp" = "Pronoun Pair (HS|T vs HS|SH) * AR(1)",
   "WasTarget:Order=First" = "AR(1) * Order",
@@ -421,7 +428,7 @@ exp4_tb_random_effects <- function(text) {
   ) %>% str_remove_all(
     "=1|_"
   ) %>% str_replace_all(  # Sentence ratings
-    "Participant.Type=NameGeneric", "Referent Type | Participant"
+    "Participant.Type=NameIndefinite", "Referent Type | Participant"
   ) %>% str_replace_all(  # Match judgments
     "Participant.PronounPair=TheyTarget",
     "Pronoun Pair (T|HS vs HS|T + HS|SH) | Participant"
@@ -432,14 +439,14 @@ exp4_tb_random_effects <- function(text) {
     "Story.PronounPair=TheyTarget",
     "Pronoun Pair (T|HS vs HS|T + HS|SH) | Story"
   ) %>% str_replace_all(
-    "Story.PronounPair=TheyComp",
-    "Pronoun Pair (HS|T vs HS|SH) | Story"
+    "Story.PronounPair=TheyComp", "Pronoun Pair (HS|T vs HS|SH) | Story"
   ) %>% str_replace_all(
     "Story.CorrectPronoun=TheyHeShe", "Pronoun | Story"
   ) %>% str_replace_all(  # Eyetracking
     "Participant.WasTarget", "AR(1) | Participant"
   ) %>% str_replace_all(
-    "Participant.Order=First:TrialScaled", "Order \\* Trial Number | Participant"
+    "Participant.Order=First:TrialScaled",
+    "Order \\* Trial Number | Participant"
   ) %>% str_replace_all(
     "Participant.Order=First", "Order | Participant"
   ) %>% str_replace_all(

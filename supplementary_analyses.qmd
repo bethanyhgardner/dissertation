@@ -2,17 +2,17 @@
 #| label: supplementary-setup
 #| include: false
 
-library(tidyverse) # data wrangling
+library(tidyverse)  # data wrangling
 library(magrittr)
 library(sjmisc)
 options(dplyr.group.inform = FALSE, dplyr.summarise.inform = FALSE)
 
-library(lme4) #  stats
+library(lme4)  #  stats
 library(lmerTest)
 library(buildmer)
 library(brms)
 
-library(insight) # model results
+library(insight)  # model results
 library(broom.mixed)
 
 library(flextable)  # tables
@@ -23,7 +23,7 @@ library(RColorBrewer)
 library(ggtext)
 library(png)
 
-source("resources/formatting/aesthetics.R")   # plot and table themes
+source("resources/formatting/aesthetics.R")  # plot and table themes
 source("resources/data-functions/demographics.R")
 source("resources/data-functions/exp1_load_data.R")
 source("resources/data-functions/exp2_load_data.R")
@@ -55,7 +55,7 @@ In addition to whether the characters used he/him, she/her, or they/them, partic
 read.csv("data/exp1a_data.csv", stringsAsFactors = TRUE) %>%
   filter(Task == "memory") %>%
   group_by(SubjID, M_Type, Pronoun) %>%
-  summarise(M_Acc_Subj = mean(M_Acc)) %>% # by-subject means
+  summarise(M_Acc_Subj = mean(M_Acc)) %>%  # by-subject means
   ggplot(aes(x = M_Type, y = M_Acc_Subj, fill = Pronoun, color = Pronoun)) +
   geom_point(
     position = position_jitterdodge(
@@ -65,8 +65,7 @@ read.csv("data/exp1a_data.csv", stringsAsFactors = TRUE) %>%
   ) +
   stat_summary(
     fun.data = mean_cl_boot, geom = "bar",
-    position = position_dodge(width = 0.9),
-    alpha = 0.4, color = NA
+    position = position_dodge(width = 0.9), alpha = 0.4, color = NA
   ) +
   stat_summary(
     fun.data = mean_cl_boot, geom = "errorbar",
@@ -101,19 +100,16 @@ read.csv("data/exp1a_data.csv", stringsAsFactors = TRUE) %>%
 
 exp1a_tb_pets_all <- tab_model(
   model = exp1a_m_pet@model,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
   dv.labels = "Memory Accuracy",
   pred.labels = c(
     "M_Type=Pet_Pronoun" =
       "<b>Question Type: Pet</b> (-.5) <b>vs Pronoun</b> (+.5)",
     exp1_tb_fixed_labels
   ),
-  wrap.labels = 80,
-  CSS = table_css
+  wrap.labels = 80, CSS = table_css
 )
 exp1a_tb_pets_all$knitr %<>% exp1_tb_random_labels() %>% drop_sigma()
 exp1a_tb_pets_all
@@ -133,18 +129,15 @@ The memory and production tasks were compared directly by creating a model predi
 
 exp1a_tb_task <- tab_model(
   model = exp1a_m_task@model,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
   dv.labels = "Accuracy",
   pred.labels = c(
     "Task=M_P" = "Task: Memory (-.5) vs Production (+.5)",
     exp1_tb_fixed_labels
   ),
-  wrap.labels = 80,
-  CSS = table_css
+  wrap.labels = 80, CSS = table_css
 )
 exp1a_tb_task$knitr %<>%
   exp1_tb_random_labels() %>%
@@ -174,14 +167,14 @@ exp1a_tb_task
 
 exp1b_tb_mem <- tab_model(
   model = exp1b_m_memory@model,
-  transform = NULL, # show log-odds not odds ratios
+  transform = NULL,  # show log-odds not odds ratios
   show.stat = TRUE, string.stat = "z", # show z
-  show.ci = FALSE, # show SE instead of CI
+  show.ci = FALSE,  # show SE instead of CI
   show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE, # don't make sense for logistic models
+  show.r2 = FALSE, show.icc = FALSE,  # don't make sense for logistic models
   # shows intercept, p values, random effects, n group, n obs by default
-  digits = 3, digits.re = 3, # round to 3
-  dv.labels = "Memory Accuracy", # labels
+  digits = 3, digits.re = 3,  # round to 3
+  dv.labels = "Memory Accuracy",  # labels
   pred.labels = exp1_tb_fixed_labels,
   wrap.labels = 80,
   CSS = table_css
@@ -202,15 +195,11 @@ exp1b_tb_mem
 
 exp1b_tb_prod <- tab_model(
   model = exp1b_m_prod@model,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
-  dv.labels = "Production Accuracy",
-  pred.labels = exp1_tb_fixed_labels,
-  wrap.labels = 80,
-  CSS = table_css
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
+  dv.labels = "Production Accuracy", pred.labels = exp1_tb_fixed_labels,
+  wrap.labels = 80, CSS = table_css
 )
 exp1b_tb_prod$knitr %<>% drop_sigma()
 exp1b_tb_prod
@@ -228,15 +217,11 @@ exp1b_tb_prod
 
 exp1b_tb_mp <- tab_model(
   model = exp1b_m_mp@model,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
-  dv.labels = "Production Accuracy",
-  pred.labels = exp1_tb_fixed_labels,
-  wrap.labels = 80,
-  CSS = table_css
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
+  dv.labels = "Production Accuracy", pred.labels = exp1_tb_fixed_labels,
+  wrap.labels = 80, CSS = table_css
 )
 exp1b_tb_mp$knitr %<>% drop_sigma()
 cat(exp1b_tb_mp$knitr)
@@ -252,7 +237,7 @@ cat(exp1b_tb_mp$knitr)
 read.csv("data/exp1b_data.csv", stringsAsFactors = TRUE) %>%
   filter(Task == "memory") %>%
   group_by(SubjID, M_Type, Pronoun) %>%
-  summarise(M_Acc_Subj = mean(M_Acc)) %>% # by-subject means
+  summarise(M_Acc_Subj = mean(M_Acc)) %>%  # by-subject means
   ggplot(aes(x = M_Type, y = M_Acc_Subj, fill = Pronoun, color = Pronoun)) +
   geom_point(
     position = position_jitterdodge(
@@ -262,8 +247,7 @@ read.csv("data/exp1b_data.csv", stringsAsFactors = TRUE) %>%
   ) +
   stat_summary(
     fun.data = mean_cl_boot, geom = "bar",
-    position = position_dodge(width = 0.9),
-    alpha = 0.4, color = NA
+    position = position_dodge(width = 0.9), alpha = 0.4, color = NA
   ) +
   stat_summary(
     fun.data = mean_cl_boot, geom = "errorbar",
@@ -298,19 +282,16 @@ read.csv("data/exp1b_data.csv", stringsAsFactors = TRUE) %>%
 
 exp1b_tb_pets_all <- tab_model(
   model = exp1b_m_pet@model,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
   dv.labels = "Memory Accuracy",
   pred.labels = c(
     "M_Type=Pet_Pronoun" =
       "<b>Question Type: Pet</b> (-.5) <b>vs Pronoun</b> (+.5)",
     exp1_tb_fixed_labels
   ),
-  wrap.labels = 80,
-  CSS = table_css
+  wrap.labels = 80, CSS = table_css
 )
 exp1b_tb_pets_all$knitr %<>% exp1_tb_random_labels() %>% drop_sigma()
 exp1b_tb_pets_all
@@ -339,7 +320,7 @@ exp1b_p_memory_dist <- exp1_d %>%
   scale_y_continuous(expand = c(0, 0)) +
   theme_classic() +
   dissertation_plot_theme +
-  grouped_strip_theme + # hack to group labels
+  grouped_strip_theme +  # hack to group labels
   theme(
     axis.text.y = element_text(size = 8),  # smaller text
     plot.title  = element_text(size = 11),
@@ -366,8 +347,7 @@ exp1b_p_memory_acc <- exp1_d %>%
   summarise(M_Acc_Subj = mean(M_Acc)) %>%
   ggplot(aes(x = Experiment, y = M_Acc_Subj, fill = Pronoun, color = Pronoun)) +
   stat_summary(
-    fun.data = mean_cl_boot, geom = "bar",
-    alpha = 0.4, color = "NA"
+    fun.data = mean_cl_boot, geom = "bar", alpha = 0.4, color = "NA"
   ) +
   geom_point(
     position = position_jitter(width = 0.35, height = 0.02, seed = 1),
@@ -385,9 +365,9 @@ exp1b_p_memory_acc <- exp1_d %>%
   guides(fill = guide_none(), color = guide_none()) +
   theme_classic() +
   dissertation_plot_theme +
-  grouped_strip_theme + # hack to group labels
+  grouped_strip_theme +  # hack to group labels
   theme(
-    axis.text.y = element_text(size = 8), # smaller text
+    axis.text.y = element_text(size = 8),  # smaller text
     plot.title  = element_text(size = 11),
     strip.text  = element_text(face = "plain")
   ) +
@@ -407,9 +387,9 @@ exp1b_p_prod_dist <- exp1_d %>%
   scale_y_continuous(expand = c(0, 0)) +
   theme_classic() +
   dissertation_plot_theme +
-  grouped_strip_theme + # hack to group labels
+  grouped_strip_theme +  # hack to group labels
   theme(
-    axis.text.y = element_text(size = 8), # smaller text
+    axis.text.y = element_text(size = 8),  # smaller text
     plot.title  = element_text(size = 11),
     strip.text  = element_text(face = "plain")
   ) +
@@ -426,8 +406,7 @@ exp1b_p_prod_acc <- exp1_d %>%
   summarise(P_Acc_Subj = mean(P_Acc)) %>%
   ggplot(aes(x = Experiment, y = P_Acc_Subj, fill = Pronoun, color = Pronoun)) +
   stat_summary(
-    fun.data = mean_cl_boot, geom = "bar",
-    alpha = 0.4, color = "NA"
+    fun.data = mean_cl_boot, geom = "bar", alpha = 0.4, color = "NA"
   ) +
   geom_point(
     position = position_jitter(width = 0.35, height = 0.02, seed = 1),
@@ -445,9 +424,9 @@ exp1b_p_prod_acc <- exp1_d %>%
   guides(fill = guide_none(), color = guide_none()) +
   theme_classic() +
   dissertation_plot_theme +
-  grouped_strip_theme + # hack to group labels
+  grouped_strip_theme +  # hack to group labels
   theme(
-    axis.text.y = element_text(size = 8), # smaller text
+    axis.text.y = element_text(size = 8),  # smaller text
     plot.title  = element_text(size = 11),
     strip.text  = element_text(face = "plain")
   ) +
@@ -502,14 +481,14 @@ exp1b_p_compare <- exp1_d %>%
   scale_y_continuous(expand = c(0, 0)) +
   theme_classic() +
   dissertation_plot_theme +
-  grouped_strip_theme + # hack to group labels
+  grouped_strip_theme +  # hack to group labels
   theme(
-    axis.text.y = element_text(size = 8), # smaller text
+    axis.text.y = element_text(size = 8),  # smaller text
     plot.title  = element_text(size = 11),
     strip.text  = element_text(face = "plain")
   ) +
   guides(
-    alpha = guide_legend( # to add Experiment as a legend
+    alpha = guide_legend(  # to add Experiment as a legend
       byrow = TRUE, label.position = "left", label.hjust = 0,
       override.aes = theme(fill = NA)),
     fill  = guide_legend(order = 1)) +
@@ -528,10 +507,10 @@ exp1b_p_split <- exp1_d %>%
   stat_summary(
     fun.data = mean_cl_boot, geom = "errorbar",
     position = position_dodge(width = 0.9),
-    color = "black", linewidth = 0.5, width = 0.5) +
+    color = "black", linewidth = 0.5, width = 0.5
+  ) +
   scale_alpha_discrete(
-    range = c(0.5, 1),
-    labels = c("Memory\nIncorrect", "Memory\nCorrect")
+    range = c(0.5, 1), labels = c("Memory\nIncorrect", "Memory\nCorrect")
   ) +
   scale_fill_brewer(palette = "Dark2") +
   scale_x_discrete(expand = c(0, 0)) +
@@ -539,9 +518,9 @@ exp1b_p_split <- exp1_d %>%
   facet_wrap(~Pronoun, strip.position = "bottom") +
   theme_classic() +
   dissertation_plot_theme +
-  grouped_strip_theme + # hack to group labels
+  grouped_strip_theme +  # hack to group labels
   theme(
-    axis.text.y = element_text(size = 8), # smaller text
+    axis.text.y = element_text(size = 8),  # smaller text
     plot.title  = element_text(size = 11),
     strip.text  = element_text(face = "plain")
   ) +
@@ -580,14 +559,14 @@ exp1b_p_compare / exp1b_p_split +
 
 exp1_tb_mem <- tab_model(
   model = exp1_m_memory@model,
-  transform = NULL, # show log-odds not odds ratios
+  transform = NULL,  # show log-odds not odds ratios
   show.stat = TRUE, string.stat = "z", # show z
-  show.ci = FALSE, # show SE instead of CI
+  show.ci = FALSE,  # show SE instead of CI
   show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE, # don't make sense for logistic models
+  show.r2 = FALSE, show.icc = FALSE,  # don't make sense for logistic models
   # shows intercept, p values, random effects, n group, n obs by default
-  digits = 3, digits.re = 3, # round to 3
-  dv.labels = "Memory Accuracy", # labels
+  digits = 3, digits.re = 3,  # round to 3
+  dv.labels = "Memory Accuracy",  # labels
   pred.labels = exp1_tb_fixed_labels,
   wrap.labels = 80,
   CSS = table_css
@@ -608,18 +587,15 @@ exp1_tb_mem
 
 exp1_tb_prod <- tab_model(
   model = exp1_m_prod,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
   dv.labels = "Production Accuracy",
   pred.labels = c(
     "Pronoun=They_HeShe:Experiment=A_B" = "<b>Pronoun (They vs He+She) * Order",
     exp1_tb_fixed_labels
   ),
-  wrap.labels = 80,
-  CSS = table_css
+  wrap.labels = 80, CSS = table_css
 )
 exp1_tb_prod$knitr %<>% drop_sigma()
 cat(exp1_tb_prod$knitr)
@@ -637,15 +613,11 @@ cat(exp1_tb_prod$knitr)
 
 exp1_tb_mp <- tab_model(
   model = exp1_m_mp,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
-  dv.labels = "Production Accuracy",
-  pred.labels = exp1_tb_fixed_labels,
-  wrap.labels = 80,
-  CSS = table_css
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
+  dv.labels = "Production Accuracy", pred.labels = exp1_tb_fixed_labels,
+  wrap.labels = 80, CSS = table_css
 )
 exp1_tb_mp$knitr %<>% drop_sigma()
 cat(exp1_tb_mp$knitr)
@@ -665,15 +637,13 @@ exp1_tb_diff <- tab_model(
   model = exp1_m_diff,
   show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
   dv.labels = "Difference Score",
   pred.labels = c(
     "(Intercept)" = "(Intercept)",
     exp1_tb_fixed_labels
   ),
-  wrap.labels = 70,
-  CSS = table_css
+  wrap.labels = 70, CSS = table_css
 )
 exp1_tb_diff$knitr %<>% drop_sigma()
 cat(exp1_tb_diff$knitr)
@@ -741,11 +711,7 @@ exp1_d_reliability <- bind_rows(.id = "Task",
     theme_classic() +
     dissertation_plot_theme +
     gray_facet_theme +
-    labs(
-      title = "Memory",
-      x     = "Even Trials",
-      y     = "Odd Trials"
-    )
+    labs(title = "Memory", x = "Even Trials", y = "Odd Trials")
   ) / (
   ggplot() +
     geom_point(
@@ -764,11 +730,7 @@ exp1_d_reliability <- bind_rows(.id = "Task",
     theme_classic() +
     dissertation_plot_theme +
     gray_facet_theme +
-    labs(
-      title = "Production",
-      x     = "Even Trials",
-      y     = "Odd Trials"
-      )
+    labs(title = "Production", x = "Even Trials", y = "Odd Trials")
   ) +
   plot_annotation(
     title = "Experiments 1A & 1B: By-Participant Slope Estimates for Pronoun",
@@ -799,7 +761,7 @@ Pronoun and pet questions were compared in a model including the character's pro
 
 exp2_d_all %>%
   group_by(Participant, M_Type, Pronoun) %>%
-  summarise(M_Acc_Subj = mean(M_Acc)) %>% # by-subject means
+  summarise(M_Acc_Subj = mean(M_Acc)) %>%  # by-subject means
   ggplot(aes(x = M_Type, y = M_Acc_Subj, fill = Pronoun, color = Pronoun)) +
   geom_point(
     position = position_jitterdodge(
@@ -809,8 +771,7 @@ exp2_d_all %>%
   ) +
   stat_summary(
     fun.data = mean_cl_boot, geom = "bar",
-    position = position_dodge(width = 0.9),
-    alpha = 0.4, color = NA
+    position = position_dodge(width = 0.9), alpha = 0.4, color = NA
   ) +
   stat_summary(
     fun.data = mean_cl_boot, geom = "errorbar",
@@ -848,19 +809,16 @@ exp2_d_all %>%
 
 exp2_tb_pets <- tab_model(
   model = exp2_m_pet@model,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
   dv.labels = "Memory Accuracy",
   pred.labels = c(
     "M_Type=Pet_Pronoun" =
       "<b>Question Type: Pet</b> (-.5) <b>vs Pronoun</b> (+.5)",
     exp2_tb_fixed_labels
   ),
-  wrap.labels = 80,
-  CSS = table_css
+  wrap.labels = 80, CSS = table_css
 )
 exp2_tb_pets$knitr %<>% exp2_tb_random_labels() %>% drop_sigma()
 exp2_tb_pets
@@ -944,15 +902,11 @@ exp2_p_memory_dist / exp2_p_prod_dist +
 
 exp2_tb_mp <- tab_model(
   model = exp2_m_mp@model,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
-  dv.labels = "Production Accuracy",
-  pred.labels = exp2_tb_fixed_labels,
-  wrap.labels = 80,
-  CSS = table_css
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
+  dv.labels = "Production Accuracy", pred.labels = exp2_tb_fixed_labels,
+  wrap.labels = 80, CSS = table_css
 )
 exp2_tb_mp$knitr %<>% drop_sigma()
 exp2_tb_mp
@@ -970,19 +924,16 @@ exp2_tb_mp
 
 exp2_tb_use_they <- tab_model(
   model = exp2_m_use_they,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
   dv.labels = "Produce They/Them",
   pred.labels = c(
     "PSA=GenLang" =
       "<b>PSA: Unrelated</b> (-.5) <b>vs PSA: Gendered Language</b> (+.5)",
     exp2_tb_fixed_labels
   ),
-  wrap.labels = 80,
-  CSS = table_css
+  wrap.labels = 80, CSS = table_css
 )
 cat(exp2_tb_use_they$knitr)
 ```
@@ -1010,33 +961,33 @@ load("r_data/exp3.RData")
 #| output: true
 
 exp3_d_norming %>%
-  count(Pronoun, Image) %>% # count instances of pronouns for each image
+  count(Pronoun, Image) %>%  # count instances of pronouns for each image
   pivot_wider(
-    names_from  = Image, # pivot to have images as columns
-    values_from = n,     # and pronouns as rows
+    names_from  = Image,  # pivot to have images as columns
+    values_from = n,      # and pronouns as rows
     values_fill = 0
   ) %>%
-  group_by(Pronoun) %>% # total for each pronoun across all images
+  group_by(Pronoun) %>%  # total for each pronoun across all images
   mutate(Count = sum(across(starts_with("GS")))) %>%
   ungroup() %>%
   # proportion for each pronoun
   mutate(Proportion = Count / sum(across(starts_with("GS")))) %>%
   # rotate back to have images/total as rows
   sjmisc::rotate_df(cn = TRUE, rn = "Image") %>%
-  mutate(.before = Image, Group = case_when( # sort into images used in study
+  mutate(.before = Image, Group = case_when(  # sort into images used in study
     str_detect(Image, "4|6|8|9|11|12") ~ "Images Included",
     str_detect(Image, "01|02|3|5|7|10") ~ "Images Not Included",
     str_detect(Image, "Count|Prop") ~ "Totals"
   )) %>%
-  arrange(Group, `he/him`, desc(`she/her`)) %>% # order rows and cols for table
+  arrange(Group, `he/him`, desc(`she/her`)) %>%  # order rows and cols for table
   select(Group, Image, `they/them`, `he/him`, `she/her`, none) %>%
   as_grouped_data(groups = "Group") %>%
-  flextable() %>% # table
-  set_header_labels(Group = "", Image = "Image Code") %>% # table labels
+  flextable() %>%  # table
+  set_header_labels(Group = "", Image = "Image Code") %>%  # table labels
   add_header_lines("Norming Study: Pronouns Produced") %>%
   colformat_double(i = c(1:14, 17), digits = 0) %>% # rounding
   colformat_double(i = 16, digits = 2) %>%
-  merge_h_range(i = c(1, 8, 15), j1 = 1, j2 = 6, part = "body") %>% # formatting
+  merge_h_range(i = c(1, 8, 15), j1 = 1, j2 = 6, part = "body") %>%  # style
   bold(i = 1, part = "header") %>%
   italic(i = 2, part = "header") %>%
   bold(i = c(1, 8, 15), part = "body") %>%
@@ -1070,7 +1021,7 @@ demographics_table(
 
 <br>
 
-The difference in naturalness ratings between singular *they* co-referring with generics, *each*, and *every* \[Indefinite\] and with masculine, feminine, and gender-neutral names \[Proper Name\] was tested using a linear mixed-effects model, with Referent Type mean-center effects coded. The model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp3_r_ratings['Intercept', 'Text']`). The significant effect of Referent Type indicated that singular *they* was rated as more natural with indefinites than with proper names (`r exp3_r_ratings['Type=Name_Generic', 'Text']`) (@tbl-exp3-ratings).
+The difference in naturalness ratings between singular *they* co-referring with generics, *each*, and *every* \[Indefinite\] and with masculine, feminine, and gender-neutral names \[Proper Name\] was tested using a linear mixed-effects model, with Referent Type mean-center effects coded. The model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp3_r_ratings['Intercept', 'Text']`). The significant effect of Referent Type indicated that singular *they* was rated as more natural with indefinites than with proper names (`r exp3_r_ratings['Type=Name_Indefinite', 'Text']`) (@tbl-exp3-ratings).
 
 |                                                               |
 |---------------------------------------------------------------|
@@ -1085,16 +1036,14 @@ The difference in naturalness ratings between singular *they* co-referring with 
 exp3_tb_ratings <- tab_model(
   model = exp3_m_ratings,
   show.stat = TRUE, string.stat = "t",
-  show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  digits = 3, digits.re = 3,
+  show.ci = FALSE, show.se = TRUE, string.se = "SE", digits = 3, digits.re = 3,
   dv.labels = "Naturalness Ratings",
   pred.labels = c(
     "(Intercept)" = "<b>(Intercept)",
-    "Type=Name_Generic" =
+    "Type=Name_Indefinite" =
       "<b>Referent Type: Proper Name</b> (-.5) <b>vs Indefinite</b> (+.5)"
   ),
-  wrap.labels = 80,
-  CSS = table_css
+  wrap.labels = 80, CSS = table_css
 )
 exp3_tb_ratings$knitr %<>% exp3_tb_random_labels() %>% drop_sigma()
 exp3_tb_ratings
@@ -1119,7 +1068,7 @@ exp3_p_gender_beliefs_dists <- exp3_d_survey %>%
       data = .x,
       aes(x = (Response_Num - 1))) +
       stat_count(geom = "bar", width = 0.9, fill = "#3288bd") +
-      expand_limits(x = c(0, 6), y = c(0, 100)) + # makes all axes the same
+      expand_limits(x = c(0, 6), y = c(0, 100)) +  # Makes all axes the same
       scale_x_continuous(breaks = c(0, 6), expand = c(0, 0)) +
       scale_y_continuous(breaks = c(0, 54), expand = c(0, 0)) +
       theme_classic() +
@@ -1128,7 +1077,8 @@ exp3_p_gender_beliefs_dists <- exp3_d_survey %>%
         axis.text.y = element_blank(),
         plot.margin = margin(0, 0, 0, 0)
       ) +
-      labs(x = element_blank(), y = element_blank()))) %>%
+      labs(x = element_blank(), y = element_blank())
+  )) %>%
   ungroup()
 
 # Participant totals
@@ -1149,11 +1099,12 @@ exp3_p_gender_beliefs_dists %<>% add_row(
     scale_y_continuous(expand = c(0, 0)) +
     theme_classic() +
     theme(
-      axis.ticks = element_blank(),
+      axis.ticks  = element_blank(),
       axis.text.y = element_blank(),
       plot.margin = margin(0, 0, 0, 0)
     ) +
-    labs(x = element_blank(), y = element_blank()))
+    labs(x = element_blank(), y = element_blank()
+  ))
 )
 
 # Table
@@ -1164,17 +1115,17 @@ exp3_d_survey %>%
     M  = mean(Response_Num - 1, na.rm = TRUE),
     SD = sd(Response_Num, na.rm = TRUE)
   ) %>%
-  add_row( # add totals
+  add_row(  # Add totals
     Item = "Total",
     M    = mean(exp3_d_gender_beliefs_totals$Total),
     SD   = sd(exp3_d_gender_beliefs_totals$Total)
   ) %>%
-  left_join(exp3_p_gender_beliefs_dists, by = "Item") %>% # Add plots to df
+  left_join(exp3_p_gender_beliefs_dists, by = "Item") %>%  # Add plots to df
   select(-data) %>%
   arrange(M) %>%
   flextable() %>%
   mk_par(
-    j = "Distribution", # Sets up plots
+    j = "Distribution",  # Sets up plots
     value = as_paragraph(
       gg_chunk(value = Distribution, width = 1.5, height = 1)
     )
@@ -1285,12 +1236,10 @@ exp3_p_acc_image <- exp3_load_data_dist() %>%
     fill = T_Pronoun, color = T_Pronoun
   )) +
   stat_summary(
-    fun.data = mean_cl_boot, geom = "bar",
-    alpha = 0.4, color = "white"
+    fun.data = mean_cl_boot, geom = "bar", alpha = 0.4, color = "white"
   ) +
   geom_point(
-    position = position_jitter(height = 0.02, width = 0.5, seed = 3),
-    size = 1
+    position = position_jitter(height = 0.02, width = 0.5, seed = 3), size = 1
   ) +
   stat_summary(
     fun.data = mean_cl_boot, geom = "errorbar",
@@ -1338,10 +1287,8 @@ exp3_p_dist_image + exp3_p_acc_image +
      ggplot(aes(x = Age_C)) +
      geom_histogram(center = TRUE, bins = 50, fill = "#D53E4F") +  # Spectral
      coord_cartesian(xlim = c(-0.5, 0.55)) +
-     labs(
-       title = "Age",
-       x     = "Younger – Older") +
-     subjCov_theme
+     labs(title = "Age", x = "Younger – Older") +
+     subj_cov_theme
   ) + # nest in () to add to each plot, not just last in list
   # Familiarity
   (exp3_load_data_subj() %>%
@@ -1353,7 +1300,7 @@ exp3_p_dist_image + exp3_p_acc_image +
         title = "Familiarity Using They/Them",
         x     = "Not Met – Not Close To – Close To/Self"
       ) +
-      subjCov_theme
+      subj_cov_theme
   ) +
   # Gender Beliefs
   (exp3_load_data_subj() %>%
@@ -1366,7 +1313,7 @@ exp3_p_dist_image + exp3_p_acc_image +
        title = "Gender Binary & Gender Essentialism",
        x     = "Lower – Higher Endorsement"
        ) +
-     subjCov_theme
+     subj_cov_theme
   ) +
   # LGBTQ
   (exp3_load_data_subj() %>%
@@ -1374,11 +1321,8 @@ exp3_p_dist_image + exp3_p_acc_image +
      unique() %>%
      ggplot(aes(x = LGBTQ_C)) +
      geom_histogram(center = TRUE, bins = 3, fill = "#E6F598") +
-     labs(
-       title = "LGBTQ+ Identity",
-       x     = "Not LGBTQ – LBGTQ"
-     ) +
-     subjCov_theme
+     labs(title = "LGBTQ+ Identity", x = "Not LGBTQ – LBGTQ") +
+     subj_cov_theme
   ) +
   # Pronoun Sharing
   (exp3_load_data_subj() %>%
@@ -1387,11 +1331,9 @@ exp3_p_dist_image + exp3_p_acc_image +
      ggplot(aes(x = Sharing_C)) +
      geom_histogram(boundary = TRUE, bins = 20, fill = "#99D594") +
      coord_cartesian(xlim = c(-0.5, 0.5)) +
-     labs(
-       title = "Pronoun Sharing",
-       x     = "Less Familiar – More Familiar"
+     labs(title = "Pronoun Sharing", x = "Less Familiar – More Familiar"
      ) +
-     subjCov_theme
+     subj_cov_theme
   ) +
   # Sentence Ratings
   (exp3_load_data_subj() %>%
@@ -1404,7 +1346,7 @@ exp3_p_dist_image + exp3_p_acc_image +
        title = "Singular <i>They</i> with Proper Names",
        x     = "Less Natural – More Natural"
      ) +
-     subjCov_theme +
+     subj_cov_theme +
      theme(plot.title = element_markdown())
    ) +
   # Join
@@ -1431,15 +1373,11 @@ exp3_p_dist_image + exp3_p_acc_image +
 
 exp3_tb_subj_cov <- tab_model(
   model = readRDS("r_data/exp3_subj-covariates.RDS")@model,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
-  dv.labels = "Production Accuracy",
-  pred.labels = exp3_tb_fixed_labels,
-  wrap.labels = 80,
-  CSS = table_css
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
+  dv.labels = "Production Accuracy", pred.labels = exp3_tb_fixed_labels,
+  wrap.labels = 80, CSS = table_css
 )
 exp3_tb_subj_cov$knitr %<>%
   drop_sigma() %>%
@@ -1479,7 +1417,7 @@ exp4_p_gender_beliefs_dists <- exp4_d_survey %>%
     data = .x,
     aes(x = (Response_Num - 1))) +
     stat_count(geom = "bar", width = 0.9, fill = "#3288bd") +
-    expand_limits(x = c(0, 6), y = c(0, 20)) + # makes all axes the same
+    expand_limits(x = c(0, 6), y = c(0, 20)) +  # makes all axes the same
     scale_x_continuous(breaks = c(0, 6), expand = c(0, 0)) +
     scale_y_continuous(expand = c(0, 0)) +
     theme_classic() +
@@ -1487,7 +1425,8 @@ exp4_p_gender_beliefs_dists <- exp4_d_survey %>%
       axis.ticks = element_blank(),
       axis.text.y = element_blank()
     ) +
-    labs(x = element_blank(), y = element_blank()))) %>%
+    labs(x = element_blank(), y = element_blank())
+  )) %>%
   ungroup()
 
 # Participant totals
@@ -1519,32 +1458,29 @@ exp4_p_gender_beliefs_dists %<>% add_row(
 # Table
 exp4_d_survey %>%
   filter(Category == "Gender Beliefs") %>%
-  group_by(Item) %>% # Means and SDs for each question
+  group_by(Item) %>%  # Means and SDs for each question
   summarise(
     M  = mean(Response_Num - 1, na.rm = TRUE),
     SD = sd(Response_Num, na.rm = TRUE)
   ) %>%
-  add_row( # add totals
+  add_row(  # Add totals
     Item = "Total",
     M    = mean(exp4_d_gender_beliefs_totals$Total),
     SD   = sd(exp4_d_gender_beliefs_totals$Total)
   ) %>%
-  left_join(exp4_p_gender_beliefs_dists, by = "Item") %>% # Add plots to df
+  left_join(exp4_p_gender_beliefs_dists, by = "Item") %>%  # Add plots to df
   select(-data) %>%
   arrange(M) %>%
   flextable() %>%
   mk_par(
-    j = "Distribution", # Sets up plots
-    value = as_paragraph(gg_chunk(
-      value = Distribution,
-      width = 1.5, height = 1
-    ))
-  ) %>%
+    j = "Distribution",  # Sets up plots
+    value = as_paragraph(gg_chunk(value = Distribution, width = 1.5, height = 1
+  ))) %>%
   add_header_lines(
     "Experiment 4: Gender Binary & Gender Essentialism Beliefs"
   ) %>%
   add_footer_lines("0: Strongly Disagree – 6: Strongly Agree") %>%
-  colformat_double(digits = 2) %>% # Table formatting
+  colformat_double(digits = 2) %>%  # Table formatting
   padding(part = "all", padding.top = 5, padding.bottom = 5) %>%
   width(j = 1, width = 4) %>%
   bold(i = 1, part = "header") %>%
@@ -1559,7 +1495,7 @@ exp4_d_survey %>%
 
 <br>
 
-As in Experiment 3, the difference in naturalness ratings between singular *they* co-referring with generics, *each*, and *every* \[Indefinite\] and with masculine, feminine, and gender-neutral names \[Proper Name\] was tested using a linear mixed-effects model (@tbl-exp4-ratings). Referent Type was mean-center effects coded, and the model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp4_r_ratings['Intercept', 'Text']`). There was no significant difference between proper name and indefinite referents (`r exp4_r_ratings['Type=Name_Generic', 'Text']`).
+As in Experiment 3, the difference in naturalness ratings between singular *they* co-referring with generics, *each*, and *every* \[Indefinite\] and with masculine, feminine, and gender-neutral names \[Proper Name\] was tested using a linear mixed-effects model (@tbl-exp4-ratings). Referent Type was mean-center effects coded, and the model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp4_r_ratings['Intercept', 'Text']`). There was no significant difference between proper name and indefinite referents (`r exp4_r_ratings['Type=Name_Indefinite', 'Text']`).
 
 |                                                               |
 |---------------------------------------------------------------|
@@ -1574,15 +1510,13 @@ As in Experiment 3, the difference in naturalness ratings between singular *they
 exp4_tb_ratings <- tab_model(
   model = exp4_m_ratings,
   show.stat = TRUE, string.stat = "t",
-  show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  digits = 3, digits.re = 3,
+  show.ci = FALSE, show.se = TRUE, string.se = "SE", digits = 3, digits.re = 3,
   dv.labels = "Naturalness Ratings",
   pred.labels = c(
     "(Intercept)" = "<b>(Intercept)",
-    "Type=Name_Generic" =
+    "Type=Name_Indefinite" =
       "Referent Type: Proper Name (-.5) vs Indefinite (+.5)"),
-  wrap.labels = 80,
-  CSS = table_css
+  wrap.labels = 80, CSS = table_css
 )
 exp4_tb_ratings$knitr %<>% exp4_tb_random_effects()
 exp4_tb_ratings
@@ -1602,11 +1536,9 @@ exp4_tb_ratings
 
 exp4_tb_match_CR <- tab_model(
   model = exp4_m_match_CR@model,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
   dv.labels = "Match",
   pred.labels = c(
     "(Intercept)" = "<b>(Intercept)",
@@ -1616,8 +1548,7 @@ exp4_tb_match_CR <- tab_model(
     "Pronoun_Pair=TheyComp" =
       "Pronoun Pair: HeShe|They (-.5) vs HeShe|SheHe (+.5)"
   ),
-  wrap.labels = 53,
-  CSS = table_css
+  wrap.labels = 53, CSS = table_css
 )
 
 exp4_tb_match_CR$knitr %<>%
@@ -1630,7 +1561,7 @@ exp4_tb_match_CR$knitr %<>%
     str_c(blank_row1, blank_row4, "-0.637"),
     str_c(
       blank_row1,
-      '&rho;<sub>01 Pronoun Pair (HS|T vs HS|SH) | Participant</sub>',
+      "&rho;<sub>01 Pronoun Pair (HS|T vs HS|SH) | Participant</sub>",
       blank_row4,
       "-0.637"
   )) %>%
@@ -1651,11 +1582,9 @@ exp4_tb_match_CR
 
 exp4_tb_match_FP <- tab_model(
   model = exp4_m_match_FP@model,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
   dv.labels = "Match",
   pred.labels = c(
     "(Intercept)" = "(Intercept)",
@@ -1663,6 +1592,7 @@ exp4_tb_match_FP <- tab_model(
   ),
   wrap.labels = 80,
   CSS = table_css
+  wrap.labels = 80, CSS = table_css
 )
 exp4_tb_match_FP$knitr %<>%
   exp4_tb_random_effects() %>%
@@ -1689,16 +1619,14 @@ exp4_tb_match_RT <- tab_model(
   model = exp4_m_match_RT@model,
   show.stat = TRUE, string.stat = "t",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
   dv.labels = "RT (ms)",
   pred.labels = c(
     "Pronoun_Pair=TheyComp" =
       "Pronoun Pair: HeShe|They (-.5) vs HeShe|SheHe (+.5)",
     exp4_tb_fixed_labels
   ),
-  wrap.labels = 60,
-  CSS = table_css
+  wrap.labels = 60, CSS = table_css
 )
 exp4_tb_match_RT$knitr %<>%
   exp4_tb_random_effects() %>%
@@ -1794,10 +1722,7 @@ exp4_load_data_plots_preview() %>%
       "1000\nAudio\nOnset"
     )
   ) +
-  scale_y_continuous(
-    expand = c(0, 0),
-    limits = c(0, 0.5)
-  ) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 0.5)) +
   theme_classic() +
   dissertation_plot_theme +
   theme(
@@ -1834,16 +1759,12 @@ In HeShe\|SheHe trials (@tbl-exp4-HS-SH), neither the main effect of Order (`r e
 
 exp4_tb_HS.SH <- tab_model(
   model = exp4_m_HS.SH,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
-  dv.labels = "Looks to Target",
-  pred.labels = exp4_tb_fixed_labels,
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
+  dv.labels = "Looks to Target", pred.labels = exp4_tb_fixed_labels,
   order.terms = c(1, 2, 4, 5, 3, 6),
-  wrap.labels = 80,
-  CSS = table_css
+  wrap.labels = 80, CSS = table_css
 )
 exp4_tb_HS.SH$knitr %<>%
   exp4_tb_random_effects() %>%
@@ -1852,7 +1773,7 @@ exp4_tb_HS.SH$knitr %<>%
     "&rho;<sub>01</sub> <sub>Trend | Story</sub>"
   ) %>%
   drop_sigma()
-  
+
 exp4_tb_HS.SH
 ```
 
@@ -1868,16 +1789,12 @@ exp4_tb_HS.SH
 
 exp4_tb_HS.T <- tab_model(
   model = exp4_m_HS.T,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
-  dv.labels = "Looks to Target",
-  pred.labels = exp4_tb_fixed_labels,
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
+  dv.labels = "Looks to Target", pred.labels = exp4_tb_fixed_labels,
   order.terms = c(1, 2, 4, 5, 3, 6),
-  wrap.labels = 82,
-  CSS = table_css
+  wrap.labels = 82, CSS = table_css
 )
 exp4_tb_HS.T$knitr %<>% exp4_tb_random_effects() %>% drop_sigma()
 exp4_tb_HS.T
@@ -1895,19 +1812,16 @@ exp4_tb_HS.T
 
 exp4_tb_T.HS <- tab_model(
   model = readRDS("r_data/exp4_pronoun-pair_T-HS.RDS"),
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
   dv.labels = "Looks to Target",
   pred.labels = c(
     "(Intercept)" = "(Intercept)",
     exp4_tb_fixed_labels
   ),
   order.terms = c(1, 2, 4, 5, 3, 6),
-  wrap.labels = 80,
-  CSS = table_css
+  wrap.labels = 80, CSS = table_css
 )
 exp4_tb_T.HS$knitr %<>% exp4_tb_random_effects() %>% drop_sigma()
 exp4_tb_T.HS
@@ -1925,15 +1839,11 @@ exp4_tb_T.HS
 
 exp4_tb_target_pronoun <- tab_model(
   model = readRDS("r_data/exp4_target-pronoun.RDS")@model,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
-  dv.labels = "Looks to Target",
-  pred.labels = exp4_tb_fixed_labels,
-  wrap.labels = 80,
-  CSS = table_css
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
+  dv.labels = "Looks to Target", pred.labels = exp4_tb_fixed_labels,
+  wrap.labels = 80, CSS = table_css
 )
 exp4_tb_target_pronoun$knitr %<>% exp4_tb_random_effects() %>% drop_sigma()
 exp4_tb_target_pronoun
@@ -1951,15 +1861,11 @@ exp4_tb_target_pronoun
 
 exp4_tb_trend <- tab_model(
   model = exp4_m_trend@model,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
-  dv.labels = "Looks to Target",
-  pred.labels = exp4_tb_fixed_labels,
-  wrap.labels = 80,
-  CSS = table_css
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
+  dv.labels = "Looks to Target", pred.labels = exp4_tb_fixed_labels,
+  wrap.labels = 80, CSS = table_css
 )
 exp4_tb_trend$knitr %<>%
   exp4_tb_random_effects() %>%
@@ -1994,7 +1900,7 @@ exp4_tb_trend$knitr %<>%
       blank_row4, "0.272"
   )) %>%
   drop_sigma()
-  
+
 exp4_tb_trend
 ```
 
@@ -2010,15 +1916,11 @@ exp4_tb_trend
 
 exp4_tb_AR <- tab_model(
   model = exp4_m_AR@model,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
-  dv.labels = "Looks to Target",
-  pred.labels = exp4_tb_fixed_labels,
-  wrap.labels = 80,
-  CSS = table_css
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
+  dv.labels = "Looks to Target", pred.labels = exp4_tb_fixed_labels,
+  wrap.labels = 80, CSS = table_css
 )
 exp4_tb_AR$knitr %<>%
   exp4_tb_random_effects() %>%
@@ -2028,6 +1930,6 @@ exp4_tb_AR$knitr %<>%
   ) %>%  # N.S. after multiple comparisons:
   str_replace_all("<strong>0.045</strong>", "0.045") %>%
   drop_sigma()
-  
+
 exp4_tb_AR
 ```

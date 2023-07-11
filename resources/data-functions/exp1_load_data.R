@@ -3,8 +3,10 @@ exp1_load_data_all <- function(a_or_b) {
   d <- read.csv(str_c("data/exp1", a_or_b, "_data.csv"),
                 stringsAsFactors = TRUE)
 
-  d %<>% select(SubjID, Task, Name, Pronoun, Pet, Job,
-                M_Type, M_Response, M_Acc, P_Pronoun, P_Acc)
+  d %<>% select(
+    SubjID, Task, Name, Pronoun, Pet, Job, M_Type,
+    M_Response, M_Acc, P_Pronoun, P_Acc
+  )
 
   d %<>% rename("Participant" = "SubjID", "P_Response" = "P_Pronoun")
 
@@ -107,10 +109,10 @@ exp1_tb_fixed_labels <- c(
 exp1_tb_random_labels <- function(text) {
   text %<>% str_replace_all(
     "Participant.Pronoun=They_HeShe",
-      " Pronoun (They vs He + She) | Participant"
+    " Pronoun (They vs He + She) | Participant"
   ) %>% str_replace_all(
     "Participant.Pronoun=He_She",
-      " Pronoun (He vs She) | Participant"
+    " Pronoun (He vs She) | Participant"
   ) %>% str_replace_all(
     "Participant.M_Type=Pet_Pronoun",
     "Question Type | Participant"

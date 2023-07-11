@@ -8,17 +8,17 @@ toc-title: "Experiment 2: Effects of a PSA and Usage Modeling on Memory and Writ
 #| label: exp2-setup
 #| include: false
 
-library(tidyverse) # data wrangling
+library(tidyverse)  # data wrangling
 library(magrittr)
 library(sjmisc)
 options(dplyr.group.inform = FALSE, dplyr.summarise.inform = FALSE)
 
-library(lme4) #  stats
+library(lme4)  #  stats
 library(lmerTest)
 library(buildmer)
 library(brms)
 
-library(insight) # model results
+library(insight)  # model results
 library(broom.mixed)
 
 library(kableExtra)  # tables
@@ -185,14 +185,14 @@ In the multiple-choice memory task (@tbl-exp2-memory), participants responded mo
 
 exp2_tb_memory <- tab_model(
   model = exp2_m_memory@model,
-  transform = NULL, # show log-odds not odds ratios
+  transform = NULL,  # show log-odds not odds ratios
   show.stat = TRUE, string.stat = "z", # show z
-  show.ci = FALSE, # show SE instead of CI
+  show.ci = FALSE,  # show SE instead of CI
   show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE, # don't make sense for logistic models
+  show.r2 = FALSE, show.icc = FALSE,  # don't make sense for logistic models
   # shows intercept, p values, random effects, n group, n obs by default
-  digits = 3, digits.re = 3, # round to 3
-  dv.labels = "Memory Accuracy", # labels
+  digits = 3, digits.re = 3,  # round to 3
+  dv.labels = "Memory Accuracy",  # labels
   pred.labels = exp2_tb_fixed_labels,
   wrap.labels = 80,
   CSS = table_css
@@ -234,8 +234,8 @@ exp2_p_memory_acc <- exp2_d %>%
   scale_fill_brewer(palette = "Dark2") +
   scale_x_discrete(expand = c(0, 0)) +
   theme_classic() +
-  dissertation_plot_theme + # main formatting
-  gray_facet_theme + # light grey facet labels w/ outline around panel
+  dissertation_plot_theme +  # main formatting
+  gray_facet_theme +  # light grey facet labels w/ outline around panel
   labs(x = element_blank(), y = "By-Participant Mean Accuracy") +
   guides(fill = guide_none(), color = guide_none())
 
@@ -246,9 +246,9 @@ exp2_p_memory_PSA <- exp2_d %>%
       ifelse(Pronoun == "they/them", "they/them", "he/him +\nshe/her")
   ) %>%
   group_by(PSA, Biography, Participant, Pronoun_Group) %>%
-  summarise(M_Acc = mean(M_Acc)) %>% # summarize across he + she
+  summarise(M_Acc = mean(M_Acc)) %>%  # summarize across he + she
   group_by(PSA, Biography, Pronoun_Group) %>%
-  summarise(mean_se(M_Acc)) %>% # summarize across participants
+  summarise(mean_se(M_Acc)) %>%  # summarize across participants
   mutate(Condition = str_c(PSA, Biography, sep = " + ")) %>%
   ggplot(aes(
     x = Pronoun_Group, y = y, ymin = ymin, ymax = ymax,
@@ -266,7 +266,7 @@ exp2_p_memory_PSA <- exp2_d %>%
   dissertation_plot_theme +
   theme(
     axis.text.x  = element_text(margin = margin(b = -10)),
-    axis.title.y = element_text(margin = margin(l = 10)), # nudge away from tag
+    axis.title.y = element_text(margin = margin(l = 10)),  # nudge away from tag
     axis.ticks.y = element_line(),
     legend.box   = "horizontal",
     legend.text  = element_text(size = 11)
@@ -316,9 +316,9 @@ contrasts(exp2_d_pets$Biography)
 
 # find random effects structure
 exp2_m_pet <- buildmer(
-  formula = M_Acc ~ CharPronoun * PSA * Biography + # conditions
-    M_Type + # add question type
-    CharPronoun * M_Type + # but only its interaction with Pronoun
+  formula = M_Acc ~ CharPronoun * PSA * Biography +  # conditions
+    M_Type +  # add question type
+    CharPronoun * M_Type +  # but only its interaction with Pronoun
     (M_Type * CharPronoun | Participant) +
     (M_Type * CharPronoun | Name),
   data = exp2_d_pets, family = binomial,
@@ -335,7 +335,7 @@ exp2_r_pet <- exp2_m_pet@model %>% tidy_model_results()
 # Dummy code pronoun to get question type in they/them characters only
 exp2_d_pets %>% count(CharPronoun, CharPronoun_They0)
 
-exp2_m_pet_they <- glmer( # same model from buildmer, just swap CharPronoun
+exp2_m_pet_they <- glmer(  # same model from buildmer, just swap CharPronoun
   formula = M_Acc ~ M_Type + CharPronoun_They0 + M_Type:CharPronoun_They0 +
     PSA + Biography + CharPronoun_They0:PSA + PSA:Biography +
     CharPronoun_They0:Biography + CharPronoun_They0:PSA:Biography +
@@ -353,7 +353,7 @@ exp2_r_pet_they <- exp2_m_pet_they %>% tidy_model_results()
 # Dummy code pronoun to get question type in he/she characters only
 exp2_d_pets %>% count(CharPronoun, CharPronoun_HeShe0)
 
-exp2_m_pet_heshe <- glmer( # same model from buildmer, just swap CharPronoun
+exp2_m_pet_heshe <- glmer(  # same model from buildmer, just swap CharPronoun
   formula = M_Acc ~ M_Type + CharPronoun_HeShe0 + M_Type:CharPronoun_HeShe0 +
     PSA + Biography + CharPronoun_HeShe0:PSA + PSA:Biography +
     CharPronoun_HeShe0:Biography + CharPronoun_HeShe0:PSA:Biography +
@@ -608,9 +608,9 @@ exp2_p_prod_PSA <- exp2_d %>%
     Pronoun == "they/them", "they/them", "he/him +\nshe/her"
   )) %>%
   group_by(PSA, Biography, Participant, Pronoun_Group) %>%
-  summarise(P_Acc = mean(P_Acc)) %>% # summarize across he + she
+  summarise(P_Acc = mean(P_Acc)) %>%  # summarize across he + she
   group_by(PSA, Biography, Pronoun_Group) %>%
-  summarise(mean_se(P_Acc)) %>% # summarize across participants
+  summarise(mean_se(P_Acc)) %>%  # summarize across participants
   mutate(Condition = str_c(PSA, Biography, sep = " + ")) %>%
   ggplot(aes(
     x = Pronoun_Group, y = y, ymin = ymin, ymax = ymax,

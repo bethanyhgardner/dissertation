@@ -8,20 +8,20 @@ toc-title: "Experiment 3: Effects of Including Pronouns on Nametags and in Intro
 #| label: exp3-setup
 #| include: false
 
-library(tidyverse) # data wrangling
+library(tidyverse)  # data wrangling
 library(magrittr)
 library(sjmisc)
 options(dplyr.group.inform = FALSE, dplyr.summarise.inform = FALSE)
 
-library(lme4) #  stats
+library(lme4)  #  stats
 library(lmerTest)
 library(buildmer)
 
-library(simr) # power analysis
+library(simr)  # power analysis
 
-library(brms) # reliability
+library(brms)  # reliability
 
-library(insight) # model results
+library(insight)  # model results
 library(broom.mixed)
 
 library(flextable)  # tables
@@ -42,8 +42,8 @@ rainbow_primary <- rainbow %>%
   column_to_rownames("Spectral")
 
 source("resources/data-functions/exp3_load_data.R")  # setting up data
-source("resources/formatting/printing.R")     # model results in text
-source("resources/formatting/aesthetics.R")   # plot and table themes
+source("resources/formatting/printing.R")  # model results in text
+source("resources/formatting/aesthetics.R")  # plot and table themes
 source("resources/data-functions/demographics.R")  # demographics tables
 ```
 
@@ -65,7 +65,7 @@ exp3_d_survey <- read.csv("data/exp3_survey.csv", stringsAsFactors = TRUE)
 
 # accuracy data only has trials with pronouns
 exp3_d_acc <- exp3_load_data_acc()
-contrasts(exp3_d_acc$Pronoun) # check contrast coding added
+contrasts(exp3_d_acc$Pronoun)  # check contrast coding added
 contrasts(exp3_d_acc$Nametag)
 contrasts(exp3_d_acc$Intro)
 
@@ -103,8 +103,8 @@ exp2_r_effect_size <- exp2_m_prod@model %>%
   pull(estimate) %>%
   round(2)
 
-exp2_r_effect_size      # log-odds
-exp(exp2_r_effect_size) # odds ratio
+exp2_r_effect_size       # log-odds
+exp(exp2_r_effect_size)  # odds ratio
 ```
 
 ```{r}
@@ -204,18 +204,18 @@ exp2_m_prod_fixed
 
 # Predictions for Exp3 based on ranges from Exp2:
 exp3_pw_fixed <- c(
-  +0.75, # Intercept                    Medium
-  +3.00, # Pronoun: T vs HS             Largest
-  -0.10, # Pronoun: H vs S              NS, maybe small
-  +0.10, # Nametag                      NS, maybe small
-  +0.10, # Introduction                 NS, maybe small
-  -2.00, # Pronoun: T vs HS * Nametag   Same size as PSA interaction
-  -0.10, # Pronoun: H vs S  * Nametag   NS, maybe small
-  -2.00, # Pronoun: T vs HS * Intro     Same size as PSA interaction
-  -0.10, # Pronoun: H vs S  * Intro     NS, maybe small
-  +0.25, # Nametag * Intro              Maybe small
-  -2.00, # 3 way T vs HS                Same size as PSA interaction
-  -0.10  # 3 way H vs S                 NS, maybe small
+  +0.75,  # Intercept                    Medium
+  +3.00,  # Pronoun: T vs HS             Largest
+  -0.10,  # Pronoun: H vs S              NS, maybe small
+  +0.10,  # Nametag                      NS, maybe small
+  +0.10,  # Introduction                 NS, maybe small
+  -2.00,  # Pronoun: T vs HS * Nametag   Same size as PSA interaction
+  -0.10,  # Pronoun: H vs S  * Nametag   NS, maybe small
+  -2.00,  # Pronoun: T vs HS * Intro     Same size as PSA interaction
+  -0.10,  # Pronoun: H vs S  * Intro     NS, maybe small
+  +0.25,  # Nametag * Intro              Maybe small
+  -2.00,  # 3 way T vs HS                Same size as PSA interaction
+  -0.10   # 3 way H vs S                 NS, maybe small
 )
 ```
 
@@ -423,7 +423,7 @@ exp3_d_ratings <- exp3_d_survey %>%
   filter(Category == "Sentence Naturalness Ratings" &
     !is.na(Response_Num)) %>%
   select(ParticipantID, Item, Response_Num) %>%
-  mutate(Type = ifelse(str_detect(Item, "Name"), "Name", "Generic"))
+  mutate(Type = ifelse(str_detect(Item, "Name"), "Name", "Indefinite"))
 
 # Means
 exp3_r_rating_means <- exp3_d_ratings %>%
@@ -445,7 +445,7 @@ exp3_d_ratings %<>% mutate(Response_Centered = Response_Num - 4)
 
 # Compare names to indefinites
 exp3_d_ratings$Type %<>% as.factor()
-contrasts(exp3_d_ratings$Type) <- cbind("=Name_Generic" = c(+.5, -.5))
+contrasts(exp3_d_ratings$Type) <- cbind("=Name_Indefinite" = c(+.5, -.5))
 contrasts(exp3_d_ratings$Type)
 
 exp3_m_ratings <- lmer(
@@ -745,13 +745,13 @@ exp3_p_gender_beliefs <- exp3_d_gender_beliefs %>%
 
 # N trials
 exp3_n_subj <- n_distinct(exp3_d_full$ParticipantID)
-exp3_n_trials_max <- exp3_n_subj * 30 # trials expected
-exp3_n_trials_total <- length(exp3_d_full$ParticipantID) # total trials in data
+exp3_n_trials_max <- exp3_n_subj * 30  # trials expected
+exp3_n_trials_total <- length(exp3_d_full$ParticipantID)  # total trials in data
 # % trials not recorded/not completing task
 exp3_prop_trials_excluded <- exp3_n_trials_total / exp3_n_trials_max
 exp3_prop_trials_excluded <- round((1 - exp3_prop_trials_excluded) * 100, 2)
 
-# Number of subject pronouns (vs possessive)
+# number of subject pronouns (vs possessive)
 exp3_n_subject_pro <- exp3_d_full %>%
   select(He, She, They) %>%
   summarise(
@@ -763,7 +763,7 @@ exp3_n_subject_pro <- exp3_d_full %>%
   rename("n" = "V1")
 exp3_n_subject_pro
 
-# Number of multiple pronouns/corrections
+# number of multiple pronouns/corrections
 exp3_n_multiple <- exp3_d_full %>%
   filter(MultiplePronouns == 1) %>%
   count(T_Pronoun, PronounProduced, His, Her, Their) %>%  # count combinations
@@ -788,7 +788,7 @@ exp3_prop_multiple <- (
   ) %>%
   format(digits = 2, nsmall = 2)
 
-# Number of trials with no pronouns
+# number of trials with no pronouns
 exp3_n_none <- exp3_d_full %>%
   filter(None == 1) %>%
   group_by(T_Pronoun) %>%
@@ -917,7 +917,7 @@ The primary analysis measured accuracy of pronouns referring to the target chara
 exp3_load_data_dist() %>%
   group_by(ParticipantID, CondLabels, Pronoun_Pair, T_Pronoun) %>%
   summarise(SubjMean = mean(Accuracy, na.rm = TRUE)) %>%
-  filter(!is.na(SubjMean)) %>% # one subj who used 0 pronouns
+  filter(!is.na(SubjMean)) %>%  # one subj who used 0 pronouns
   ggplot(aes(
     x = T_Pronoun, fill = T_Pronoun, color = T_Pronoun,
     y = SubjMean)) +
@@ -1184,7 +1184,7 @@ exp3_tb_accuracy
 
 exp3_d_reliability <- exp3_load_data_acc() %>%
   select(ParticipantID, Pronoun, Accuracy) %>%
-  arrange(ParticipantID, Pronoun) %>%   # sort by pronoun within participant
+  arrange(ParticipantID, Pronoun) %>%  # sort by pronoun within participant
   mutate(Obs_Num = seq(1, length(Pronoun)))  %>%
   mutate(Obs_Half = case_when(  # count odd and even trials
     is_even(Obs_Num) ~ "even",
@@ -1208,7 +1208,7 @@ exp3_d_reliability <- exp3_load_data_acc() %>%
 #| cache: true
 
 exp3_m_reliability <- brm(
-  formula = Accuracy ~ Pronoun_Even + Pronoun_Odd + # fixed effects for halves
+  formula = Accuracy ~ Pronoun_Even + Pronoun_Odd +  # fixed effects for halves
     (1 + Pronoun_Even + Pronoun_Odd | ParticipantID),  # random slopes by subj
   data = exp3_d_reliability,
   family = bernoulli(),  # keep default priors
@@ -1317,20 +1317,20 @@ The strongest correlation between participant covariates (@fig-exp3-corr) was fa
 
 read.csv("data/exp3_participant-covariates.csv") %>%
   select(order(colnames(.)), -ParticipantID, -Condition, -TGD) %>%
-  rename( # rename for plot labels
+  rename(  # rename for plot labels
     "LGBTQ"              = "LGBQ",
     "Familiarity"        = "UseThey",
     "Gender Beliefs"     = "GenderBeliefs",
     "Name Ratings"       = "Rating_Name",
     "Indefinite Ratings" = "Rating_Generic"
   ) %>%
-  as.matrix() %>% # correlation function needs matrix not df
-  rcorr() %>% # correlations
-  magrittr::extract2(1) %>% # get r values
+  as.matrix() %>%  # correlation function needs matrix not df
+  rcorr() %>%  # correlations
+  magrittr::extract2(1) %>%  # get r values
   ggcorrplot(
     method = "square", type = "lower", hc.order = TRUE,
     lab = TRUE, lab_size = 4, legend.title = "",
-    colors = c("#D7191C", "white", "#2B83BA"), # spectral palette red/blue
+    colors = c("#D7191C", "white", "#2B83BA"),  # spectral palette red/blue
     outline.col = "black"
   ) +
   scale_x_discrete(expand = c(0, 0)) +
@@ -1379,7 +1379,7 @@ clusterEvalQ(cl6, "buildmer")  # check all packages are loaded to each cluster
 clusterExport(cl6, "exp3_d_subjCov")  # check data is loaded to each cluster
 
 exp3_m_subj_cov <- buildmer(
-  formula = Accuracy ~ Pronoun * Nametag * Intro * # allow all interactions
+  formula = Accuracy ~ Pronoun * Nametag * Intro *  # allow all interactions
             Age_C * Familiarity_C * GenderBeliefs_C * LGBTQ_Fct +
             Rating_C * Sharing_C +
             (1 | ParticipantID) + (1 | Character),

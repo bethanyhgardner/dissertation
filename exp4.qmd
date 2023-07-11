@@ -8,18 +8,18 @@ toc-title: "Experiment 4: Online Processing"
 #| label: exp4-setup
 #| include: false
 
-library(tidyverse) # data wrangling
+library(tidyverse)  # data wrangling
 library(magrittr)
 library(sjmisc)
 options(dplyr.group.inform = FALSE, dplyr.summarise.inform = FALSE)
 
-library(lme4) #  stats
+library(lme4)  #  stats
 library(lmerTest)
 library(buildmer)
 
-library(snow) # parallel
+library(snow)  # parallel
 
-library(insight) # model results
+library(insight)  # model results
 library(broom.mixed)
 
 library(sjPlot)  # tables
@@ -208,15 +208,12 @@ exp4_d_ratings <- exp4_d_survey %>%
   filter(Category == "Sentence Naturalness Ratings" &
     !is.na(Response_Num)) %>%
   select(ParticipantID, Item, Response_Num) %>%
-  mutate(Type = ifelse(str_detect(Item, "Name"), "Name", "Generic"))
+  mutate(Type = ifelse(str_detect(Item, "Name"), "Name", "Indefinite"))
 
 # Means
 exp4_r_rating_means <- exp4_d_ratings %>%
   group_by(Type) %>%
-  summarise(
-    mean = mean(Response_Num, na.rm = TRUE),
-    SD   = sd(Response_Num, na.rm = TRUE)
-  ) %>%
+  summarise(mean = mean(Response_Num), SD = sd(Response_Num)) %>%
   column_to_rownames("Type") %>%
   round(2)
 exp4_r_rating_means
@@ -230,7 +227,7 @@ exp4_d_ratings %<>% mutate(Response_Centered = Response_Num - 4)
 
 # Compare names to indefinites
 exp4_d_ratings$Type %<>% as.factor()
-contrasts(exp4_d_ratings$Type) <- cbind("=Name_Generic" = c(+.5, -.5))
+contrasts(exp4_d_ratings$Type) <- cbind("=Name_Indefinite" = c(+.5, -.5))
 contrasts(exp4_d_ratings$Type)
 
 exp4_m_ratings <- lmer(
@@ -279,7 +276,7 @@ exp4_d_gender_beliefs <- exp4_d_gender_beliefs %>%
 exp4_d_gender_beliefs
 ```
 
-To contextualize the findings, I first discuss the results of the survey. Most participants were in the typical undergraduate age range (*M* = `r exp4_n_age$mean`, *SD* = `r exp4_n_age$sd`) and described themselves as native English speakers (N = `r exp4_n_english$Native`). `r exp4_n_gender$Female` were women, `r exp4_n_gender$Male` were men, and none identified as transgender and/or a gender different than their sex assigned at birth (@tbl-exp4-demographics). Overall, all participants were at least somewhat familiar with singular *they* before the experiment: `r exp4_d_use_they$HeardAbout` had heard about people using they/them pronouns but not met someone who does, `r exp4_d_use_they$HaveMet` had met but were not close to anyone who uses they/them, and `r exp4_d_use_they$CloseTo` were close to someone who uses they/them, but `r exp4_d_use_they$Myself` participants used they/them themselves ([Figure @fig-exp4-survey]B). When rating the naturalness of singular *they* coreferring with different types of referents ([Figure @fig-exp4-survey]A), acceptance of indefinite forms was generally high (*M* = `r exp4_r_rating_means['Generic', 'mean']`, *SD* = `r exp4_r_rating_means['Generic', 'SD']`). Surprisingly, ratings for proper names (*M* = `r exp4_r_rating_means['Name', 'mean']`, *SD* = `r exp4_r_rating_means['Name', 'SD']`) were not significantly lower than ratings for indefinites @tbl-exp4-ratings). For the gender beliefs measure [@nagoshi2008], responses were again scaled to 0--6 and summed, so that a score of 0 indicated the lowest endorsement of the gender binary and gender essentialism, and a score of 54 indicated the highest [Figure @fig-exp4-survey]C. Participant totals spanned the entire range but were strongly skewed towards the lower end, with the mean response favorable towards trans and gender-nonconforming people (range = `r exp4_d_gender_beliefs$min`--`r exp4_d_gender_beliefs$max`, *M* = `r exp4_d_gender_beliefs$mean`, *SD* = `r exp4_d_gender_beliefs$SD`) (see @tbl-exp4-gender-beliefs for item text and means).
+To contextualize the findings, I first discuss the results of the survey. Most participants were in the typical undergraduate age range (*M* = `r exp4_n_age$mean`, *SD* = `r exp4_n_age$sd`) and described themselves as native English speakers (N = `r exp4_n_english$Native`). `r exp4_n_gender$Female` were women, `r exp4_n_gender$Male` were men, and none identified as transgender and/or a gender different than their sex assigned at birth (@tbl-exp4-demographics). Overall, all participants were at least somewhat familiar with singular *they* before the experiment: `r exp4_d_use_they$HeardAbout` had heard about people using they/them pronouns but not met someone who does, `r exp4_d_use_they$HaveMet` had met but were not close to anyone who uses they/them, and `r exp4_d_use_they$CloseTo` were close to someone who uses they/them, but `r exp4_d_use_they$Myself` participants used they/them themselves ([Figure @fig-exp4-survey]B). When rating the naturalness of singular *they* coreferring with different types of referents ([Figure @fig-exp4-survey]A), acceptance of indefinite forms was generally high (*M* = `r exp4_r_rating_means['Indefinite', 'mean']`, *SD* = `r exp4_r_rating_means['Indefinite', 'SD']`). Surprisingly, ratings for proper names (*M* = `r exp4_r_rating_means['Name', 'mean']`, *SD* = `r exp4_r_rating_means['Name', 'SD']`) were not significantly lower than ratings for indefinites @tbl-exp4-ratings). For the gender beliefs measure [@nagoshi2008], responses were again scaled to 0--6 and summed, so that a score of 0 indicated the lowest endorsement of the gender binary and gender essentialism, and a score of 54 indicated the highest [Figure @fig-exp4-survey]C. Participant totals spanned the entire range but were strongly skewed towards the lower end, with the mean response favorable towards trans and gender-nonconforming people (range = `r exp4_d_gender_beliefs$min`--`r exp4_d_gender_beliefs$max`, *M* = `r exp4_d_gender_beliefs$mean`, *SD* = `r exp4_d_gender_beliefs$SD`) (see @tbl-exp4-gender-beliefs for item text and means).
 
 |     |
 |-----|
@@ -349,10 +346,7 @@ exp4_p_familiarity <- exp4_d_survey %>%
   filter(str_detect(Category, "They/Them")) %>%
   filter(Item != "Aggregate" & Response_Bool == TRUE) %>%
   select(ParticipantID, Item, Response_Bool) %>%
-  pivot_wider(
-    names_from  = Item,
-    values_from = Response_Bool
-  ) %>%
+  pivot_wider(names_from = Item, values_from = Response_Bool) %>%
   mutate(.keep = c("unused"), HighestFamiliarity = case_when(
     `Close To`    == TRUE ~ "Close To",
     `Have Met`    == TRUE ~ "Have Met",
@@ -360,10 +354,7 @@ exp4_p_familiarity <- exp4_d_survey %>%
   )) %>%
   group_by(HighestFamiliarity) %>%
   summarise(n = n_distinct(ParticipantID)) %>%
-  add_row(
-    n = c(0, 0),
-    HighestFamiliarity = c("Myself", "Not Heard\nAbout")
-  ) %>%
+  add_row(n = c(0, 0), HighestFamiliarity = c("Myself", "Not Heard\nAbout")) %>%
   mutate(
     HighestFamiliarity = HighestFamiliarity %>%
       factor(
@@ -376,10 +367,10 @@ exp4_p_familiarity <- exp4_d_survey %>%
   ) %>%
   ggplot(aes(y = Label, x = n, fill = HighestFamiliarity)) +
   geom_bar(position = "fill", stat = "identity") +
-  scale_fill_brewer(palette = "Spectral", direction = -1,
+  scale_fill_brewer(
+    palette = "Spectral", direction = -1,
     guide = guide_legend(
-      title = NULL, ncol = 6,
-      direction = "horizontal", reverse = TRUE,
+      title = NULL, ncol = 6, direction = "horizontal", reverse = TRUE,
       keywidth = .8, keyheight = .8
     )
   ) +
@@ -389,9 +380,7 @@ exp4_p_familiarity <- exp4_d_survey %>%
   survey_theme +
   labs(
     title = "Experience Using They/Them Pronouns",
-    x     = element_blank(),
-    y     = element_blank(),
-    fill  = element_blank()
+    x = element_blank(), y = element_blank(), fill = element_blank()
   )
 
 # Gender beliefs----
@@ -408,9 +397,9 @@ exp4_p_gender_beliefs <- exp4_d_gender_beliefs %>%
   coord_cartesian(xlim = c(54, 0), expand = 0, clip = "off") +
   scale_y_continuous(breaks = c(1, 2, 3)) +
   scale_fill_manual(values =
-      rainbow %>%
-      filter(Score %in% exp4_d_gender_beliefs$Total) %>%
-      pull(Color)
+    rainbow %>%
+    filter(Score %in% exp4_d_gender_beliefs$Total) %>%
+    pull(Color)
   ) +
   theme_classic() +
   survey_theme +
@@ -444,8 +433,7 @@ exp4_p_ratings + exp4_p_familiarity + exp4_p_gender_beliefs +
 #| label: exp4-characters-data
 
 exp4_d_characters <- read.csv(
-  "data/exp4_characters.csv",
-  stringsAsFactors = TRUE
+  "data/exp4_characters.csv", stringsAsFactors = TRUE
 )
 ```
 
@@ -455,12 +443,12 @@ exp4_d_characters <- read.csv(
 exp4_n_pre <- exp4_d_characters %>%
   filter(Section == "pre") %>%
   group_by(ParticipantID) %>%
-  summarise(nRounds = n_distinct(Test_Round)) %>%
+  summarise(N_Rounds = n_distinct(Test_Round)) %>%
   summarise(
-    min  = min(nRounds),
-    max  = max(nRounds),
-    mean = mean(nRounds) %>% round(2) %>% format(nsmall = 2),
-    sd   = sd(nRounds)   %>% round(2) %>% format(nsmall = 2)
+    min  = min(N_Rounds),
+    max  = max(N_Rounds),
+    mean = mean(N_Rounds) %>% round(2) %>% format(nsmall = 2),
+    sd   = sd(N_Rounds)   %>% round(2) %>% format(nsmall = 2)
   )
 exp4_n_pre
 
@@ -501,8 +489,10 @@ exp4_d_match <- read.csv("data/exp4_match-judgments.csv",
   filter(TrialType != "PR") %>%
   filter(!is.na(Match_Num)) %>%  # drop missing data (unclear location)
   mutate(Story = str_sub(TrialID, -2) %>% as.numeric()) %>%
-  select(ParticipantID, TrialType, Pronoun_Pair, T_Pronoun, C_Pronoun,
-         Story, TrialID, Match_Num, Match_RT, IsOutlier)
+  select(
+    ParticipantID, TrialType, Pronoun_Pair, T_Pronoun, C_Pronoun,
+    Story, TrialID, Match_Num, Match_RT, IsOutlier
+  )
 
 # Contrast coding
 contrasts(exp4_d_match$Pronoun_Pair) <- cbind(
@@ -579,10 +569,7 @@ When asked if the description they heard matched the scene (@fig-exp4-match, lef
 exp4_r_RT_means <- exp4_d_match %>%
   filter(IsOutlier == FALSE) %>%
   group_by(TrialType, Pronoun_Pair) %>%
-  summarise(
-    mean = round(mean(Match_RT)),
-    sd   = round(sd(Match_RT))
-  ) %>%
+  summarise(mean = round(mean(Match_RT)), sd = round(sd(Match_RT))) %>%
   ungroup() %>%
   mutate(.keep = c("unused"), Condition =
     str_c(TrialType, Pronoun_Pair, sep = " ")
@@ -593,13 +580,8 @@ exp4_r_RT_means %<>% bind_rows(
   exp4_d_match %>%
     filter(IsOutlier == FALSE) %>%
     group_by(TrialType) %>%
-    summarise(
-      mean = round(mean(Match_RT)),
-      sd   = round(sd(Match_RT))
-    ) %>%
-    mutate(.keep = c("unused"), Condition =
-      str_c(TrialType, " All")
-    )
+    summarise(mean = round(mean(Match_RT)), sd = round(sd(Match_RT))) %>%
+    mutate(.keep = c("unused"), Condition = str_c(TrialType, " All"))
   ) %>%
   column_to_rownames("Condition")
 
@@ -848,7 +830,7 @@ exp4_d <- exp4_load_data_stats()
 str(exp4_d)
 
 # Pronoun, Order
-contrasts(exp4_d$Pronoun_Pair)  # double check contrast coding
+contrasts(exp4_d$Pronoun_Pair)  # Double check contrast coding
 contrasts(exp4_d$Order)
 
 # Trend (rescaled, centered)
@@ -861,9 +843,9 @@ exp4_d %>% select(WasTarget, IsTarget) %>% summary()
 # Number of data points per trial
 exp4_d %>%
   group_by(ParticipantID, TrialID) %>%
-  summarise(n = n()) %>%  # count observations per trial per participant
+  summarise(n = n()) %>%  # Count observations per trial per participant
   group_by(n) %>%
-  summarise(n_obs = n_distinct(n))  # all have 103 obs
+  summarise(n_obs = n_distinct(n))  # All have 103 obs
 ```
 
 @fig-exp4-6panel shows fixations to the target, competitor, distractor, and no characters, starting 500ms before the onset of the pronoun and continuing for 2500ms (e.g., *...spilling on the floor. They are standing in a blue triangle, and the painting looks amazing*). The He\|She and She\|He trials (first row) generally resemble prior results [@arnold2000; @arnold2007; @brown-schmidt2017], with participants starting to look at the target more than the competitor rapidly after the onset of the pronoun, and more so when the target character was mentioned first. Unexpectedly, the order of mention effect---where listeners look more at the character named first in the story than to the character named second---is only clear in He\|She trials, not in She\|He trials. The He\|They and She\|They trials (second row) show the expected order effect, but participants are less likely to be looking at the target than in the He\|She and She\|He trials. The They\|He and They\|She trials (third row) still show participants looking at the target more than the competitor before the onset of the shape word, but less than in the other two conditions, and no order effect is apparent. Examining fixations during the beginning of the story (@fig-exp4-names), participants looked at the target and competitor after each was named, and the time course did not differ by the character's pronouns. This confirms that participants knew the names of the characters and had identified the two possible referents before the start of the critical time window.
@@ -891,14 +873,8 @@ exp4_load_data_plots_full() %>%
   eyetracking_theme +
   theme(plot.title.position = "plot") +
   guides(
-    color = guide_legend(
-      order = 1,
-      override.aes = theme(linewidth = 1)
-    ),
-    linetype = guide_legend(
-      order = 2,
-      override.aes = theme(linewidth = 1)
-    )
+    color = guide_legend(order = 1, override.aes = theme(linewidth = 1)),
+    linetype = guide_legend(order = 2, override.aes = theme(linewidth = 1))
   ) +
   labs(
     x = "Time Relative to Pronoun Onset (ms)",
@@ -930,10 +906,7 @@ exp4_load_data_plots_crit() %>%
     expand = c(0, 0),
     breaks = c(200, 400, 600, 800, 1000, 1200)
   ) +
-  scale_y_continuous(
-    limits = c(0, 0.75),
-    breaks = c(0, 0.25, 0.50, 0.75)
-  ) +
+  scale_y_continuous(limits = c(0, 0.75), breaks = c(0, 0.25, 0.50, 0.75)) +
   geom_vline(xintercept = 180, linewidth = 1) +
   theme_classic() +
   eyetracking_theme +
@@ -1205,15 +1178,11 @@ After noting differences between the He\|She and She\|He trials in @fig-exp4-6pa
 
 exp4_tb_pronoun_pair <- tab_model(
   model = exp4_m_pronoun_pair,
-  transform = NULL,
-  show.stat = TRUE, string.stat = "z",
+  transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
-  show.r2 = FALSE, show.icc = FALSE,
-  digits = 3, digits.re = 3,
-  dv.labels = "Looks to Target",
-  pred.labels = exp4_tb_fixed_labels,
-  wrap.labels = 51,
-  CSS = table_css
+  show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
+  dv.labels = "Looks to Target", pred.labels = exp4_tb_fixed_labels,
+  wrap.labels = 51, CSS = table_css
 )
 exp4_tb_pronoun_pair$knitr %<>% exp4_tb_random_effects() %>% drop_sigma()
 exp4_tb_pronoun_pair

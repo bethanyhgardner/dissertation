@@ -67,9 +67,11 @@ exp2_tb_fixed_labels <- c(
     "<b>Memory Accuracy: Wrong </b>(-.5) <b>vs Right</b> (+.5)",
   "Pronoun=They_HeShe:PSA=GenLang" = "<b>Pronoun (They vs He + She) * PSA</b>",
   "Pronoun=He_She:PSA=GenLang" = "Pronoun (He vs She) * PSA",
-  "Pronoun=They_HeShe:Biography=They" = "Pronoun (They vs He + She) * Biography",
+  "Pronoun=They_HeShe:Biography=They" =
+    "Pronoun (They vs He + She) * Biography",
   "Pronoun=He_She:Biography=They" = "Pronoun (He vs She) * Biography",
-  "Pronoun=They_HeShe:Bio_Ref_HeShe0" = "Pronoun (They vs He + She) * Biography",
+  "Pronoun=They_HeShe:Bio_Ref_HeShe0" =
+    "Pronoun (They vs He + She) * Biography",
   "Pronoun=He_She:Bio_Ref_HeShe0" = "Pronoun (He vs She) * Biography",
   "Pronoun=They_HeShe:Bio_Ref_They0" = "Pronoun (They vs He + She) * Biography",
   "Pronoun=He_She:Bio_Ref_They0" = "Pronoun (He vs She) * Biography",
@@ -154,7 +156,6 @@ exp2_tb_fixed_labels <- c(
 
 exp2_tb_random_labels <- function(text) {
   text %<>% str_replace_all(
-    "Participant.M_Type=Pet_Pronoun",
-    "Question Type | Participant"
+    "Participant.M_Type=Pet_Pronoun", "Question Type | Participant"
   )
 }

@@ -59,15 +59,12 @@ survey_theme <- theme(
   legend.title     = element_text(size = 10),
   plot.tag         = element_text(size = 12, face = "bold"),
   plot.margin      = margin(t = .10, b = .10, l = .05, r = .20, unit = "in"),
-  plot.title       = element_markdown(
-    lineheight = 1.1,
-    size = 11,
-    face = "bold"
-  )
+  plot.title       = element_markdown(lineheight = 1.1, size = 11,
+                                      face = "bold")
 )
 
 # Participant covariate distribution (Exp3)
-subjCov_theme <- list(
+subj_cov_theme <- list(
   scale_x_continuous(expand = c(0.01, 0.01), breaks = c(-0.5, 0, 0.5)),
   scale_y_continuous(expand = c(0, 0)),
   theme_classic(),
@@ -113,11 +110,11 @@ table_css <- list(css.randomparts =
 
 # Helper function to drop sigma squared from logistic regression tables
 drop_sigma <- function(tb_knitr, title) {
-  tb_knitr %<>% str_remove(paste(sep = ' ',
+  tb_knitr %<>% str_remove(paste(sep = " ",
     '<tr>\n<td style=\" padding:0.2cm; text-align:left; vertical-align:top;',
-    'text-align:left; padding-top:0.1cm;',
+    "text-align:left; padding-top:0.1cm;",
     'padding-bottom:0.1cm;\">&sigma;<sup>2</sup></td>\n<td style=\"',
-    'padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm;',
+    "padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm;",
     'padding-bottom:0.1cm; text-align:center;\"',
     'colspan=\"4\">3.290</td>\n</tr>\n'
   ))
