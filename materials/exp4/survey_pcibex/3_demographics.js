@@ -149,7 +149,7 @@ newTrial("demographics2",
 );
 
 newTrial("end",
-    newText("Thank you for participanting in this study!")
+    newText("Thank you for participating in this study!")
         .center(),
     newButton("End").hidden().wait()
 );

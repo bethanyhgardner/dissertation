@@ -88,7 +88,7 @@ tidy_model_results <- function(model) {
 
   # Just two cases where models aren't logistic regression:
   # Sentence naturalness ratings (Exp3&4) and RT (Exp4)
-  if ("Type=Name_Generic" %in% df$Predictor || max(df$Beta) > 100) {
+  if ("Type=Name_Indefinite" %in% df$Predictor || max(df$Beta) > 100) {
     df %<>% rename("t" = "z")
   }
 
