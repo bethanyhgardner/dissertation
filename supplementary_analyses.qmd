@@ -43,11 +43,11 @@ load("r_data/exp1.RData")
 
 ### Experiment 1A: Additional Results {#supplementary-exp1a}
 
-In addition to whether the characters used he/him, she/her, or they/them, participants were also asked about the characters' job and pets (@fig-exp1a-job-pet). Accuracy matching the 12 jobs to the 12 characters was lower (*M* = `r exp1a_r_job$mean`, *SD* = `r exp1a_r_job$sd`) than for the 3 pets (*M* = `r exp1a_r_pet_means['all', 'mean']`, *SD* = `r exp1a_r_pet_means['all', 'sd']`) and 3 pronouns (*M* = `r exp1a_r_memory_means['all', 'mean']`, *SD* = `r exp1a_r_memory_means['all', 'sd']`), but not at floor. Neither job nor pet accuracy varied based on the character's pronouns. Accuracy for the characters' pets (cat, dog, or fish) was designed as a comparison to pronoun accuracy, and the two were compared in a model including the character's pronouns (contrast coded as in the main analyses) and question type (pronoun vs pet, mean-center effects coded) as fixed effects. The most complex model that converged included by-participant random slopes for question type (@tbl-exp1a-pet). Averaging across the three character pronouns, participants were significantly more accurate for pronoun questions than pet questions (`r exp1a_r_pet['M_Type=Pet_Pronoun', 'Text']`). The interaction between character pronoun (they/them vs he/him + she/her) and question type was significant (`r exp1a_r_pet['M_Type=Pet_Pronoun:CharPronoun=They_HeShe', 'Text']`), reflecting that the character pronouns affected accuracy for the pronoun question, but not the pet question. Probing this interaction indicated that for they/them characters, there was no significant difference in accuracy between pronouns and pets (`r exp1a_r_pet_they['M_Type=Pet_Pronoun', 'Text']`), but that for he/him + she/her characters, pronoun accuracy was higher than pet accuracy (`r exp1a_r_pet_heshe['M_Type=Pet_Pronoun', 'Text']`).
+In addition to whether the characters used he/him, she/her, or they/them, participants were also asked about the characters' jobs and pets (@fig-exp1a-job-pet). Accuracy matching the 12 jobs to the 12 characters was lower (*M* = `r exp1a_r_job$mean`, *SD* = `r exp1a_r_job$sd`) than for the 3 pets (*M* = `r exp1a_r_pet_means['all', 'mean']`, *SD* = `r exp1a_r_pet_means['all', 'sd']`) and 3 pronouns (*M* = `r exp1a_r_memory_means['all', 'mean']`, *SD* = `r exp1a_r_memory_means['all', 'sd']`), but not at floor. Neither job nor pet accuracy varied based on the character's pronouns. Accuracy for the characters' pets (cat, dog, or fish) was designed as a comparison to pronoun accuracy, and the two were compared in a model including the Character's Pronouns (contrast coded as in the main analyses) and Question Type (pronoun vs pet, mean-center effects coded) as fixed effects. The most complex model that converged included by-participant random slopes for Question Type (@tbl-exp1a-pet). Averaging across the three character pronouns, participants were significantly more accurate for pronoun questions than pet questions (`r exp1a_r_pet['M_Type=Pet_Pronoun', 'Text']`). The interaction between Character Pronoun (they/them vs he/him + she/her) and Question Type was significant (`r exp1a_r_pet['M_Type=Pet_Pronoun:CharPronoun=They_HeShe', 'Text']`), reflecting that the character pronouns affected accuracy for the pronoun question, but not the pet question. Probing this interaction indicated that for they/them characters, there was no significant difference in accuracy between pronouns and pets (`r exp1a_r_pet_they['M_Type=Pet_Pronoun', 'Text']`), but that for he/him + she/her characters, pronoun accuracy was higher than pet accuracy (`r exp1a_r_pet_heshe['M_Type=Pet_Pronoun', 'Text']`).
 
 ```{r}
 #| label: fig-exp1a-job-pet
-#| fig-cap: "Experiment 1A: By-participant mean accuracy in the multiple-choice memory task for each character's pronouns, pet, and job, with colors indicating the character's pronouns. Error bars indicate a 95% CI calculated over the by-participant means."
+#| fig-cap: "Experiment 1A: By-participant mean accuracy in the multiple-choice memory task for each character's pronouns, pet, and job, with colors indicating the character's pronouns. Error bars indicate 95% CIs calculated over the by-participant means."
 #| fig-asp: 0.6
 #| output: true
 #| cache: true
@@ -121,7 +121,7 @@ The memory and production tasks were compared directly by creating a model predi
 |-------------------------------------------------------------|
 | **Experiment 1A: Comparing Memory and Production Accuracy** |
 
-: Experiment 1A: Model results for the effects of Pronoun and Task (memory vs production) on accuracy. {#tbl-exp1a-task .borderless}
+: Experiment 1A: Model results for the effects of Pronoun and Task (memory vs production) on Accuracy. {#tbl-exp1a-task .borderless}
 
 ```{r}
 #| label: table-exp1a-task
@@ -274,7 +274,7 @@ read.csv("data/exp1b_data.csv", stringsAsFactors = TRUE) %>%
 |------------------------------------------------|
 | **Experiment 1B: Memory for Pronouns vs Pets** |
 
-: Experiment 1B: Model results for the effects of Character Pronoun and Question Type on accuracy in the pronoun and pet memory questions, when the memory task was completed after the production task. {#tbl-exp1b-pet .borderless}
+: Experiment 1B: Model results for the effects of Character Pronoun and Question Type (character’s pronoun or pet) on Memory Accuracy, when the memory task was completed after the production task. {#tbl-exp1b-pet .borderless}
 
 ```{r}
 #| label: table-exp1b-pet
@@ -301,7 +301,7 @@ exp1b_tb_pets_all
 
 ```{r}
 #| label: fig-exp1ab-panel1
-#| fig-cap: "Experiments 1A & 1B. Memory accuracy, distribution of memory responses, production accuracy, and distribution of pronoun responses, comparing between task orders. Points indicate by-participant means, and error bars indicate 95% CIs calculated over the by-participant means."
+#| fig-cap: "Experiments 1A & 1B. Memory accuracy, distribution of memory responses, production accuracy, and distribution of production responses, comparing between task orders. Points indicate by-participant means, and error bars indicate 95% CIs calculated over the by-participant means."
 #| fig-asp: 0.8
 #| output: true
 #| cache: true
@@ -551,7 +551,7 @@ exp1b_p_compare / exp1b_p_split +
 |------------------------------------------------------------------------|
 | **Comparing Experiments 1A (Memory First) & 1B (Production First):**<br>**Memory** |
 
-: Experiments 1A & 1B: Model results for the effects of Pronoun and Task Order (Experiment 1A vs Experiment 1B) on Memory Accuracy. {#tbl-exp1-mem .borderless}
+: Experiments 1A & 1B: Model results for the effects of Pronoun and Task Order on Memory Accuracy. {#tbl-exp1-mem .borderless}
 
 ```{r}
 #| label: table-exp1-mem
@@ -579,7 +579,7 @@ exp1_tb_mem
 |------------------------------------------------------------------------|
 | **Comparing Experiments 1A (Memory First) & 1B (Production First):**<br>**Production** |
 
-: Experiments 1A & 1B: Model results for the effects of Pronoun and Task Order (Experiment 1A vs Experiment 1B) on Production Accuracy. {#tbl-exp1-prod .borderless}
+: Experiments 1A & 1B: Model results for the effects of Pronoun and Task Order on Production Accuracy. {#tbl-exp1-prod .borderless}
 
 ```{r}
 #| label: table-exp1-prod
@@ -605,7 +605,7 @@ cat(exp1_tb_prod$knitr)
 |------------------------------------------------------------------------|
 | **Comparing Experiments 1A (Memory First) & 1B (Production First):**<br>**Memory Predicting Production** |
 
-: Experiments 1A & 1B: Model results for the effects of Pronoun, Memory Accuracy, and Task Order (Experiment 1A vs Experiment 1B) on Production Accuracy. {#tbl-exp1-both .borderless}
+: Experiments 1A & 1B: Model results for the effects of Pronoun, Memory Accuracy, and Task Order on Production Accuracy. {#tbl-exp1-both .borderless}
 
 ```{r}
 #| label: table-exp1-mp
@@ -748,13 +748,13 @@ load("r_data/exp2.RData")
 
 ### Pet & Job Questions {#supplementary-exp2-pet-job}
 
-As in Experiments 1A & 1B, memory for the characters' 12 jobs was analyzed in order to make sure the task did not show floor effects, and memory for the characters' 3 pets was analyzed as a less marked comparison to pronouns (@fig-exp2-job-pet). Averaged across conditions, accuracy for the jobs (*M* = `r exp2_r_job$mean`) was numerically higher than in Experiments 1A (*M* = `r exp1a_r_job$mean`) and 1B (*M* = `r exp1b_r_job$mean`). Accuracy for the pets was also higher in Experiment 2 (*M* = `r exp2_r_pet_means$mean`) than in Experiments 1A (*M* = `r exp1a_r_pet_means['all', 'mean']`) and 1B (*M* = `r exp1b_r_pet_means['all', 'mean']`). Job and pet accuracy did not vary based on the characters' pronouns or the PSA and Biography conditions.
+As in Experiments 1A & 1B, memory for the characters' 12 jobs was analyzed in order to make sure the task did not show floor effects, and memory for the characters' 3 pets was analyzed as a less marked comparison to pronouns (@fig-exp2-job-pet). Averaged across conditions, accuracy for jobs (*M* = `r exp2_r_job$mean`) was numerically higher than in Experiments 1A (*M* = `r exp1a_r_job$mean`) and 1B (*M* = `r exp1b_r_job$mean`). Accuracy for pets was also higher in Experiment 2 (*M* = `r exp2_r_pet_means$mean`) than in Experiments 1A (*M* = `r exp1a_r_pet_means['all', 'mean']`) and 1B (*M* = `r exp1b_r_pet_means['all', 'mean']`). Job and pet accuracy did not vary based on the characters' pronouns or the PSA and Biography conditions.
 
-Pronoun and pet questions were compared in a model including the character's pronouns (contrast coded as in the main analyses), the question type (mean-center effects coded), and the PSA and Biography conditions as fixed effects. The initial model included interactions between Character Pronoun, PSA, and Biography as in the main analyses; the interaction between Character Pronoun and Question Type; by-participant and by-item intercepts; and by-participant and by-item slopes for Character Pronoun and Question Type. In addition to the subset of interactions between fixed effects listed above, the most complex model that converged included by-participant intercepts, by-item intercepts, and by-item slopes for Question Type (@tbl-exp2-pet). Participants were significantly more accurate for pronoun questions than pet questions (`r exp2_r_pet['M_Type=Pet_Pronoun', 'Text']`), and the interaction between Character Pronoun (they/them vs he/him + she/her) and Question Type was significant (`r exp2_r_pet['M_Type=Pet_Pronoun:CharPronoun=They_HeShe', 'Text']`). Probing this interaction indicated that there was no significant difference in accuracy between pronouns and pets for they/them characters (`r exp2_r_pet_they['M_Type=Pet_Pronoun', 'Text']`), only for he/him + she/her characters (`r exp2_r_pet_heshe['M_Type=Pet_Pronoun', 'Text']`). This resembles the pattern of results in Experiment 1.
+Pronoun and pet questions were compared in a model including the Character's Pronouns (contrast coded as in the main analyses), the Question Type (mean-center effects coded), and the PSA and Biography conditions as fixed effects. The initial model included interactions between Character Pronoun, PSA, and Biography as in the main analyses; the interaction between Character Pronoun and Question Type; by-participant and by-item intercepts; and by-participant and by-item slopes for Character Pronoun and Question Type. In addition to the subset of interactions between fixed effects listed above, the most complex model that converged included by-participant intercepts, by-item intercepts, and by-item slopes for Question Type (@tbl-exp2-pet). Participants were significantly more accurate for pronoun questions than pet questions (`r exp2_r_pet['M_Type=Pet_Pronoun', 'Text']`), and the interaction between Character Pronoun (they/them vs he/him + she/her) and Question Type was significant (`r exp2_r_pet['M_Type=Pet_Pronoun:CharPronoun=They_HeShe', 'Text']`). Probing this interaction indicated that there was no significant difference in accuracy between pronouns and pets for they/them characters (`r exp2_r_pet_they['M_Type=Pet_Pronoun', 'Text']`), only for he/him + she/her characters (`r exp2_r_pet_heshe['M_Type=Pet_Pronoun', 'Text']`). This resembles the pattern of results in Experiment 1.
 
 ```{r}
 #| label: fig-exp2-job-pet
-#| fig-cap: "Experiment 2: Mean accuracy in the multiple-choice memory task for pronoun, pet, and job, split by PSA and Biography conditions. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means."
+#| fig-cap: "Experiment 2: Mean accuracy in the multiple-choice memory task for pronouns, pets, and jobs, with colors indicating the character’s pronouns. By-participant means are shown as points; error bars indicate 95% CIs calculated over the by-participant means."
 #| fig-asp: 0.6
 #| output: true
 #| cache: true
@@ -801,7 +801,7 @@ exp2_d_all %>%
 |-----------------------------------------------|
 | **Experiment 2: Memory for Pronouns vs Pets** |
 
-: Experiment 2: Model results for the effects of Character Pronoun, PSA, Biography, and Question Type on accuracy in the pronoun and pet memory questions. {#tbl-exp2-pet .borderless}
+: Experiment 2: Model results for the effects of Character Pronoun, PSA, Biography, and Question Type (pronoun vs pet) on Memory Accuracy. {#tbl-exp2-pet .borderless}
 
 ```{r}
 #| label: table-exp2-pet
@@ -1021,13 +1021,13 @@ demographics_table(
 
 <br>
 
-The difference in naturalness ratings between singular *they* co-referring with generics, *each*, and *every* \[Indefinite\] and with masculine, feminine, and gender-neutral names \[Proper Name\] was tested using a linear mixed-effects model, with Referent Type mean-center effects coded. The model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp3_r_ratings['Intercept', 'Text']`). The significant effect of Referent Type indicated that singular *they* was rated as more natural with indefinites than with proper names (`r exp3_r_ratings['Type=Name_Indefinite', 'Text']`) (@tbl-exp3-ratings).
+The difference in naturalness ratings between singular *they* coreferring with generic and quantified referents [\[Indefinite\]](introduction.qmd#def-indefinite "indefinite singular they") and with masculine, feminine, and gender-neutral names \[Proper Name\] was tested using a linear mixed-effects model, with Referent Type mean-center effects coded. The model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp3_r_ratings['Intercept', 'Text']`). The significant effect of Referent Type indicated that singular *they* was rated as more natural with indefinites than with proper names (`r exp3_r_ratings['Type=Name_Indefinite', 'Text']`) (@tbl-exp3-ratings).
 
 |                                                               |
 |---------------------------------------------------------------|
 | **Experiment 3: Naturalness Ratings for Singular** ***They*** |
 
-: Experiment 3: Naturalness Ratings. Model results for the effect of Referent Type (generics, *each*, *every* vs masculine, feminine, gender-neutral names) on sentence naturalness ratings for singular *they*. {#tbl-exp3-ratings .borderless}
+: Experiment 3: Naturalness Ratings. Model results for the effect of Referent Type (generic, each, every vs masculine, feminine, gender-neutral names) on sentence naturalness ratings for singular *they*. {#tbl-exp3-ratings .borderless}
 
 ```{r}
 #| label: table-exp3-ratings
@@ -1036,6 +1036,7 @@ The difference in naturalness ratings between singular *they* co-referring with 
 exp3_tb_ratings <- tab_model(
   model = exp3_m_ratings,
   show.stat = TRUE, string.stat = "t",
+  df.method = "satterthwaite",  # match summary() in lme4/lmerTest
   show.ci = FALSE, show.se = TRUE, string.se = "SE", digits = 3, digits.re = 3,
   dv.labels = "Naturalness Ratings",
   pred.labels = c(
@@ -1365,7 +1366,7 @@ exp3_p_dist_image + exp3_p_acc_image +
 |------------------------------------------|
 | **Experiment 3: Participant Covariates** |
 
-: Experiment 3: Model results for the effects of Pronoun, Nametag, Introduction, Gender Beliefs, and Familiarity with Pronoun Sharing on accuracy. {#tbl-exp3-cov .borderless}
+: Experiment 3: Model results for the effects of Pronoun, Nametag, Introduction, Gender Beliefs, and Familiarity with Pronoun-Sharing on Accuracy. {#tbl-exp3-cov .borderless}
 
 ```{r}
 #| label: table-exp3-cov
@@ -1495,13 +1496,13 @@ exp4_d_survey %>%
 
 <br>
 
-As in Experiment 3, the difference in naturalness ratings between singular *they* co-referring with generics, *each*, and *every* \[Indefinite\] and with masculine, feminine, and gender-neutral names \[Proper Name\] was tested using a linear mixed-effects model (@tbl-exp4-ratings). Referent Type was mean-center effects coded, and the model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp4_r_ratings['Intercept', 'Text']`). There was no significant difference between proper name and indefinite referents (`r exp4_r_ratings['Type=Name_Indefinite', 'Text']`).
+As in Experiment 3, the difference in naturalness ratings between singular *they* coreferring with generic and quantified referents [\[Indefinite\]](introduction.qmd#def-indefinite "indefinite singular they") and with masculine, feminine, and gender-neutral names \[Proper Name\] was tested using a linear mixed-effects model (@tbl-exp4-ratings). Referent Type was mean-center effects coded, and the model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp4_r_ratings['Intercept', 'Text']`). There was no significant difference between proper name and indefinite referents (`r exp4_r_ratings['Type=Name_Indefinite', 'Text']`).
 
 |                                                               |
 |---------------------------------------------------------------|
 | **Experiment 4: Naturalness Ratings for Singular** ***They*** |
 
-: Experiment 4: Model results for the effect of Referent Type (generics, *each*, *every* vs masculine, feminine, gender-neutral names) on sentence naturalness ratings for singular *they.* {#tbl-exp4-ratings .borderless}
+: Experiment 4: Model results for the effect of Referent Type (generic, each, every vs masculine, feminine, gender-neutral names) on sentence naturalness ratings for singular *they.* {#tbl-exp4-ratings .borderless}
 
 ```{r}
 #| label: table-exp4-ratings
@@ -1511,6 +1512,7 @@ exp4_tb_ratings <- tab_model(
   model = exp4_m_ratings,
   show.stat = TRUE, string.stat = "t",
   show.ci = FALSE, show.se = TRUE, string.se = "SE", digits = 3, digits.re = 3,
+  df.method = "satterthwaite",  # match summary() in lme4/lmerTest
   dv.labels = "Naturalness Ratings",
   pred.labels = c(
     "(Intercept)" = "<b>(Intercept)",
@@ -1528,7 +1530,7 @@ exp4_tb_ratings
 |-------------------------------------------------------|
 | **Experiment 4: Match Judgment Rates in Test Trials** |
 
-: Experiment 4: Test Trial Match Rates. Model results for the effect of Pronoun Pair on the likelihood of judging the story to match the scene in test trials (match = 1 = correct). {#tbl-exp4-match-CR .borderless}
+: Experiment 4: Test Trial Match Rates. Model results for the effect of Pronoun Pair on the likelihood of judging the story to match the scene in test trials (1 = match = correct). {#tbl-exp4-match-CR .borderless}
 
 ```{r}
 #| label: table-exp4-match-CR
@@ -1574,7 +1576,7 @@ exp4_tb_match_CR
 |----------------------------------------------------------------|
 | **Experiment 4: Match Judgment Rates in Wrong Pronoun Trials** |
 
-: Experiment 4: Wrong Pronoun Trial Match Rates. Model results for the effect of Pronoun on judging the story to match the scene in wrong pronoun trials (match = 1 = incorrect). There were no wrong pronoun trials for the HeShe\|They condition, so They\|HeShe (they/them character referred to with he/him or she/her, whichever the competitor did not use) and HeShe\|SheHe (he/him and she/her characters referred to with they/them) were mean-center effects coded. {#tbl-exp4-match-FP .borderless}
+: Experiment 4: Wrong Pronoun Trial Match Rates. Model results for the effect of Pronoun on judging the story to match the scene in wrong pronoun trials (1 = match = incorrect). There were no wrong pronoun trials for the HeShe\|They condition, so the They\|HeShe (they/them character referred to with he/him or she/her, whichever the competitor did not use) and the HeShe\|SheHe (he/him and she/her characters referred to with they/them) conditions were mean-center effects coded. {#tbl-exp4-match-FP .borderless}
 
 ```{r}
 #| label: table-exp4-match-FP
@@ -1590,8 +1592,6 @@ exp4_tb_match_FP <- tab_model(
     "(Intercept)" = "(Intercept)",
     exp4_tb_fixed_labels
   ),
-  wrap.labels = 80,
-  CSS = table_css
   wrap.labels = 80, CSS = table_css
 )
 exp4_tb_match_FP$knitr %<>%
@@ -1669,7 +1669,7 @@ exp4_tb_match_RT
 
 ```{r}
 #| label: fig-exp4-names
-#| fig-cap: ": Experiment 4: Name Window. Looks to the named characters at the beginning of the story, with the first name beginning at 0ms and the second name beginning ~1000ms later."
+#| fig-cap: "Experiment 4: Name Window. Looks to the named characters at the beginning of the story, with the first name beginning at 0ms and the second name beginning ~1000ms later."
 #| fig-asp: 0.6
 #| output: true
 #| cache: true
@@ -1751,7 +1751,7 @@ In HeShe\|SheHe trials (@tbl-exp4-HS-SH), neither the main effect of Order (`r e
 |----------------------------------------------|
 | **Experiment 4: Looks to the Target Character<br>(HeShe\|SheHe As Reference Group)** |
 
-: Experiment 4: Model results for the effects of Pronoun and Order on the likelihood of looking at the target character (=1) or not (=0). The HeShe\|SheHe condition is coded as 0, and the HeShe\|They and They\|HeShe conditions are coded as 1. {#tbl-exp4-HS-SH .borderless}
+: Experiment 4: Model results for the effects of Pronoun Pair and Order on the likelihood of looking at the target character (=1) or not (=0). The HeShe\|SheHe condition is coded as 0, and the HeShe\|They and They\|HeShe conditions are coded as 1. {#tbl-exp4-HS-SH .borderless}
 
 ```{r}
 #| label: table-exp4-HS-SH
@@ -1781,7 +1781,7 @@ exp4_tb_HS.SH
 |----------------------------------------------|
 | **Experiment 4: Looks to the Target Character<br>(HeShe\|They As Reference Group)** |
 
-: Experiment 4: Model results for the effects of Pronoun and Order on the likelihood of looking at the target character (=1) or not (=0). The HeShe\|They condition is coded as 0, and the HeShe\|SheHe and They\|HeShe conditions are coded as 1. {#tbl-exp4-HS-T .borderless}
+: Experiment 4: Model results for the effects of Pronoun Pair and Order on the likelihood of looking at the target character (=1) or not (=0). The HeShe\|They condition is coded as 0, and the HeShe\|SheHe and They\|HeShe conditions are coded as 1. {#tbl-exp4-HS-T .borderless}
 
 ```{r}
 #| label: table-exp4-HS-T
@@ -1792,7 +1792,12 @@ exp4_tb_HS.T <- tab_model(
   transform = NULL, show.stat = TRUE, string.stat = "z",
   show.ci = FALSE, show.se = TRUE, string.se = "SE",
   show.r2 = FALSE, show.icc = FALSE, digits = 3, digits.re = 3,
-  dv.labels = "Looks to Target", pred.labels = exp4_tb_fixed_labels,
+  dv.labels = "Looks to Target",
+  pred.labels = c(
+    "Order=First" =
+       "<b>Order: Target Mentioned Second</b> (-.5) <b>vs First</b> (+.5)",
+    exp4_tb_fixed_labels
+  ),
   order.terms = c(1, 2, 4, 5, 3, 6),
   wrap.labels = 82, CSS = table_css
 )
@@ -1804,7 +1809,7 @@ exp4_tb_HS.T
 |----------------------------------------------|
 | **Experiment 4: Looks to the Target Character<br>(They\|HeShe As Reference Group)** |
 
-: Experiment 4: Model results for the effects of Pronoun and Order on the likelihood of looking at the target character (=1) or not (=0). The They\|HeShe condition is coded as 0, and the HeShe\|They and HeShe\|SheHe conditions are coded as 1. {#tbl-exp4-T-HS .borderless}
+: Experiment 4: Model results for the effects of Pronoun Pair and Order on the likelihood of looking at the target character (=1) or not (=0). The They\|HeShe condition is coded as 0, and the HeShe\|They and HeShe\|SheHe conditions are coded as 1. {#tbl-exp4-T-HS .borderless}
 
 ```{r}
 #| label: table-exp4-T-HS
@@ -1831,7 +1836,7 @@ exp4_tb_T.HS
 |----------------------------------|
 | **Experiment 4: Target Pronoun** |
 
-: Experiment 4: Model results for the effects of Target Pronoun and Order on the likelihood of looks to the target character (=1), during the window starting 200ms after pronoun onset and ending at 1210ms, the earliest shape word onset. {#tbl-exp4-target-pronoun .borderless}
+: Experiment 4: Model results for the effects of Target Pronoun and Order on the likelihood of looks to the target character (=1) or not (=0), during the window starting 200ms after pronoun onset and ending at 1210ms, the earliest shape word onset. {#tbl-exp4-target-pronoun .borderless}
 
 ```{r}
 #| label: table-exp4-target-pronoun
@@ -1853,7 +1858,7 @@ exp4_tb_target_pronoun
 |-------------------------------------------|
 | **Experiment 4: Interactions with Trend** |
 
-: Experiment 4: Trend Interactions. Model results for the interactions between Trend and Pronoun Pair and Order on the likelihood of looking at the target character (=1). {#tbl-exp4-trend .borderless}
+: Experiment 4: Trend Interactions. Model results for the interactions between Trend, Pronoun Pair, and Order on the likelihood of looking at the target character (=1) or not (=0). {#tbl-exp4-trend .borderless}
 
 ```{r}
 #| label: table-exp4-trend
@@ -1908,7 +1913,7 @@ exp4_tb_trend
 |-------------------------------------------|
 | **Experiment 4: Interactions with AR(1)** |
 
-: Experiment 4: AR(1) Interactions. Model results for the interactions between AR(1) and Pronoun Pair and Order on the likelihood of looking at the target character (=1). {#tbl-exp4-AR .borderless}
+: Experiment 4: AR(1) Interactions. Model results for the interactions between AR(1), Pronoun Pair, and Order on the likelihood of looking at the target character (=1) or not (=0). {#tbl-exp4-AR .borderless}
 
 ```{r}
 #| label: table-exp4-AR

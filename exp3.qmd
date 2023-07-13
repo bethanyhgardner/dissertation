@@ -445,7 +445,9 @@ exp3_m_ratings <- lmer(
   data = exp3_d_ratings
 )
 summary(exp3_m_ratings)
-exp3_r_ratings <- exp3_m_ratings %>% tidy_model_results()
+exp3_r_ratings <- exp3_m_ratings %>%
+  tidy_model_results() %>%
+  mutate(Text = str_replace(Text, "z", "t"))
 ```
 
 ```{r}

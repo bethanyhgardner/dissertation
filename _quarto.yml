@@ -71,7 +71,6 @@ format:
     mainfont: Arial
     monofont: Arial
     embed-resources: true
-    toc-title: "On This Page"
     number-depth: 3
     toc-expand: 2
     toc-depth: 4
