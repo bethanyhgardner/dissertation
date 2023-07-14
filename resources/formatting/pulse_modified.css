@@ -588,8 +588,12 @@ progress {
 }
 
 .blockquote {
-  margin-bottom: 1rem;
-  font-size: 1.25rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  border-left: 0rem;
 }
 .blockquote > :last-child {
   margin-bottom: 0;
@@ -603,6 +607,12 @@ progress {
 }
 .blockquote-footer::before {
   content: "— ";
+}
+
+.example-formatting {
+   margin-left: 3rem;
+   margin-right: 3rem;
+   color: #848484;
 }
 
 .img-fluid {

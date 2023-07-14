@@ -1,3 +1,8 @@
+---
+toc-title: "Supplementary Analyses"
+toc-expand: 1
+---
+
 ```{r}
 #| label: supplementary-setup
 #| include: false
@@ -33,7 +38,7 @@ source("resources/data-functions/exp4_load_data.R")
 
 # Supplementary Analyses
 
-## Experiment 1 {#supplementary-exp1}
+## Experiment 1 {#sec-supplementary-exp1}
 
 ```{r}
 #| label: load-workspace-exp1
@@ -41,7 +46,7 @@ source("resources/data-functions/exp4_load_data.R")
 load("r_data/exp1.RData")
 ```
 
-### Experiment 1A: Additional Results {#supplementary-exp1a}
+### Experiment 1A: Additional Results {#sec-supplementary-exp1a}
 
 In addition to whether the characters used he/him, she/her, or they/them, participants were also asked about the characters' jobs and pets (@fig-exp1a-job-pet). Accuracy matching the 12 jobs to the 12 characters was lower (*M* = `r exp1a_r_job$mean`, *SD* = `r exp1a_r_job$sd`) than for the 3 pets (*M* = `r exp1a_r_pet_means['all', 'mean']`, *SD* = `r exp1a_r_pet_means['all', 'sd']`) and 3 pronouns (*M* = `r exp1a_r_memory_means['all', 'mean']`, *SD* = `r exp1a_r_memory_means['all', 'sd']`), but not at floor. Neither job nor pet accuracy varied based on the character's pronouns. Accuracy for the characters' pets (cat, dog, or fish) was designed as a comparison to pronoun accuracy, and the two were compared in a model including the Character's Pronouns (contrast coded as in the main analyses) and Question Type (pronoun vs pet, mean-center effects coded) as fixed effects. The most complex model that converged included by-participant random slopes for Question Type (@tbl-exp1a-pet). Averaging across the three character pronouns, participants were significantly more accurate for pronoun questions than pet questions (`r exp1a_r_pet['M_Type=Pet_Pronoun', 'Text']`). The interaction between Character Pronoun (they/them vs he/him + she/her) and Question Type was significant (`r exp1a_r_pet['M_Type=Pet_Pronoun:CharPronoun=They_HeShe', 'Text']`), reflecting that the character pronouns affected accuracy for the pronoun question, but not the pet question. Probing this interaction indicated that for they/them characters, there was no significant difference in accuracy between pronouns and pets (`r exp1a_r_pet_they['M_Type=Pet_Pronoun', 'Text']`), but that for he/him + she/her characters, pronoun accuracy was higher than pet accuracy (`r exp1a_r_pet_heshe['M_Type=Pet_Pronoun', 'Text']`).
 
@@ -153,7 +158,7 @@ exp1a_tb_task$knitr %<>%
 exp1a_tb_task
 ```
 
-### Experiment 1B: Additional Results {#supplementary-exp1b}
+### Experiment 1B: Additional Results {#sec-supplementary-exp1b}
 
 |                           |
 |---------------------------|
@@ -297,7 +302,7 @@ exp1b_tb_pets_all$knitr %<>% exp1_tb_random_labels() %>% drop_sigma()
 exp1b_tb_pets_all
 ```
 
-### Comparing Experiments 1A & 1B {#supplementary-exp1ab}
+### Comparing Experiments 1A & 1B {#sec-supplementary-exp1ab}
 
 ```{r}
 #| label: fig-exp1ab-panel1
@@ -738,7 +743,7 @@ exp1_d_reliability <- bind_rows(.id = "Task",
   )
 ```
 
-## Experiment 2 {#supplementary-exp2}
+## Experiment 2 {#sec-supplementary-exp2}
 
 ```{r}
 #| label: load-workspace-exp2
@@ -746,7 +751,7 @@ exp1_d_reliability <- bind_rows(.id = "Task",
 load("r_data/exp2.RData")
 ```
 
-### Pet & Job Questions {#supplementary-exp2-pet-job}
+### Pet & Job Questions {#sec-supplementary-exp2-pet-job}
 
 As in Experiments 1A & 1B, memory for the characters' 12 jobs was analyzed in order to make sure the task did not show floor effects, and memory for the characters' 3 pets was analyzed as a less marked comparison to pronouns (@fig-exp2-job-pet). Averaged across conditions, accuracy for jobs (*M* = `r exp2_r_job$mean`) was numerically higher than in Experiments 1A (*M* = `r exp1a_r_job$mean`) and 1B (*M* = `r exp1b_r_job$mean`). Accuracy for pets was also higher in Experiment 2 (*M* = `r exp2_r_pet_means$mean`) than in Experiments 1A (*M* = `r exp1a_r_pet_means['all', 'mean']`) and 1B (*M* = `r exp1b_r_pet_means['all', 'mean']`). Job and pet accuracy did not vary based on the characters' pronouns or the PSA and Biography conditions.
 
@@ -824,7 +829,7 @@ exp2_tb_pets$knitr %<>% exp2_tb_random_labels() %>% drop_sigma()
 exp2_tb_pets
 ```
 
-### Additional Figures {#supplementary-exp2-figures}
+### Additional Figures {#sec-supplementary-exp2-figures}
 
 ```{r}
 #| label: fig-exp2-dist
@@ -888,7 +893,7 @@ exp2_p_memory_dist / exp2_p_prod_dist +
   ))
 ```
 
-### Additional Model Results {#supplementary-exp2-tables}
+### Additional Model Results {#sec-supplementary-exp2-tables}
 
 |                                                |
 |------------------------------------------------|
@@ -938,7 +943,7 @@ exp2_tb_use_they <- tab_model(
 cat(exp2_tb_use_they$knitr)
 ```
 
-## Experiment 3 {#supplementary-exp3}
+## Experiment 3 {#sec-supplementary-exp3}
 
 ```{r}
 #| label: load-workspace-exp3
@@ -949,7 +954,7 @@ rm(list = ls(pattern = "exp2"))
 load("r_data/exp3.RData")
 ```
 
-### Norming Study {#supplementary-norming}
+### Norming Study {#sec-supplementary-norming}
 
 |  |
 |--|
@@ -1001,7 +1006,7 @@ exp3_d_norming %>%
 
 <br>
 
-### Additional Survey Results {#supplementary-exp3-survey}
+### Additional Survey Results {#sec-supplementary-exp3-survey}
 
 |  |
 |--|
@@ -1150,7 +1155,7 @@ exp3_d_survey %>%
 
 <br>
 
-### Additional Pronoun Accuracy Results {#supplementary-exp3-accuracy}
+### Additional Pronoun Accuracy Results {#sec-supplementary-exp3-accuracy}
 
 ```{r}
 #| label: fig-exp3-by-character
@@ -1271,7 +1276,7 @@ exp3_p_dist_image + exp3_p_acc_image +
   )
 ```
 
-### Participant Covariate Analyses {#supplementary-exp3-covariates}
+### Participant Covariate Analyses {#sec-supplementary-exp3-covariates}
 
 ```{r}
 #| label: fig-exp3-cov-dist
@@ -1388,7 +1393,7 @@ exp3_tb_subj_cov$knitr %<>%
 exp3_tb_subj_cov
 ```
 
-## Experiment 4 {#supplementary-exp4}
+## Experiment 4 {#sec-supplementary-exp4}
 
 ```{r}
 #| label: load-workspace-exp4
@@ -1398,7 +1403,7 @@ load("r_data/exp4.RData")
 source("resources/data-functions/exp4_load_data.R")
 ```
 
-### Additional Survey Results {#supplementary-exp4-survey}
+### Additional Survey Results {#sec-supplementary-exp4-survey}
 
 |     |
 |-----|
@@ -1524,7 +1529,7 @@ exp4_tb_ratings$knitr %<>% exp4_tb_random_effects()
 exp4_tb_ratings
 ```
 
-### Match Judgments {#supplementary-exp4-match}
+### Match Judgments {#sec-supplementary-exp4-match}
 
 |                                                       |
 |-------------------------------------------------------|
@@ -1665,7 +1670,7 @@ exp4_tb_match_RT$knitr %<>%
 exp4_tb_match_RT
 ```
 
-### Additional Figures {#supplementary-exp4-figures}
+### Additional Figures {#sec-supplementary-exp4-figures}
 
 ```{r}
 #| label: fig-exp4-names
@@ -1741,7 +1746,7 @@ exp4_load_data_plots_preview() %>%
   )
 ```
 
-### Additional Eyetracking Results {#supplementary-exp4-tables}
+### Additional Eyetracking Results {#sec-supplementary-exp4-tables}
 
 The Order of Mention effect was estimated separately for each Pronoun Pair condition by running three models, each with one Pronoun Pair condition coded as 0 and the other two Pronoun Pair conditions coded as 1. The maximal random effects structures that converged [@bates2015; @rcoreteam2023; @voeten2023] only included a subset of those in the main model (@tbl-exp4-pronoun-pair). For the by-participant effects, each kept all 3 slopes (AR(1), Order, and Trial Number). For the by-item effects, the HeShe\|They reference model included both slopes (Order, Trend), the HeShe\|SheHe reference model only included slopes for Trend, and the They\|HeShe reference model only included intercepts.
 
