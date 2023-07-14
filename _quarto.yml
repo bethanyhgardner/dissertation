@@ -15,7 +15,7 @@ book:
   # Structure
   chapters:
     - index.qmd
-    # - intro.qmd
+    - introduction.qmd
     - exp1.qmd
     - exp2.qmd
     - exp3.qmd
