@@ -20,7 +20,7 @@ book:
     - exp2.qmd
     - exp3.qmd
     - exp4.qmd
-    # - discussion.qmd
+    - general_discussion.qmd
   appendices:
     - references.qmd
     - supplementary_analyses.qmd
