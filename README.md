@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/653838432.svg)](https://zenodo.org/badge/latestdoi/653838432)
+
 # Dissertation
 
 Right now, this repository has de-identified data, materials, and analysis code. The rendered analysis code, a DOI, and a link to the full text on ProQuest will be available later.
