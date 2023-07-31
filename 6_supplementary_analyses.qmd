@@ -1026,7 +1026,7 @@ demographics_table(
 
 <br>
 
-The difference in naturalness ratings between singular *they* coreferring with generic and quantified referents [\[Indefinite\]](introduction.qmd#def-indefinite "indefinite singular they") and with masculine, feminine, and gender-neutral names \[Proper Name\] was tested using a linear mixed-effects model, with Referent Type mean-center effects coded. The model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp3_r_ratings['Intercept', 'Text']`). The significant effect of Referent Type indicated that singular *they* was rated as more natural with indefinites than with proper names (`r exp3_r_ratings['Type=Name_Indefinite', 'Text']`) (@tbl-exp3-ratings).
+The difference in naturalness ratings between singular *they* coreferring with generic and quantified referents [\[Indefinite\]](0_introduction.qmd#def-indefinite "indefinite singular they") and with masculine, feminine, and gender-neutral names \[Proper Name\] was tested using a linear mixed-effects model, with Referent Type mean-center effects coded. The model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp3_r_ratings['Intercept', 'Text']`). The significant effect of Referent Type indicated that singular *they* was rated as more natural with indefinites than with proper names (`r exp3_r_ratings['Type=Name_Indefinite', 'Text']`) (@tbl-exp3-ratings).
 
 |                                                               |
 |---------------------------------------------------------------|
@@ -1501,7 +1501,7 @@ exp4_d_survey %>%
 
 <br>
 
-As in Experiment 3, the difference in naturalness ratings between singular *they* coreferring with generic and quantified referents [\[Indefinite\]](introduction.qmd#def-indefinite "indefinite singular they") and with masculine, feminine, and gender-neutral names \[Proper Name\] was tested using a linear mixed-effects model (@tbl-exp4-ratings). Referent Type was mean-center effects coded, and the model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp4_r_ratings['Intercept', 'Text']`). There was no significant difference between proper name and indefinite referents (`r exp4_r_ratings['Type=Name_Indefinite', 'Text']`).
+As in Experiment 3, the difference in naturalness ratings between singular *they* coreferring with generic and quantified referents [\[Indefinite\]](0_introduction.qmd#def-indefinite "indefinite singular they") and with masculine, feminine, and gender-neutral names \[Proper Name\] was tested using a linear mixed-effects model (@tbl-exp4-ratings). Referent Type was mean-center effects coded, and the model also included by-item intercepts and by-participant slopes. Ratings were mean centered such that a score of 0 indicated the center of the Likert scale, so the significant intercept means that both types of sentences were rated as more natural than unnatural (`r exp4_r_ratings['Intercept', 'Text']`). There was no significant difference between proper name and indefinite referents (`r exp4_r_ratings['Type=Name_Indefinite', 'Text']`).
 
 |                                                               |
 |---------------------------------------------------------------|
@@ -1942,4 +1942,10 @@ exp4_tb_AR$knitr %<>%
   drop_sigma()
 
 exp4_tb_AR
+```
+
+```{r}
+#| label: clear-environment
+
+rm(list = ls())
 ```

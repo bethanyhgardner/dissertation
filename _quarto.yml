@@ -15,15 +15,18 @@ book:
   # Structure
   chapters:
     - index.qmd
-    - introduction.qmd
-    - exp1.qmd
-    - exp2.qmd
-    - exp3.qmd
-    - exp4.qmd
-    - general_discussion.qmd
+    - 0_abstract.qmd
+    - 0_introduction.qmd
+    - part: Experiments
+      chapters:
+        - 1_exp.qmd
+        - 2_exp.qmd
+        - 3_exp.qmd
+        - 4_exp.qmd
+    - 5_general_discussion.qmd
   appendices:
-    - references.qmd
-    - supplementary_analyses.qmd
+    - 6_supplementary_analyses.qmd
+    - 7_references.qmd
 
   # Links/tools
   repo-url: https://github.com/bethanyhgardner/dissertation

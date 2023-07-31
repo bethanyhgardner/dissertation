@@ -5,11 +5,11 @@ docs/
 *.Rmarkdown
 
 # Tracking version in docs/
-exp1_files/
-exp2_files/
-exp3_files/
-exp4_files/
-supplementary_analyses_files/
+1_exp_files/
+2_exp_files/
+3_exp_files/
+4_exp_files/
+6_supplementary_analyses_files/
 
 # History files
 .Rhistory
