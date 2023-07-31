@@ -1,1 +1,2 @@
 # Index {.unnumbered}
+The results sections for this dissertation were written using [Quarto](https://quarto.org), and a number of useful [R packages](7_references.qmd#packages). After finishing, I decided to add the rest of the dissertation text to learn how to make a Quarto [book](https://quarto.org/docs/books/), because I'm the type of person who finds playing with new coding and typesetting tools fun.
