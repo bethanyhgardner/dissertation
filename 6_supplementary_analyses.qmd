@@ -825,7 +825,9 @@ exp2_tb_pets <- tab_model(
   ),
   wrap.labels = 80, CSS = table_css
 )
-exp2_tb_pets$knitr %<>% exp2_tb_random_labels() %>% drop_sigma()
+exp2_tb_pets$knitr %<>% exp2_tb_random_labels() %>% 
+  str_replace("Name.M_Type=Pet_Pronoun", "Question Type | Name") %>%
+  drop_sigma()
 exp2_tb_pets
 ```
 
@@ -960,7 +962,7 @@ load("r_data/exp3.RData")
 |--|
 |  |
 
-: Image Norming: Results. Counts and proportions <br>of they/them, he/him, she/her, and no pronoun responses for <br>each image in norming study. {#tbl-norming .borderless}
+: Image Norming: Results. Counts and proportions <br>of they/them, he/him, she/her, and no pronoun responses for <br>each [image](https://github.com/bethanyhgardner/dissertation/blob/main/materials/exp3/images.md) in the norming study. {#tbl-norming .borderless}
 
 ```{r ft.align="left"}
 #| output: true
@@ -984,6 +986,7 @@ exp3_d_norming %>%
     str_detect(Image, "01|02|3|5|7|10") ~ "Images Not Included",
     str_detect(Image, "Count|Prop") ~ "Totals"
   )) %>%
+  mutate(Image = str_remove(Image, ".png")) %>%  # drop file extension
   arrange(Group, `he/him`, desc(`she/her`)) %>%  # order rows and cols for table
   select(Group, Image, `they/them`, `he/him`, `she/her`, none) %>%
   as_grouped_data(groups = "Group") %>%
