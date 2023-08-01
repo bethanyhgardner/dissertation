@@ -1,2 +1,61 @@
-# Index {.unnumbered}
-The results sections for this dissertation were written using [Quarto](https://quarto.org), and a number of useful [R packages](7_references.qmd#packages). After finishing, I decided to add the rest of the dissertation text to learn how to make a Quarto [book](https://quarto.org/docs/books/), because I'm the type of person who finds playing with new coding and typesetting tools fun.
+<br>
+
+## About {.unnumbered}
+
+The results sections for this dissertation were written using [Quarto](https://quarto.org), then after finishing, I decided to add the rest of the dissertation text to learn how to make a Quarto [book](https://quarto.org/docs/books/), because I'm the type of person who finds playing with new coding and typesetting tools fun.
+
+The [Github repository](https://github.com/bethanyhgardner/dissertation/) also includes the de-identified data, code for the statistical analyses and plots, and most of the study materials. If you're interested in using materials that aren't uploaded here, like edited images or audio files, send me an email. If you're interested in building off this data, please get in touch with [me](mailto:bethany.gardner@vanderbilt.edu) and [Sarah Brown-Schmidt](mailto:sarah.brown-schmidt@vanderbilt.edu)---we're both excited about pronoun research and open science!
+
+<br>
+
+## Acknowledgements {.unnumbered}
+
+**People:**
+
+-   My advisor at Vanderbilt, [Sarah Brown-Schmidt](http://sarahbrownschmidt.com/lab-page/)
+-   My other committee members, joint lab meeting people, and attendees at HSP and LSA, for feedback that made my thinking and presentation clearer
+-   Morrigan Dunlap-Loomis, who contributed to annotating data for Experiment 3 and collecting data for Experiment 4
+
+**Funding:**
+
+-   This material is based upon work supported by a National Science Foundation under Grant #2214299 (Linguistics DDRI program). Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
+-   In addition to NSF Linguistics, this research was also supported by small grants programs of the [Vanderbilt LGBT Policy Lab](https://www.vanderbilt.edu/lgbtq-policy-lab/) and the [Peabody Office of Equity, Diversity, and Inclusion](https://peabody.vanderbilt.edu/about/office-of-equity-diversity-inclusion/).
+
+**Open-source software:**
+
+-   All of the statistical analyses and plots were created with R ([package citations](7_references.qmd#packages))
+-   This text is written and published using [Quarto](https://quarto.org)
+-   Several of the experiments were coded and hosted with [PCIbex](https://doc.pcibex.net/)
+
+<br>
+
+## Citation {.unnumbered}
+
+ProQuest listing pending.
+
+::: quarto-appendix-secondary-label
+```{=html}
+BibTeX citation:
+```
+:::
+
+```{=html}
+<pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@phdthesis{gardner2023,
+  author = {Gardner, Bethany},
+  publisher = {Vanderbilt University},
+  title = {Learning to comprehend and produce singular \emph{they}},
+  date = {2023-06-15},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre>
+```
+
+::: quarto-appendix-secondary-label
+```{=html}
+For attribution, please cite this work as:
+```
+:::
+
+```{=html}
+<pre class="sourceCode code-with-copy"><code><div id="ref-gardner2023" class="csl-entry quarto-appendix-citeas" role="listitem">Gardner, B. 2023. <i>Learning to comprehend and produce singular</i><br> they. [Doctoral dissertation, Vanderbilt University]. <!-- ProQuest Dissertations & Theses Global. <a href="https://url_pending">url_pending</a>. --></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre>
+```

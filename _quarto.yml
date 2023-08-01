@@ -6,11 +6,13 @@ project:
 book:
   # Metadata
   title: "Learning to comprehend and produce singular <i>they</i><br>"
-  date: 06/15/2023
+  date: "06/15/2023"
+  available-date: "08/01/2023"
   author:
     - name: Bethany Gardner
       orcid: 0000-0002-5154-2040
-  # doi: "placeholder"
+      email: bethany.gardner@vanderbilt.edu
+  # doi:
 
   # Structure
   chapters:
@@ -33,6 +35,9 @@ book:
   sidebar:
     tools:
       - icon: person-circle
+        text: "About Me"
+        href: https://bethanyhgardner.github.io/
+      - icon: enve;ope
         text: "Contact"
         href: "mailto: bethany.gardner@vanderbilt.edu"
       # - icon: filetype-pdf
@@ -42,6 +47,9 @@ book:
     style: docked
     foreground: "#7570B3"
     background: "#ededed"
+  page-footer:
+    center:
+      - text: "&copy; 2023 Bethany Gardner"
 
 # References
 bibliography: resources/references.bib
@@ -49,21 +57,31 @@ csl: resources/formatting/apa.csl
 link-citations: true
 link-bibliography: true
 
+
 # Other citation info
 citation:
   title: Learning to comprehend and produce singular \emph{they}
   author:
     - name: Bethany Gardner
       orcid: 0000-0002-5154-2040
+      email: bethany.gardner@vanderbilt.edu
       affiliation:
       - name: Vanderbilt University
         department: Department of Psychology & Human Development
+        city: Nashville
+        state: TN
   type: thesis
   genre: Doctoral dissertation
   publisher: Vanderbilt University
 google-scholar: true
 
-# HTML
+copyright:
+  holder: Bethany Gardner
+  year: 2023
+
+appendix-cite-as: display
+
+# Rendering
 format:
   html:
     execute:
