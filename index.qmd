@@ -23,9 +23,9 @@ The [Github repository](https://github.com/bethanyhgardner/dissertation/) also i
 
 **Open-source software:**
 
--   All of the statistical analyses and plots were created with R ([package citations](7_references.qmd#packages))
 -   This text is written and published using [Quarto](https://quarto.org)
 -   Several of the experiments were coded and hosted with [PCIbex](https://doc.pcibex.net/)
+-   All of the statistical analyses and plots were created with R ([package citations](7_references.qmd#r-packages)).
 
 <br>
 

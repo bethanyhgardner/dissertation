@@ -9,6 +9,7 @@ bibliography: resources/packages.bib
 library(tidyverse)
 library(magrittr)
 library(kableExtra)
+library(grateful)
 ```
 
 # References
@@ -19,24 +20,16 @@ library(kableExtra)
 
 <br>
 
-## Packages
+## R Packages
 
 Built using [Quarto](https://quarto.org/) version `r quarto::quarto_version()` and the R packages:
 
 ```{r}
 #| label: list-packages
-#| results: asis
+#| output: true
 
-grateful::cite_packages(
-    output   = "table",
-    out.dir  = "resources",
-    bib.file = "packages"
-  ) %>%
-  mutate(.before = Citation, ` ` = " ") %>%  # workaround to render as markdown
-  kable(align = "lrl") %>%                   # table so pandoc recognizes
-  column_spec(1, width = "5em") %>%          # citation keys
-  column_spec(2, width = "5em") %>%
-  column_spec(3, width = "1.75em") %>%
-  unclass() %>%
-  cat()
+scan_packages() %>%
+  rename("Package" = "pkg", "Version" = "version") %>%
+  kable(table.attr = 'data-quarto-disable-processing="true"', align = "lr") %>%
+  kable_styling(full_width = F, position = "left")
 ```
