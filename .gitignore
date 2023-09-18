@@ -1,5 +1,6 @@
 *.Rproj
 *.Rmarkdown
+_freeze/
 
 # Tracking version in docs/
 1_exp_files/

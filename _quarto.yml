@@ -87,6 +87,7 @@ format:
     execute:
       echo: false
       output: false
+      freeze: true
     theme: pulse
     css: resources/formatting/pulse_modified.css
     mainfont: Arial
