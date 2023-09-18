@@ -2,7 +2,8 @@
 
 # Dissertation
 
-Right now, this repository has de-identified data, materials, and analysis code. The rendered analysis code, a DOI, and a link to the full text on ProQuest will be available later.
+This repository includes the de-identified data, materials, analysis code, and Quarto code for my dissertation, **Learning to Comprehend and Produce Singular** ***They.*** You can read the full dissertation open-access in the [Vanderbilt database](http://hdl.handle.net/1803/18385), with institutional access in the [ProQuest database](https://www.proquest.com/docview/2864824940), or [here](https://bethanyhgardner.github.io/dissertation/) as a Quarto book.
+
  
 ## Contents
 
@@ -13,38 +14,16 @@ Right now, this repository has de-identified data, materials, and analysis code.
 *	[Resources](#resources)
 *	[Quarto Files](#quarto-files)
 
-```
-│   exp1.qmd
-│   exp2.qmd
-│   exp3.qmd
-│   exp4.qmd
-│   index.qmd
-│   references.qmd
-│   supplementary_analyses.qmd
-│   _quarto.yml
-├───data
-├───materials
-│   ├───exp1
-│   ├───exp2
-│   ├───exp3
-│   └───exp4
-├───resources
-│   ├───data-functions
-│   ├───formatting
-│   └───icons
-└───r_data
-```
-
 ---
 
 ## Analysis Code
 
 ```
-│   exp1.qmd
-│   exp2.qmd
-│   exp3.qmd
-│   exp4.qmd
-│   supplementary_analyses.qmd
+├── 1_exp.qmd
+├── 2_exp.qmd
+├── 3_exp.qmd
+├── 4_exp.qmd
+└── 6_supplementary_analyses.qmd
 ```
 
 Analysis code for each experiment and the appendix, which includes code for the stats models, plots, and tables, and the text with the model results piped in.
@@ -54,28 +33,28 @@ Analysis code for each experiment and the appendix, which includes code for the 
 ## Data
 
 ```
-├───data
-│       exp1a_data.csv
-│       exp1b_data.csv
-│       exp2_data.csv
-│       exp3_demographics.csv
-│       exp3_image-norming.csv
-│       exp3_participant-covariates.csv
-│       exp3_pronouns.csv
-│       exp3_survey.csv
-│       exp4_characters.csv
-│       exp4_demographics.csv
-│       exp4_match-judgments.csv
-│       exp4_survey.csv
-│       exp4_timecourse-full.csv
-│       exp4_timecourse-names.csv
-│       exp4_timecourse-preview.csv
-│       exp4_timecourse-pronoun.csv
-│       README.md
-└───    README.qmd
+├── data
+│   ├── exp1a_data.csv
+│   ├── exp1b_data.csv
+│   ├── exp2_data.csv
+│   ├── exp3_demographics.csv
+│   ├── exp3_image-norming.csv
+│   ├── exp3_participant-covariates.csv
+│   ├── exp3_pronouns.csv
+│   ├── exp3_survey.csv
+│   ├── exp4_characters.csv
+│   ├── exp4_demographics.csv
+│   ├── exp4_match-judgments.csv
+│   ├── exp4_survey.csv
+│   ├── exp4_timecourse-full.csv
+│   ├── exp4_timecourse-names.csv
+│   ├── exp4_timecourse-preview.csv
+│   ├── exp4_timecourse-pronoun.csv
+│   ├── README.md
+|   └── README.qmd
 ```
 
-These are the de-identified data files, which are described in the [README](data/README.md) in that directory.
+These are the de-identified data files, which are described in the [README](data/README.md) file in that directory.
 
 ---
 
@@ -84,11 +63,11 @@ These are the de-identified data files, which are described in the [README](data
 ### Experiment 1
 
 ```
-├───exp1
-│       demographics.txt
-│       exp1a_qualtrics.qsf
-│       exp1b_qualtrics.qsf
-│       exp1_stimuli.xlsx
+├── exp1
+│   ├── demographics.txt
+│   ├── exp1a_qualtrics.qsf
+│   ├── exp1b_qualtrics.qsf
+|   └── exp1_stimuli.xlsx
 ```
 
 *	[`demographics.txt`](materials/exp1/demographics.txt) is the age, gender, and English experience questions.
@@ -99,30 +78,28 @@ These are the de-identified data files, which are described in the [README](data
 ### Experiment 2
 
 ```
-├───exp2
-│   │   biographies.md
-│   │   demographics.txt
-│   │   PSA.md
-│   │
-│   ├───PCIbex
-│   │       demolink.txt
-│   │       global_main.css
-│   │       main.js
-│   │       PennController.css
-│   │       Scale.css
-│   │
-│   └───stim
-│           catch_word.mp3
-│           consent.html
-│           math.csv
-│           psa_neutral.html
-│           psa_pronoun.html
-│           stimuli_characters.csv
-│           stimuli_training.csv
-│           story1_she.html
-│           story1_they_fem.html
-│           story2_he.html
-│           story2_they_masc.html
+├── exp2
+│   ├── biographies.md
+│   ├── demographics.txt
+│   ├── PCIbex
+│   │   ├── demolink.txt
+│   │   ├── global_main.css
+│   │   ├── main.js
+│   │   ├── PennController.css
+│   │   └── Scale.css
+│   ├── PSA.md
+│   └── stim
+│       ├── catch_word.mp3
+│       ├── consent.html
+│       ├── math.csv
+│       ├── psa_neutral.html
+│       ├── psa_pronoun.html
+│       ├── stimuli_characters.csv
+│       ├── stimuli_training.csv
+│       ├── story1_she.html
+│       ├── story1_they_fem.html
+│       ├── story2_he.html
+│       └── story2_they_masc.html
 ```
 
 *	[`biographies.md`](materials/exp2/biographies.md) is the text of the biographies.
@@ -134,41 +111,38 @@ These are the de-identified data files, which are described in the [README](data
 ### Experiment 3
 
 ```
-├───exp3
-│   │   demographics.md
-│   │   images.md
-│   │   stimuli.xlsx
-│   │   survey.md
-│   │
-│   ├───figures
-│   │       procedure.png
-│   │       stimuli.png
-│   │
-│   ├───PCIbex
-│   │       1_setup.js
-│   │       2_consent-checks.js
-│   │       3_experiment.js
-│   │       4_attitudes.js
-│   │       5_demographics-end.js
-│   │       demolink.txt
-│   │       global_main.css
-│   │       PennController.css
-│   │       Scale.css
-│   │
-│   └───stim
-│           catch_word.mp3
-│           ins_characters.html
-│           ins_mic-test.html
-│           ins_start.html
-│           ins_trials-example.html
-│           ins_trials-practice.html
-│           ins_trials-test.html
-│           stim-acceptability.csv
-│           stim-char.csv
-│           stim-example.csv
-│           stim-practice.csv
-│           stim-test.csv
-│           stim-transphobia.csv
+├── exp3
+│   ├── demographics.md
+│   ├── figures
+│   │   ├── procedure.png
+│   │   └── stimuli.png
+│   ├── images.md
+│   ├── PCIbex
+│   │   ├── 1_setup.js
+│   │   ├── 2_consent-checks.js
+│   │   ├── 3_experiment.js
+│   │   ├── 4_attitudes.js
+│   │   ├── 5_demographics-end.js
+│   │   ├── demolink.txt
+│   │   ├── global_main.css
+│   │   ├── PennController.css
+│   │   └── Scale.css
+│   ├── stim
+│   │   ├── catch_word.mp3
+│   │   ├── ins_characters.html
+│   │   ├── ins_mic-test.html
+│   │   ├── ins_start.html
+│   │   ├── ins_trials-example.html
+│   │   ├── ins_trials-practice.html
+│   │   ├── ins_trials-test.html
+│   │   ├── stim-acceptability.csv
+│   │   ├── stim-char.csv
+│   │   ├── stim-example.csv
+│   │   ├── stim-practice.csv
+│   │   ├── stim-test.csv
+│   │   └── stim-transphobia.csv
+│   ├── stimuli.xlsx
+│   └── survey.md
 ```
 
 *	[`demographics.md`](materials/exp3/demographics.md) is the text of the demographics questions.
@@ -186,37 +160,34 @@ These are the de-identified data files, which are described in the [README](data
 ### Experiment 4
 
 ```
-└───exp4
-    │   audio-times.csv
-    │   demographics.md
-    │   images.md
-    │   stimuli.xlsx
-    │   stories.md
-    │   survey.md
-    │
-    ├───eyetracking_matlab
-    │       charIntros.m
-    │       charPost.m
-    │       charPre.m
-    │       mainTrials.m
-    │       startScreen.m
-    │       they4.m
-    │
-    ├───figures
-    │       arnold2000.png
-    │       procedure.png
-    │       stimuli.png
-    │
-    └───survey_pcibex
-            1_setup.js
-            2_attitudes.js
-            3_demographics.js
-            demolink.txt
-            global_main.css
-            PennController.css
-            Scale.css
-            stim-acceptability.csv
-            stim-transphobia.csv
+└── exp4
+    ├── audio-times.csv
+    ├── demographics.md
+    ├── eyetracking_matlab
+    │   ├── charIntros.m
+    │   ├── charPost.m
+    │   ├── charPre.m
+    │   ├── mainTrials.m
+    │   ├── startScreen.m
+    │   └── they4.m
+    ├── figures
+    │   ├── arnold2000.png
+    │   ├── procedure.png
+    │   └── stimuli.png
+    ├── images.md
+    ├── stimuli.xlsx
+    ├── stories.md
+    ├── survey.md
+    └── survey_pcibex
+        ├── 1_setup.js
+        ├── 2_attitudes.js
+        ├── 3_demographics.js
+        ├── demolink.txt
+        ├── global_main.css
+        ├── PennController.css
+        ├── Scale.css
+        ├── stim-acceptability.csv
+        └── stim-transphobia.csv
 ```
 
 *	[`audio-times.csv`](materials/exp4/audio-times.csv) has the duration for all audio stimuli files, plus the time of the shape word onset for each pronoun sentence. The audio files are available upon request.
@@ -241,32 +212,33 @@ These are the de-identified data files, which are described in the [README](data
 ## R Data Files and Environments
 
 ```
-└───r_data
-        exp1.RData
-        exp1a_memory_reliability.RDS
-        exp1a_production_reliability.RDS
-        exp1b_memory_reliability.RDS
-        exp1b_production_reliability.RDS
-        exp2.RData
-        exp3.RData
-        exp3_power_2way_N108.RDA
-        exp3_power_2way_N132.RDA
-        exp3_power_2way_N156.RDA
-        exp3_power_2way_N180.RDA
-        exp3_power_3way_N132.RDA
-        exp3_power_3way_N156.RDA
-        exp3_reliability.RDS
-        exp3_subj-covariates.RDS
-        exp4.RData
-        exp4_AR.RDS
-        exp4_pronoun-pair.RDS
-        exp4_pronoun-pair_HS-SH.RDS
-        exp4_pronoun-pair_HS-T.RDS
-        exp4_pronoun-pair_HS-T_first0.RDS
-        exp4_pronoun-pair_HS-T_second0.RDS
-        exp4_pronoun-pair_T-HS.RDS
-        exp4_target-pronoun.RDS
-        exp4_trend.RDS
+├── r_data
+│   ├── exp1.RData
+│   ├── exp1a_memory_reliability.RDS
+│   ├── exp1a_production_reliability.RDS
+│   ├── exp1b_memory_reliability.RDS
+│   ├── exp1b_production_reliability.RDS
+│   ├── exp2.RData
+│   ├── exp3.RData
+│   ├── exp3_power_2way_N108.RDA
+│   ├── exp3_power_2way_N132.RDA
+│   ├── exp3_power_2way_N156.RDA
+│   ├── exp3_power_2way_N180.RDA
+│   ├── exp3_power_3way_N132.RDA
+│   ├── exp3_power_3way_N156.RDA
+│   ├── exp3_reliability.RDS
+│   ├── exp3_subj-covariates.RDS
+│   ├── exp4.RData
+│   ├── exp4_AR.RDS
+│   ├── exp4_match_RT.RDS
+│   ├── exp4_pronoun-pair.RDS
+│   ├── exp4_pronoun-pair_HS-SH.RDS
+│   ├── exp4_pronoun-pair_HS-T.RDS
+│   ├── exp4_pronoun-pair_HS-T_first0.RDS
+│   ├── exp4_pronoun-pair_HS-T_second0.RDS
+│   ├── exp4_pronoun-pair_T-HS.RDS
+│   ├── exp4_target-pronoun.RDS
+│   └── exp4_trend.RDS
 ```
 
 *	The `exp*.RData` files are the R environments after running the analysis code file for the corresponding experiment. These are used in the supplementary analysis code file, and to save time re-running everything.
@@ -279,27 +251,27 @@ These are the de-identified data files, which are described in the [README](data
 ## Resources
 
 ```
-└───resources
-    ├───data-functions
-    │       demographics.R
-    │       exp1_load_data.R
-    │       exp2_load_data.R
-    │       exp3_load_data.R
-    │       exp4_load_data.R
-    │
-    ├───formatting
-    │       aesthetics.R
-    │       apa.csl
-    │       printing.R
-    │       pulse_modified.css
-    │       rainbow.csv
-    │
-    └───icons
-            file-code-fill.svg
-            open-data.svg
-            open-materials.svg
-            osf.svg
-            preregistered.svg
+├── resources
+│   ├── data-functions
+│   │   ├── demographics.R
+│   │   ├── exp1_load_data.R
+│   │   ├── exp2_load_data.R
+│   │   ├── exp3_load_data.R
+│   │   └── exp4_load_data.R
+│   ├── formatting
+│   │   ├── aesthetics.R
+│   │   ├── apa.csl
+│   │   ├── printing.R
+│   │   ├── pulse_modified.css
+│   │   └── rainbow.csv
+│   ├── icons
+│   │   ├── file-code-fill.svg
+│   │   ├── open-data.svg
+│   │   ├── open-materials.svg
+│   │   ├── osf.svg
+│   │   └── preregistered.svg
+│   ├── packages.bib
+│   └── references.bib
 ```
 
 *	[`data-functions/`](resources/data-functions/)
@@ -312,17 +284,22 @@ These are the de-identified data files, which are described in the [README](data
 	*	[`pulse_modified.css`](resources/formatting/pulse_modified.css) is the HTML theme, with a couple small modifications to the tables from the [Bootswatch theme](https://bootswatch.com/pulse/).
 	*	[`rainbow.csv`](resources/formatting/rainbow.csv) has the hex codes for a color gradient based on the RColorBrewer Spectral theme (used for the Gender Beliefs plots in Experiments 3 & 4 so the color scheme matches the other survey plots).
 *	[`icons/`](resources/icons/) has several images from the [Bootstrap set](https://icons.getbootstrap.com/) and the [Academicons](https://jpswalsh.github.io/academicons/) set, because I couldn't figure out how to insert them using shortcodes and make them hyperlinks.
+* [`references.bib`](resources/references.bib) and [`packages.bib`](resources/packages.bib) have citation information.
 
 ---
 
-## Quarto Files
+## Quarto & Text Files
 
 ```
-│   index.qmd
-│   references.qmd
-│   _quarto.yml
+├── index.qmd
+├── 0_abstract.qmd
+├── 0_introduction.qmd
+├── 5_general_discussion.qmd
+├── 7_references.qmd
+├── _quarto.yml
 ```
 
 *	[`index.qmd`](index.qmd) is the landing page for opening the project online.
-*	[`references.qmd`](references.qmd) directs Quarto to print the reference list from the Experiments 1-4 pages into a separate page.
+*	[`7_references.qmd`](7_references.qmd) directs Quarto to print the reference list from the Experiments 1-4 pages into a separate page.
 *	[`_quarto.yml`](_quarto.yml) is the rendering settings, structuring, and citation information for this repository.
+* [`0_abstract.qmd`](0_abstract.qmd), [`0_introduction.qmd`](0_introduction.qmd), and [`5_general_discussion`](5_general_discussion.qmd) typeset the other sections.
