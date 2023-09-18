@@ -37,12 +37,12 @@ book:
       - icon: person-circle
         text: "About Me"
         href: https://bethanyhgardner.github.io/
-      - icon: enve;ope
+      - icon: envelope
         text: "Contact"
         href: "mailto: bethany.gardner@vanderbilt.edu"
-      # - icon: filetype-pdf
-      #  text: "Download"
-      #  href: https://placeholder-to-proquest
+      - icon: filetype-pdf
+        text: "Download Manuscript from Vanderbilt"
+        href: http://hdl.handle.net/1803/18385
     search: true
     style: docked
     foreground: "#7570B3"
@@ -60,7 +60,7 @@ link-bibliography: true
 
 # Other citation info
 citation:
-  title: Learning to comprehend and produce singular \emph{they}
+  title: Learning to comprehend and produce singular \emph{they} (Publication No. 30722219)
   author:
     - name: Bethany Gardner
       orcid: 0000-0002-5154-2040
@@ -73,6 +73,9 @@ citation:
   type: thesis
   genre: Doctoral dissertation
   publisher: Vanderbilt University
+  archive: ProQuest Dissertations & Theses Global
+  url: http://hdl.handle.net/1803/18385  # https://www.proquest.com/docview/2864824940
+
 google-scholar: true
 
 copyright:

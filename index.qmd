@@ -12,9 +12,9 @@ The [Github repository](https://github.com/bethanyhgardner/dissertation/) also i
 
 **People:**
 
--   My advisor at Vanderbilt, [Sarah Brown-Schmidt](http://sarahbrownschmidt.com/lab-page/)
--   My other committee members, joint lab meeting people, and attendees at HSP and LSA, for feedback that made my thinking and presentation clearer
--   Morrigan Dunlap-Loomis, who contributed to annotating data for Experiment 3 and collecting data for Experiment 4
+-   My advisor at Vanderbilt, [Sarah Brown-Schmidt](http://sarahbrownschmidt.com/lab-page/).
+-   My other committee members, joint lab meeting people, and attendees at HSP and LSA, for feedback that made my thinking and presentation clearer.
+-   Morrigan Dunlap-Loomis, who contributed to annotating data for Experiment 3 and collecting data for Experiment 4.
 
 **Funding:**
 
@@ -23,15 +23,15 @@ The [Github repository](https://github.com/bethanyhgardner/dissertation/) also i
 
 **Open-source software:**
 
--   This text is written and published using [Quarto](https://quarto.org)
--   Several of the experiments were coded and hosted with [PCIbex](https://doc.pcibex.net/)
 -   All of the statistical analyses and plots were created with R ([package citations](7_references.qmd#r-packages)).
+-   This text is written and published using [Quarto](https://quarto.org).
+-   Several of the experiments were coded and hosted with [PCIbex](https://doc.pcibex.net/).
 
 <br>
 
 ## Citation {.unnumbered}
 
-ProQuest listing pending.
+The official dissertation document is available open-access in the [Vanderbilt database](http://hdl.handle.net/1803/18385) and with institutional access in the [ProQuest database](https://www.proquest.com/docview/2864824940).
 
 ::: quarto-appendix-secondary-label
 ```{=html}
@@ -40,12 +40,14 @@ BibTeX citation:
 :::
 
 ```{=html}
-<pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@phdthesis{gardner2023,
+<pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@thesis{gardner2023,
   author = {Gardner, Bethany},
+  date = {2023},
+  title = {Learning to comprehend and produce singular \emph{they} (Publication No. 30722219)},
+  type = {Doctoral dissertation},
   publisher = {Vanderbilt University},
-  title = {Learning to comprehend and produce singular \emph{they}},
-  date = {2023-06-15},
-  langid = {en}
+  archive = {ProQuest Dissertations & Theses Global},
+  url = {http://hdl.handle.net/1803/18385}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre>
 ```
@@ -57,5 +59,7 @@ For attribution, please cite this work as:
 :::
 
 ```{=html}
-<pre class="sourceCode code-with-copy"><code><div id="ref-gardner2023" class="csl-entry quarto-appendix-citeas" role="listitem">Gardner, B. 2023. <i>Learning to comprehend and produce singular</i><br> they. [Doctoral dissertation, Vanderbilt University]. <!-- ProQuest Dissertations & Theses Global. <a href="https://url_pending">url_pending</a>. --></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre>
+<pre class="sourceCode code-with-copy"><code><div id="ref-gardner2023" class="csl-entry quarto-appendix-citeas" role="listitem">Gardner, B. 2023. <i>Learning to comprehend and produce singular</i> they (Publication No. 30722219) <br>[Doctoral dissertation, Vanderbilt University]. ProQuest Dissertations & Theses Global.
+
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre>
 ```
