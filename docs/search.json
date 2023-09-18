@@ -1,5 +1,26 @@
 [
   {
+    "objectID": "index.html#about",
+    "href": "index.html#about",
+    "title": "Learning to comprehend and produce singular they",
+    "section": "About",
+    "text": "About\nThe results sections for this dissertation were written using Quarto, then after finishing, I decided to add the rest of the dissertation text to learn how to make a Quarto book, because I’m the type of person who finds playing with new coding and typesetting tools fun.\nThe Github repository also includes the de-identified data, code for the statistical analyses and plots, and most of the study materials. If you’re interested in using materials that aren’t uploaded here, like edited images or audio files, send me an email. If you’re interested in building off this data, please get in touch with me and Sarah Brown-Schmidt—we’re both excited about pronoun research and open science!"
+  },
+  {
+    "objectID": "index.html#acknowledgements",
+    "href": "index.html#acknowledgements",
+    "title": "Learning to comprehend and produce singular they",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nPeople:\n\nMy advisor at Vanderbilt, Sarah Brown-Schmidt.\nMy other committee members, joint lab meeting people, and attendees at HSP and LSA, for feedback that made my thinking and presentation clearer.\nMorrigan Dunlap-Loomis, who contributed to annotating data for Experiment 3 and collecting data for Experiment 4.\n\nFunding:\n\nThis material is based upon work supported by a National Science Foundation under Grant #2214299 (Linguistics DDRI program). Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.\nIn addition to NSF Linguistics, this research was also supported by small grants programs of the Vanderbilt LGBT Policy Lab and the Peabody Office of Equity, Diversity, and Inclusion.\n\nOpen-source software:\n\nAll of the statistical analyses and plots were created with R (package citations).\nThis text is written and published using Quarto.\nSeveral of the experiments were coded and hosted with PCIbex."
+  },
+  {
+    "objectID": "index.html#citation",
+    "href": "index.html#citation",
+    "title": "Learning to comprehend and produce singular they",
+    "section": "Citation",
+    "text": "Citation\nThe official dissertation document is available open-access in the Vanderbilt database and with institutional access in the ProQuest database.\n\nBibTeX citation:\n\n@thesis{gardner2023,\n  author = {Gardner, Bethany},\n  date = {2023},\n  title = {Learning to comprehend and produce singular \\emph{they} (Publication No. 30722219)},\n  type = {Doctoral dissertation},\n  publisher = {Vanderbilt University},\n  archive = {ProQuest Dissertations & Theses Global},\n  url = {http://hdl.handle.net/1803/18385}\n}\n\n\nFor attribution, please cite this work as:\n\nGardner, B. 2023. Learning to comprehend and produce singular they (Publication No. 30722219) [Doctoral dissertation, Vanderbilt University]. ProQuest Dissertations & Theses Global."
+  },
+  {
     "objectID": "0_abstract.html",
     "href": "0_abstract.html",
     "title": "Abstract",
@@ -68,27 +89,6 @@
     "title": "Introduction",
     "section": "",
     "text": "See Bjorkman (2017) and Konnelly & Cowper (2020) for a discussion of how proper names may have morphosyntactic gender features used to evaluate agreement with pronouns, a question that this dissertation remains agnostic about.↩︎\nArguably, pronouns are not definitionally gendered, since not all people who use she/her are women and not all women use she/her, and vice versa for men and he/him. However, treating pronouns as probabilistic cues—nearly all people who use she/her are women and nearly all women use she/her—would make the same predictions. Even if it is not a binary rule, the pronoun would still be a stronger cue about gender than the stereotypes associated with a role noun.↩︎\nI make a distinction between our higher-level beliefs about gender and our lower-level, automatic cognitive processing. The fact that comprehenders immediately infer a gender categorization for new referents reflects statistical knowledge about how language is used, but does not necessarily reflect a belief in gender as binary and transparent. For a theory of how automatic categorization processes interact with higher-level beliefs about gender in the context of making gender attributions, see Friedman (2014).↩︎\nTo be clear, I use language like “identify as” and “consider themself” not to imply that people’s identities are less real, but to describe surveys asking people about the labels they use. Decisions about how to describe gender and sexuality are complicated and personal, and I want to maintain a distinction between the set of people who do say “yes, I am X,” and the set of people who fall under the definition of X and could say “yes, I am X” or may be grouped as X in research analyses. Often in LGBTQ+ research the set of people who could identify as X is larger than the set of people who do identify as X, which makes estimating and talking about population sizes tricky.↩︎\nKnowing a person who uses gender-neutral pronouns is more common than knowing a nonbinary person (Minkin & Brown, 2021; PRRI, 2021), but this is not particularly surprising given that not all people who use gender-neutral pronouns are nonbinary, and that people may tell others what gendered language they prefer, without getting into the details of their gender identity.↩︎\nSee Conrod (2019b)’s analysis of politeness, discussed in Section 0.5.↩︎\nAs of May 30, 2023, the Indiana bill is dead, the Arizona and North Dakota bills were vetoed by the governor, and the Tennessee bill was signed into law.↩︎\nAdvancing as of May 30, 2023.↩︎\nAs of May 23, 2023, the Indiana and New Hampshire bills are dead, the Oklahoma bill is advancing, and the Arizona and North Dakota bills were vetoed by the governor.↩︎\nDead as of May 23, 2023.↩︎\nAs of May 23, 2023, the North Dakota bills are vetoed and not advanced to a full vote, respectively. The Arizona bill has passed the senate and is being considered by the house.↩︎"
-  },
-  {
-    "objectID": "index.html#about",
-    "href": "index.html#about",
-    "title": "Learning to comprehend and produce singular they",
-    "section": "About",
-    "text": "About\nThe results sections for this dissertation were written using Quarto, then after finishing, I decided to add the rest of the dissertation text to learn how to make a Quarto book, because I’m the type of person who finds playing with new coding and typesetting tools fun.\nThe Github repository also includes the de-identified data, code for the statistical analyses and plots, and most of the study materials. If you’re interested in using materials that aren’t uploaded here, like edited images or audio files, send me an email. If you’re interested in building off this data, please get in touch with me and Sarah Brown-Schmidt—we’re both excited about pronoun research and open science!"
-  },
-  {
-    "objectID": "index.html#acknowledgements",
-    "href": "index.html#acknowledgements",
-    "title": "Learning to comprehend and produce singular they",
-    "section": "Acknowledgements",
-    "text": "Acknowledgements\nPeople:\n\nMy advisor at Vanderbilt, Sarah Brown-Schmidt.\nMy other committee members, joint lab meeting people, and attendees at HSP and LSA, for feedback that made my thinking and presentation clearer.\nMorrigan Dunlap-Loomis, who contributed to annotating data for Experiment 3 and collecting data for Experiment 4.\n\nFunding:\n\nThis material is based upon work supported by a National Science Foundation under Grant #2214299 (Linguistics DDRI program). Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.\nIn addition to NSF Linguistics, this research was also supported by small grants programs of the Vanderbilt LGBT Policy Lab and the Peabody Office of Equity, Diversity, and Inclusion.\n\nOpen-source software:\n\nAll of the statistical analyses and plots were created with R (package citations).\nThis text is written and published using Quarto.\nSeveral of the experiments were coded and hosted with PCIbex."
-  },
-  {
-    "objectID": "index.html#citation",
-    "href": "index.html#citation",
-    "title": "Learning to comprehend and produce singular they",
-    "section": "Citation",
-    "text": "Citation\nThe official dissertation document is available open-access in the Vanderbilt database and with institutional access in the ProQuest database.\n\nBibTeX citation:\n\n@thesis{gardner2023,\n  author = {Gardner, Bethany},\n  date = {2023},\n  title = {Learning to comprehend and produce singular \\emph{they} (Publication No. 30722219)},\n  type = {Doctoral dissertation},\n  publisher = {Vanderbilt University},\n  archive = {ProQuest Dissertations & Theses Global},\n  url = {http://hdl.handle.net/1803/18385}\n}\n\n\nFor attribution, please cite this work as:\n\nGardner, B. 2023. Learning to comprehend and produce singular they (Publication No. 30722219) [Doctoral dissertation, Vanderbilt University]. ProQuest Dissertations & Theses Global."
   },
   {
     "objectID": "1_exp.html#motivation",

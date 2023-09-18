@@ -12,7 +12,7 @@ book:
     - name: Bethany Gardner
       orcid: 0000-0002-5154-2040
       email: bethany.gardner@vanderbilt.edu
-  # doi:
+  doi: 10.5281/zenodo.8357333
 
   # Structure
   chapters:
